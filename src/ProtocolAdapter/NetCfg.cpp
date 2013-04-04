@@ -1,0 +1,120 @@
+/*
+ * NetCfg.cpp
+ *
+ *  Created on: Nov 17, 2012
+ *      Author: Scorpion
+ */
+
+#include "NetCfg.h"
+#include <boost/filesystem.hpp>
+#include <boost/regex.hpp>
+#include <boost/algorithm/string.hpp>
+namespace centny {
+namespace fs = boost::filesystem;
+NetCfg::NetCfg(string& cfgPath) :
+		CfgParser(cfgPath) {
+	fs::path fp(this->locSyncDir());
+	this->valid = exists(fp) && fs::is_directory(fp);
+	if (!this->valid) {
+		this->msg = this->locSyncDir() + " is not exist or not a directory";
+		return;
+	}
+	this->isNoticeSync = false;
+	this->isTimeSync = false;
+	vector<string> stype = this->syncChkType();
+	for (size_t i = 0; i < stype.size(); i++) {
+		if ("NOTICE" == stype[i]) {
+			this->isNoticeSync = true;
+			continue;
+		}
+		if ("TIME" == stype[i]) {
+			this->isTimeSync = true;
+			continue;
+		}
+	}
+}
+NetCfg::~NetCfg() {
+}
+string NetCfg::host() {
+	CFG_SLOCK;
+	return this->kvs["SERVER_HOST"];
+}
+string NetCfg::port() {
+	CFG_SLOCK;
+	return this->kvs["SERVER_PORT"];
+}
+string NetCfg::bhost() {
+	CFG_SLOCK;
+	return this->kvs["SERVER_BHOST"];
+}
+string NetCfg::bport() {
+	CFG_SLOCK;
+	return this->kvs["SERVER_BPORT"];
+}
+string NetCfg::path() {
+	CFG_SLOCK;
+	return this->kvs["SERVER_PATH"];
+}
+bool NetCfg::ssl() {
+	CFG_SLOCK;
+	return this->kvs["SERVER_SSL"]=="YES";
+}
+string NetCfg::username() {
+	CFG_SLOCK;
+	return this->kvs["USERNAME"];
+}
+string NetCfg::password() {
+	CFG_SLOCK;
+	return this->kvs["PASSWORD"];
+}
+string NetCfg::usrpwd() {
+	CFG_SLOCK;
+	string usr = this->kvs["USERNAME"];
+	string pwd = this->kvs["PASSWORD"];
+	if (usr.length() < 1 || pwd.length() < 1) {
+		return "";
+	}
+	return usr + ":" + pwd;
+}
+string NetCfg::cname() {
+	CFG_SLOCK;
+	return this->kvs["CNAME"];
+}
+bool NetCfg::isUpload() {
+	CFG_SLOCK;
+	return this->kvs["UPLOAD"] == "YES";
+}
+bool NetCfg::isDownload() {
+	CFG_SLOCK;
+	return this->kvs["DOWNLOAD"] == "YES";
+}
+time_t NetCfg::syncChkTime() {
+	CFG_SLOCK;
+	string tmp = this->kvs["SYNC_CHK_TIME"];
+	return atol(tmp.c_str());
+}
+string NetCfg::syncChkNotice() {
+	CFG_SLOCK;
+	return this->kvs["SYNC_CHK_NOTICE"];
+}
+vector<string> NetCfg::syncChkType() {
+	CFG_SLOCK;
+	string tmp=this->kvs["SYNC_CHK_TYPES"];
+	vector<string> types;
+	boost::split(types,tmp,boost::is_any_of("|"));
+	return types;
+}
+string NetCfg::type() {
+	CFG_SLOCK;
+	return this->kvs["SERVER_TYPE"];
+}
+string NetCfg::locSyncDir() {
+	CFG_SLOCK;
+	return this->kvs["LOC_SYNC_DIR"];
+}
+string NetCfg::dbPath() {
+	CFG_SLOCK;
+	return this->kvs["LOC_DB_PATH"];
+}
+//
+} /* namespace centny */

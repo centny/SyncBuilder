@@ -1,0 +1,308 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="CfgParser">
+      <UniqueIdentifier>{463a49b1-7e0d-4a88-bd35-ae4daa124136}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{14ade574-0d52-40ab-bd8e-1425bb4b14ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DataPool">
+      <UniqueIdentifier>{d6dbfd11-8939-43c7-bcda-ca399fffcdb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EventMgr">
+      <UniqueIdentifier>{855afe54-fa62-475e-9a2b-6ba7feeafd2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="log">
+      <UniqueIdentifier>{98db803f-d044-48cf-8d91-c102cecbea00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ProtocolAdapter">
+      <UniqueIdentifier>{3e937833-9db1-4e74-96fa-3738f09c6e56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SyncMgr">
+      <UniqueIdentifier>{409172f5-b72c-41ff-8820-42e7dc7935ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinService">
+      <UniqueIdentifier>{d8f79402-528a-432f-8c43-6d7ea5474e6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SyncServer">
+      <UniqueIdentifier>{48dbc0b2-99da-48a0-89fb-6bd085b7128a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Notice">
+      <UniqueIdentifier>{9cfc5eca-2935-40f5-adf0-bdbbff112e35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Web">
+      <UniqueIdentifier>{e1e7a65a-94e7-48b8-a72e-b9767fb1aeb5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CfgParser\CfgParser.cpp">
+      <Filter>CfgParser</Filter>
+    </ClCompile>
+    <ClCompile Include="CfgParser\CfgParserTest.cpp">
+      <Filter>CfgParser</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\SyncFstream.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="DataPool\DataPool.cpp">
+      <Filter>DataPool</Filter>
+    </ClCompile>
+    <ClCompile Include="DataPool\DataPoolTest.cpp">
+      <Filter>DataPool</Filter>
+    </ClCompile>
+    <ClCompile Include="EventMgr\EventMgr.cpp">
+      <Filter>EventMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="EventMgr\EventMgrTest.cpp">
+      <Filter>EventMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="EventMgr\EventRunner.cpp">
+      <Filter>EventMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="log\LogFactory.cpp">
+      <Filter>log</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SyncBuilder.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ProtocolAdapter\AdapterBase.cpp">
+      <Filter>ProtocolAdapter</Filter>
+    </ClCompile>
+    <ClCompile Include="ProtocolAdapter\CurlBuilder.cpp">
+      <Filter>ProtocolAdapter</Filter>
+    </ClCompile>
+    <ClCompile Include="ProtocolAdapter\FtpAdapter.cpp">
+      <Filter>ProtocolAdapter</Filter>
+    </ClCompile>
+    <ClCompile Include="ProtocolAdapter\LocAdapter.cpp">
+      <Filter>ProtocolAdapter</Filter>
+    </ClCompile>
+    <ClCompile Include="ProtocolAdapter\NetCfg.cpp">
+      <Filter>ProtocolAdapter</Filter>
+    </ClCompile>
+    <ClCompile Include="ProtocolAdapter\testAdapter.cpp">
+      <Filter>ProtocolAdapter</Filter>
+    </ClCompile>
+    <ClCompile Include="ProtocolAdapter\testCurl.cpp">
+      <Filter>ProtocolAdapter</Filter>
+    </ClCompile>
+    <ClCompile Include="SyncMgr\SyncDemo.cpp">
+      <Filter>SyncMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="SyncMgr\SyncMgr.cpp">
+      <Filter>SyncMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="SyncMgr\testSyncMgr.cpp">
+      <Filter>SyncMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="EventMgr\EventCfg.cpp">
+      <Filter>EventMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="xgetopt.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="WinServcie\WinService.cpp">
+      <Filter>WinService</Filter>
+    </ClCompile>
+    <ClCompile Include="WinServcie\WinTools.cpp">
+      <Filter>WinService</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\ReplaceAll.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="ProtocolAdapter\SyncAdapter.cpp">
+      <Filter>ProtocolAdapter</Filter>
+    </ClCompile>
+    <ClCompile Include="ProtocolAdapter\SyncBindCmd.cpp">
+      <Filter>ProtocolAdapter</Filter>
+    </ClCompile>
+    <ClCompile Include="SyncServer\BindCmdMgr.cpp">
+      <Filter>SyncServer</Filter>
+    </ClCompile>
+    <ClCompile Include="SyncServer\ConClient.cpp">
+      <Filter>SyncServer</Filter>
+    </ClCompile>
+    <ClCompile Include="SyncServer\FileCmdMgr.cpp">
+      <Filter>SyncServer</Filter>
+    </ClCompile>
+    <ClCompile Include="SyncServer\HttpCmdMgr.cpp">
+      <Filter>SyncServer</Filter>
+    </ClCompile>
+    <ClCompile Include="SyncServer\SyncServer.cpp">
+      <Filter>SyncServer</Filter>
+    </ClCompile>
+    <ClCompile Include="SyncServer\testCmdBase.cpp">
+      <Filter>SyncServer</Filter>
+    </ClCompile>
+    <ClCompile Include="SyncServer\testSyncServer.cpp">
+      <Filter>SyncServer</Filter>
+    </ClCompile>
+    <ClCompile Include="SyncServer\UserCfg.cpp">
+      <Filter>SyncServer</Filter>
+    </ClCompile>
+    <ClCompile Include="Notice\NoticeCenter.cpp">
+      <Filter>Notice</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Cmd.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="SyncServer\ShellCmdMgr.cpp">
+      <Filter>SyncServer</Filter>
+    </ClCompile>
+    <ClCompile Include="SyncServer\LoginCmdBase.cpp">
+      <Filter>SyncServer</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CfgParser\CfgParser.h">
+      <Filter>CfgParser</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\SyncFstream.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="DataPool\DataPool.h">
+      <Filter>DataPool</Filter>
+    </ClInclude>
+    <ClInclude Include="EventMgr\EventMgr.h">
+      <Filter>EventMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="EventMgr\EventRunner.h">
+      <Filter>EventMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="log\LogFactory.h">
+      <Filter>log</Filter>
+    </ClInclude>
+    <ClInclude Include="SyncBuilder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="common.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ProtocolAdapter\AdapterBase.h">
+      <Filter>ProtocolAdapter</Filter>
+    </ClInclude>
+    <ClInclude Include="ProtocolAdapter\CurlBuilder.h">
+      <Filter>ProtocolAdapter</Filter>
+    </ClInclude>
+    <ClInclude Include="ProtocolAdapter\FtpAdapter.h">
+      <Filter>ProtocolAdapter</Filter>
+    </ClInclude>
+    <ClInclude Include="ProtocolAdapter\LocAdapter.h">
+      <Filter>ProtocolAdapter</Filter>
+    </ClInclude>
+    <ClInclude Include="ProtocolAdapter\NetCfg.h">
+      <Filter>ProtocolAdapter</Filter>
+    </ClInclude>
+    <ClInclude Include="SyncMgr\SyncDemo.h">
+      <Filter>SyncMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="SyncMgr\SyncMgr.h">
+      <Filter>SyncMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="EventMgr\EventCfg.h">
+      <Filter>EventMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="xgetopt.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WinServcie\WinService.h">
+      <Filter>WinService</Filter>
+    </ClInclude>
+    <ClInclude Include="WinServcie\WinTools.h">
+      <Filter>WinService</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\ReplaceAll.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="ProtocolAdapter\SyncAdapter.h">
+      <Filter>ProtocolAdapter</Filter>
+    </ClInclude>
+    <ClInclude Include="ProtocolAdapter\SyncBindCmd.h">
+      <Filter>ProtocolAdapter</Filter>
+    </ClInclude>
+    <ClInclude Include="SyncServer\BindCmdMgr.h">
+      <Filter>SyncServer</Filter>
+    </ClInclude>
+    <ClInclude Include="SyncServer\ConClient.h">
+      <Filter>SyncServer</Filter>
+    </ClInclude>
+    <ClInclude Include="SyncServer\FileCmdMgr.h">
+      <Filter>SyncServer</Filter>
+    </ClInclude>
+    <ClInclude Include="SyncServer\HttpCmdMgr.h">
+      <Filter>SyncServer</Filter>
+    </ClInclude>
+    <ClInclude Include="SyncServer\SyncServer.h">
+      <Filter>SyncServer</Filter>
+    </ClInclude>
+    <ClInclude Include="SyncServer\UserCfg.h">
+      <Filter>SyncServer</Filter>
+    </ClInclude>
+    <ClInclude Include="Notice\NoticeCenter.h">
+      <Filter>Notice</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Cmd.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="SyncServer\ShellCmdMgr.h">
+      <Filter>SyncServer</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\ComDef.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="SyncServer\LoginCmdBase.h">
+      <Filter>SyncServer</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CfgParser\e.cfg">
+      <Filter>CfgParser</Filter>
+    </None>
+    <None Include="EventMgr\e.cfg">
+      <Filter>EventMgr</Filter>
+    </None>
+    <None Include="log\log.conf">
+      <Filter>log</Filter>
+    </None>
+    <None Include="ProtocolAdapter\Net.cfg">
+      <Filter>ProtocolAdapter</Filter>
+    </None>
+    <None Include="ProtocolAdapter\WinNet.cfg">
+      <Filter>ProtocolAdapter</Filter>
+    </None>
+    <None Include="EventMgr\Wine.cfg">
+      <Filter>EventMgr</Filter>
+    </None>
+    <None Include="ProtocolAdapter\Ftp.cfg">
+      <Filter>ProtocolAdapter</Filter>
+    </None>
+    <None Include="SyncServer\users.cfg">
+      <Filter>SyncServer</Filter>
+    </None>
+    <None Include="SyncServer\Web.cfg">
+      <Filter>SyncServer</Filter>
+    </None>
+    <None Include="Web\index.html">
+      <Filter>Web</Filter>
+    </None>
+    <None Include="..\lib\sqlite3.def">
+      <Filter>源文件</Filter>
+    </None>
+  </ItemGroup>
+</Project>

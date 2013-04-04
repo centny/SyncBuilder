@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SyncBuilder", "src\SyncBuilder.vcxproj", "{98B4EECE-5C9A-4E2C-8571-19E006268FCD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2DE1DF52-DD0C-42E7-A7E4-5093C8F268BD} = {2DE1DF52-DD0C-42E7-A7E4-5093C8F268BD}
+		{1C691AC7-A516-4F03-913F-7BE0D2D60991} = {1C691AC7-A516-4F03-913F-7BE0D2D60991}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libextc", "ExternalCaller\src\libextc\libextc.vcxproj", "{1C691AC7-A516-4F03-913F-7BE0D2D60991}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libsqlite", "libsqlite\libsqlite.vcxproj", "{2DE1DF52-DD0C-42E7-A7E4-5093C8F268BD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Debug|x64 = Debug|x64
+		DebugService|Win32 = DebugService|Win32
+		DebugService|x64 = DebugService|x64
+		Release|Win32 = Release|Win32
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{98B4EECE-5C9A-4E2C-8571-19E006268FCD}.Debug|Win32.ActiveCfg = Debug|Win32
+		{98B4EECE-5C9A-4E2C-8571-19E006268FCD}.Debug|Win32.Build.0 = Debug|Win32
+		{98B4EECE-5C9A-4E2C-8571-19E006268FCD}.Debug|x64.ActiveCfg = Debug|x64
+		{98B4EECE-5C9A-4E2C-8571-19E006268FCD}.Debug|x64.Build.0 = Debug|x64
+		{98B4EECE-5C9A-4E2C-8571-19E006268FCD}.DebugService|Win32.ActiveCfg = DebugService|Win32
+		{98B4EECE-5C9A-4E2C-8571-19E006268FCD}.DebugService|Win32.Build.0 = DebugService|Win32
+		{98B4EECE-5C9A-4E2C-8571-19E006268FCD}.DebugService|x64.ActiveCfg = DebugService|x64
+		{98B4EECE-5C9A-4E2C-8571-19E006268FCD}.DebugService|x64.Build.0 = DebugService|x64
+		{98B4EECE-5C9A-4E2C-8571-19E006268FCD}.Release|Win32.ActiveCfg = Release|Win32
+		{98B4EECE-5C9A-4E2C-8571-19E006268FCD}.Release|Win32.Build.0 = Release|Win32
+		{98B4EECE-5C9A-4E2C-8571-19E006268FCD}.Release|x64.ActiveCfg = Release|x64
+		{98B4EECE-5C9A-4E2C-8571-19E006268FCD}.Release|x64.Build.0 = Release|x64
+		{1C691AC7-A516-4F03-913F-7BE0D2D60991}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1C691AC7-A516-4F03-913F-7BE0D2D60991}.Debug|Win32.Build.0 = Debug|Win32
+		{1C691AC7-A516-4F03-913F-7BE0D2D60991}.Debug|x64.ActiveCfg = Debug|Win32
+		{1C691AC7-A516-4F03-913F-7BE0D2D60991}.DebugService|Win32.ActiveCfg = Debug|Win32
+		{1C691AC7-A516-4F03-913F-7BE0D2D60991}.DebugService|Win32.Build.0 = Debug|Win32
+		{1C691AC7-A516-4F03-913F-7BE0D2D60991}.DebugService|x64.ActiveCfg = Debug|Win32
+		{1C691AC7-A516-4F03-913F-7BE0D2D60991}.Release|Win32.ActiveCfg = Release|Win32
+		{1C691AC7-A516-4F03-913F-7BE0D2D60991}.Release|Win32.Build.0 = Release|Win32
+		{1C691AC7-A516-4F03-913F-7BE0D2D60991}.Release|x64.ActiveCfg = Release|Win32
+		{2DE1DF52-DD0C-42E7-A7E4-5093C8F268BD}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2DE1DF52-DD0C-42E7-A7E4-5093C8F268BD}.Debug|Win32.Build.0 = Debug|Win32
+		{2DE1DF52-DD0C-42E7-A7E4-5093C8F268BD}.Debug|x64.ActiveCfg = Debug|Win32
+		{2DE1DF52-DD0C-42E7-A7E4-5093C8F268BD}.DebugService|Win32.ActiveCfg = Debug|Win32
+		{2DE1DF52-DD0C-42E7-A7E4-5093C8F268BD}.DebugService|Win32.Build.0 = Debug|Win32
+		{2DE1DF52-DD0C-42E7-A7E4-5093C8F268BD}.DebugService|x64.ActiveCfg = Debug|Win32
+		{2DE1DF52-DD0C-42E7-A7E4-5093C8F268BD}.Release|Win32.ActiveCfg = Release|Win32
+		{2DE1DF52-DD0C-42E7-A7E4-5093C8F268BD}.Release|Win32.Build.0 = Release|Win32
+		{2DE1DF52-DD0C-42E7-A7E4-5093C8F268BD}.Release|x64.ActiveCfg = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

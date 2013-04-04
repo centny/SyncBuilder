@@ -1,0 +1,316 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="DebugService|Win32">
+      <Configuration>DebugService</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="DebugService|x64">
+      <Configuration>DebugService</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{98B4EECE-5C9A-4E2C-8571-19E006268FCD}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>SyncBuilder</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugService|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugService|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DebugService|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DebugService|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(SolutionDir)\$(Configuration);$(DEV_LIB_HOME)\include;$(BOOST_HOME);$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\$(Configuration);$(BOOST_HOME)\stage\lib;$(DEV_LIB_HOME)\lib;$(LibraryPath)</LibraryPath>
+    <LibraryWPath>$(DEV_LIB_HOME)\bin;$(LibraryWPath)</LibraryWPath>
+    <ExecutablePath>$(DEV_LIB_HOME)\bin;$(ExecutablePath)</ExecutablePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(DEV_LIB_HOME)\include;$(BOOST_HOME);$(IncludePath)</IncludePath>
+    <LibraryPath>$(BOOST_HOME)\stage\lib;$(DEV_LIB_HOME)\lib;$(LibraryPath)</LibraryPath>
+    <LibraryWPath>$(DEV_LIB_HOME)\bin;$(LibraryWPath)</LibraryWPath>
+    <ExecutablePath>$(DEV_LIB_HOME)\bin;$(ExecutablePath)</ExecutablePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugService|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(DEV_LIB_HOME)\include;$(BOOST_HOME);$(IncludePath)</IncludePath>
+    <LibraryPath>$(BOOST_HOME)\stage\lib;$(DEV_LIB_HOME)\lib;$(LibraryPath)</LibraryPath>
+    <LibraryWPath>$(DEV_LIB_HOME)\bin;$(LibraryWPath)</LibraryWPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugService|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(DEV_LIB_HOME)\include;$(BOOST_HOME);$(IncludePath)</IncludePath>
+    <LibraryPath>$(BOOST_HOME)\stage\lib;$(DEV_LIB_HOME)\lib;$(LibraryPath)</LibraryPath>
+    <LibraryWPath>$(DEV_LIB_HOME)\bin;$(LibraryWPath)</LibraryWPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;DEV_IN_TEST=1;USING_LOG4CXX=1;SHOW_REL_LOG=1;_WIN32_WINNT=0x0501;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4996;4250;4251;4244</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>libcurl_imp.lib;libextc_d.lib;log4cxx.lib;libsqlite_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;DEV_IN_TEST=1;USING_LOG4CXX=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4996;4250;4251</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>libcurl_imp.lib;libextc_d.lib;log4cxx.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugService|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;USING_LOG4CXX=1;_WIN32_WINNT=0x0501;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4996;4250;4251</DisableSpecificWarnings>
+      <PrecompiledHeaderFile>PreHeader.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>libcurl_imp.lib;libextc_d.lib;log4cxx.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugService|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4996;4250;4251</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>libcurl_imp.lib;libextc_d.lib;log4cxx.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>libcurl_imp.lib;libextc.lib;log4cxx.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>libcurl_imp.lib;libextc.lib;log4cxx.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="CfgParser\CfgParser.cpp" />
+    <ClCompile Include="CfgParser\CfgParserTest.cpp" />
+    <ClCompile Include="Common\Cmd.cpp" />
+    <ClCompile Include="Common\ReplaceAll.cpp" />
+    <ClCompile Include="Common\SyncFstream.cpp" />
+    <ClCompile Include="DataPool\DataPool.cpp" />
+    <ClCompile Include="DataPool\DataPoolTest.cpp" />
+    <ClCompile Include="EventMgr\EventCfg.cpp" />
+    <ClCompile Include="EventMgr\EventMgr.cpp" />
+    <ClCompile Include="EventMgr\EventMgrTest.cpp" />
+    <ClCompile Include="EventMgr\EventRunner.cpp" />
+    <ClCompile Include="log\LogFactory.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Notice\NoticeCenter.cpp" />
+    <ClCompile Include="ProtocolAdapter\AdapterBase.cpp" />
+    <ClCompile Include="ProtocolAdapter\CurlBuilder.cpp" />
+    <ClCompile Include="ProtocolAdapter\FtpAdapter.cpp" />
+    <ClCompile Include="ProtocolAdapter\LocAdapter.cpp" />
+    <ClCompile Include="ProtocolAdapter\NetCfg.cpp" />
+    <ClCompile Include="ProtocolAdapter\SyncAdapter.cpp" />
+    <ClCompile Include="ProtocolAdapter\SyncBindCmd.cpp" />
+    <ClCompile Include="ProtocolAdapter\testAdapter.cpp" />
+    <ClCompile Include="ProtocolAdapter\testCurl.cpp" />
+    <ClCompile Include="SyncBuilder.cpp" />
+    <ClCompile Include="SyncMgr\SyncDemo.cpp" />
+    <ClCompile Include="SyncMgr\SyncMgr.cpp" />
+    <ClCompile Include="SyncMgr\testSyncMgr.cpp" />
+    <ClCompile Include="SyncServer\BindCmdMgr.cpp" />
+    <ClCompile Include="SyncServer\ConClient.cpp" />
+    <ClCompile Include="SyncServer\FileCmdMgr.cpp" />
+    <ClCompile Include="SyncServer\HttpCmdMgr.cpp" />
+    <ClCompile Include="SyncServer\LoginCmdBase.cpp" />
+    <ClCompile Include="SyncServer\ShellCmdMgr.cpp" />
+    <ClCompile Include="SyncServer\SyncServer.cpp" />
+    <ClCompile Include="SyncServer\testCmdBase.cpp" />
+    <ClCompile Include="SyncServer\testSyncServer.cpp" />
+    <ClCompile Include="SyncServer\UserCfg.cpp" />
+    <ClCompile Include="WinServcie\WinService.cpp" />
+    <ClCompile Include="WinServcie\WinTools.cpp" />
+    <ClCompile Include="xgetopt.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CfgParser\CfgParser.h" />
+    <ClInclude Include="common.h" />
+    <ClInclude Include="Common\Cmd.h" />
+    <ClInclude Include="Common\ComDef.h" />
+    <ClInclude Include="Common\ReplaceAll.h" />
+    <ClInclude Include="Common\SyncFstream.h" />
+    <ClInclude Include="DataPool\DataPool.h" />
+    <ClInclude Include="EventMgr\EventCfg.h" />
+    <ClInclude Include="EventMgr\EventMgr.h" />
+    <ClInclude Include="EventMgr\EventRunner.h" />
+    <ClInclude Include="log\LogFactory.h" />
+    <ClInclude Include="Notice\NoticeCenter.h" />
+    <ClInclude Include="ProtocolAdapter\AdapterBase.h" />
+    <ClInclude Include="ProtocolAdapter\CurlBuilder.h" />
+    <ClInclude Include="ProtocolAdapter\FtpAdapter.h" />
+    <ClInclude Include="ProtocolAdapter\LocAdapter.h" />
+    <ClInclude Include="ProtocolAdapter\NetCfg.h" />
+    <ClInclude Include="ProtocolAdapter\SyncAdapter.h" />
+    <ClInclude Include="ProtocolAdapter\SyncBindCmd.h" />
+    <ClInclude Include="SyncBuilder.h" />
+    <ClInclude Include="SyncMgr\SyncDemo.h" />
+    <ClInclude Include="SyncMgr\SyncMgr.h" />
+    <ClInclude Include="SyncServer\BindCmdMgr.h" />
+    <ClInclude Include="SyncServer\ConClient.h" />
+    <ClInclude Include="SyncServer\FileCmdMgr.h" />
+    <ClInclude Include="SyncServer\HttpCmdMgr.h" />
+    <ClInclude Include="SyncServer\LoginCmdBase.h" />
+    <ClInclude Include="SyncServer\ShellCmdMgr.h" />
+    <ClInclude Include="SyncServer\SyncServer.h" />
+    <ClInclude Include="SyncServer\UserCfg.h" />
+    <ClInclude Include="WinServcie\WinService.h" />
+    <ClInclude Include="WinServcie\WinTools.h" />
+    <ClInclude Include="xgetopt.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\lib\sqlite3.def" />
+    <None Include="CfgParser\e.cfg" />
+    <None Include="EventMgr\e.cfg" />
+    <None Include="EventMgr\Wine.cfg" />
+    <None Include="log\log.conf" />
+    <None Include="ProtocolAdapter\Ftp.cfg" />
+    <None Include="ProtocolAdapter\Net.cfg" />
+    <None Include="ProtocolAdapter\WinNet.cfg" />
+    <None Include="SyncServer\users.cfg" />
+    <None Include="SyncServer\Web.cfg" />
+    <None Include="Web\index.html" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
