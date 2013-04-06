@@ -251,6 +251,37 @@ void ShellCmdMgr::get(ConClient* c, std::istream* isbuf) {
 			}
 		}
 	}
+	if (args.size() >0 &&args[0]=="Logout"){
+		if(session.empty()){
+			this->response(c, "EServer", 500, "not login");
+			c->shutdown();
+			return;
+		}
+		set<string>::iterator it=this->sessions.find(session);
+		if(it==this->sessions.end()){
+			this->response(c, "EServer", 500, "not login");
+		}else{
+			this->sessions.erase(it);
+			this->response(c, "EServer", 200, "logout success");
+		}
+		c->shutdown();
+		return;
+	}
+	if (args.size() >0 &&args[0]=="CheckLogin"){
+		if(session.empty()){
+			this->response(c, "EServer", 500, "not login");
+			c->shutdown();
+			return;
+		}
+		if(this->sessions.find(session)==this->sessions.end()){
+			this->response(c, "EServer", 500, "not login");
+		}else{
+			this->sendHeader(c,200,session.size());
+			c->syncWrite(session.c_str(), session.size());
+		}
+		c->shutdown();
+		return;
+	}
 	if (args.size() > 0 && args[0] == "Login") {
 		string user = param["usr"];
 		string pass = param["pwd"];
@@ -442,7 +473,7 @@ bool ShellCmdMgr::list(ConClient* c, vector<string>& args, std::istream* isbuf,
 			sdata << (it->first) << "\r\n";
 		}
 		if (sdata.str().empty()) {
-			this->writeMsg(c, 200, "the binding client not found.");
+			this->response(c,"EServer",204,"");
 		} else {
 			c->syncWrite(sdata.str().c_str(), sdata.str().size());
 		}
@@ -669,7 +700,7 @@ void ShellCmdMgr::sendHeader(ConClient* c, int code, size_t len, string ctype) {
 	blen = 0;
 	char* tbuf = 0;
 	tbuf = cbuf + blen;
-	blen += sprintf(tbuf, "HTTP/1.0 200 OK\r\n");
+	blen += sprintf(tbuf, "HTTP/1.0 %d OK\r\n",code);
 	tbuf = cbuf + blen;
 	blen += sprintf(tbuf, "Cache-Control: no-cache\r\n");
 	tbuf = cbuf + blen;

@@ -29,37 +29,59 @@ Date.prototype.format = function(format) {
 	}
 	return format;
 }
-// Sample desktop configuration
+/**
+ * desktop instance.
+ */
 MyDesktop = new Ext.app.App({
 	init : function() {
 		Ext.QuickTips.init();
 	},
 
 	getModules : function() {
-		return [new MyDesktop.UserLogWindow(), new MyDesktop.LogMonitorWindow(), new MyDesktop.ClientManagerWindow(), new MyDesktop.AccordionWindow(), new MyDesktop.BogusMenuModule(), new MyDesktop.BogusMenuModule()];
+		return [this.LWindow, new MyDesktop.UserLogWindow(), new MyDesktop.LogMonitorWindow(), new MyDesktop.ClientManagerWindow(), new MyDesktop.AccordionWindow(), new MyDesktop.BogusMenuModule(), new MyDesktop.BogusMenuModule()];
 	},
 
 	// config for the start menu
 	getStartConfig : function() {
 		return {
-			title : 'Jack Slocum',
+			title : 'Centny',
 			iconCls : 'user',
 			toolItems : [{
-				text : 'Settings',
-				iconCls : 'settings',
+				text : 'Login',
+				iconCls : 'user-green',
 				scope : this,
 				handler : function() {
-					alert(1);
+					MyDesktop.Login();
 				}
 			}, '-', {
 				text : 'Logout',
-				iconCls : 'logout',
-				scope : this
+				iconCls : 'user-red',
+				scope : this,
+				handler : function() {
+					Ext.Ajax.request({
+						url : 'Logout',
+						method : 'GET',
+						success : function(response, options) {
+							Ext.MessageBox.alert('Success', response.responseText);
+						},
+						failure : function(response, options) {
+							Ext.MessageBox.alert('Failed', 'Server error code:' + response.status);
+						}
+					});
+				}
 			}]
 		};
 	}
 });
-
+/**
+ * login.
+ */
+MyDesktop.Login = function() {
+	if (!this.LWindow) {
+		return;
+	}
+	this.LWindow.createWindow();
+}
 /*
  * user log window.
  */
@@ -77,11 +99,11 @@ MyDesktop.log = {
 		return ncount;
 	},
 	allToContainer : function() {
-		if(this.lgary==null||this.lgary.length<1){
+		if (this.lgary == null || this.lgary.length < 1) {
 			return;
 		}
 		for (item in this.lgary) {
-			if(item=="remove"){
+			if (item == "remove") {
 				continue;
 			}
 			this.changed(this.lgary[item]);
@@ -96,6 +118,103 @@ MyDesktop.log = {
 		}
 	}
 }
+/*
+ * login window.
+ */
+MyDesktop.LoginWindow = Ext.extend(Ext.app.Module, {
+	id : 'login-win',
+	init : function() {
+		this.launcher = {
+			text : 'Login',
+			iconCls : 'icon-grid',
+			handler : this.createWindow,
+			scope : this
+		}
+	},
+	createWindow : function() {
+		var desktop = this.app.getDesktop();
+		var win = desktop.getWindow('login-win');
+		if (!win) {
+			var form = new Ext.form.FormPanel({
+				baseCls : 'x-plain',
+				layout : 'absolute',
+				monitorValid : true,
+				defaultType : 'textfield',
+				defaults : {
+					allowBlank : false
+				},
+				items : [{
+					x : 0,
+					y : 10,
+					xtype : 'label',
+					text : 'Username:'
+				}, {
+					x : 70,
+					y : 6,
+					name : 'usr',
+					anchor : '98%'
+				}, {
+					x : 0,
+					y : 40,
+					xtype : 'label',
+					text : 'Password:'
+				}, {
+					x : 70,
+					y : 39,
+					name : 'pwd',
+					inputType : "password",
+					anchor : '98%' // anchor width by percentage
+				}],
+				buttonAlign : 'center',
+				buttons : [{
+					text : 'Cancel',
+					formBind : false,
+					handler : function(btn, evt) {
+						win && win.close();
+					}
+				}, {
+					text : 'Login',
+					formBind : true,
+					handler : function(btn, evt) {
+						var rform = form.getForm();
+						if (rform.isValid()) {
+							Ext.Ajax.request({
+								url : 'Login',
+								method : 'GET',
+								params : rform.getValues(),
+								success : function(response, options) {
+									Ext.MessageBox.alert('Success', 'Login success');
+									win && win.close();
+								},
+								failure : function(response, options) {
+									Ext.MessageBox.alert('Failed', 'Invalid username or password');
+								}
+							});
+						} else {
+							Ext.Msg.alert('Failed', "invalid username or password");
+						}
+					}
+				}]
+			});
+			win = new Ext.Window({
+				id : 'login-win',
+				title : 'Login',
+				width : 250,
+				height : 145,
+				layout : 'fit',
+				plain : true,
+				bodyStyle : 'padding:5px;',
+				modal : true,
+				items : form
+			});
+		}
+		win.show();
+	}
+});
+MyDesktop.LWindow = new MyDesktop.LoginWindow();
+/*
+ * user log window.
+ */
 MyDesktop.UserLogWindow = Ext.extend(Ext.app.Module, {
 	id : 'ulog-win',
 	init : function() {
@@ -130,7 +249,7 @@ MyDesktop.UserLogWindow = Ext.extend(Ext.app.Module, {
 });
 
 /**
- * 
+ *log monitor window.
  */
 MyDesktop.LogMonitorWindow = Ext.extend(Ext.app.Module, {
 	id : 'lmon-win',
@@ -149,172 +268,246 @@ MyDesktop.LogMonitorWindow = Ext.extend(Ext.app.Module, {
 		if (!win) {
 			win = desktop.createWindow({
 				id : 'lmon-win',
-				title : 'Log Monitor Window',
+				title : 'ULog Window',
 				width : 740,
 				height : 480,
 				iconCls : 'icon-grid',
 				shim : false,
 				animCollapse : false,
 				constrainHeader : true,
-
 				layout : 'fit',
-				items : new Ext.grid.GridPanel({
-					border : false,
-					ds : new Ext.data.Store({
-						reader : new Ext.data.ArrayReader({}, [{
-							name : 'company'
-						}, {
-							name : 'price',
-							type : 'float'
-						}, {
-							name : 'change',
-							type : 'float'
-						}, {
-							name : 'pctChange',
-							type : 'float'
-						}]),
-						data : Ext.grid.dummyData
-					}),
-					cm : new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
-						header : "Company",
-						width : 120,
-						sortable : true,
-						dataIndex : 'company'
-					}, {
-						header : "Price",
-						width : 70,
-						sortable : true,
-						renderer : Ext.util.Format.usMoney,
-						dataIndex : 'price'
-					}, {
-						header : "Change",
-						width : 70,
-						sortable : true,
-						dataIndex : 'change'
-					}, {
-						header : "% Change",
-						width : 70,
-						sortable : true,
-						dataIndex : 'pctChange'
-					}]),
-
-					viewConfig : {
-						forceFit : true
-					},
-					//autoExpandColumn:'company',
-
-					tbar : [{
-						text : 'Add Something',
-						tooltip : 'Add a new row',
-						iconCls : 'add'
-					}, '-', {
-						text : 'Options',
-						tooltip : 'Blah blah blah blaht',
-						iconCls : 'option'
-					}, '-', {
-						text : 'Remove Something',
-						tooltip : 'Remove the selected item',
-						iconCls : 'remove'
-					}]
-				})
+				html : "<div id=\"lmon-container\"></div>"
 			});
 		}
 		win.show();
 	}
 });
 /**
- * 
+ *client manager window.
  */
 MyDesktop.ClientManagerWindow = Ext.extend(Ext.app.Module, {
 	id : 'cmgr-win',
 	init : function() {
 		this.launcher = {
 			text : 'Client Manager',
-			iconCls : 'icon-grid',
+			iconCls : 'cmgr',
 			handler : this.createWindow,
 			scope : this
 		}
+		this.idx = 1;
 	},
 
 	createWindow : function() {
 		var desktop = this.app.getDesktop();
-		var win = desktop.getWindow('cmgr-win');
+		var id = 'cmgr-win' + this.idx;
+		var win = desktop.getWindow(id);
 		if (!win) {
+			var clients, cmds, events;
+			var clt_box, cmd_box, ent_box;
+			function loadEventData(client, cmd) {
+				Ext.Ajax.request({
+					url : 'Cmd/List/' + client + '/' + cmd,
+					method : 'GET',
+					success : function(response, options) {
+						var vals = response.responseText.split('\n');
+						var rvals = new Array();
+						for (var i = 0; i < vals.length; i++) {
+							var val = vals[i].trim();
+							if (!val) {
+								continue;
+							}
+							rvals[rvals.length] = val;
+						}
+						var cvals = new Array();
+						for (var i = 0; i < rvals.length; i++) {
+							cvals.push(new Array(rvals[i]));
+						}
+						if (cvals.length > 0) {
+							events.loadData(cvals);
+						}
+					},
+					failure : function(response, options) {
+						Ext.MessageBox.alert('Failed', 'Server error code:' + response.status);
+					}
+				});
+			}
+
+			clients = new Ext.data.ArrayStore({
+				fields : ['val'],
+				data : []
+			});
+			clt_box = new Ext.form.ComboBox({
+				fieldLabel : 'Online Clients',
+				hiddenName : 'Clients',
+				store : clients,
+				valueField : 'val',
+				displayField : 'val',
+				typeAhead : true,
+				mode : 'local',
+				triggerAction : 'all',
+				emptyText : 'Select a client...',
+				selectOnFocus : true,
+				anchor : '98%',
+				listeners : {
+					select : function(tar, nval) {
+						events.loadData([]);
+						if (cmd_box && cmd_box.value) {
+							loadEventData(clt_box.value, cmd_box.value);
+						}
+					}
+				}
+			});
+			cmds = new Ext.data.ArrayStore({
+				fields : ['val'],
+				data : [["T_LOG"], ["N_EVENT"], ["N_SYNC"]]
+			});
+			cmd_box = new Ext.form.ComboBox({
+				fieldLabel : 'Commands',
+				hiddenName : 'Commands',
+				store : cmds,
+				valueField : 'val',
+				displayField : 'val',
+				typeAhead : true,
+				mode : 'local',
+				triggerAction : 'all',
+				emptyText : 'Select a command...',
+				selectOnFocus : true,
+				anchor : '98%',
+				listeners : {
+					select : function(tar, nval) {
+						events.loadData([]);
+						if (nval.data.val == "N_SYNC") {
+							ent_box.disable();
+						} else {
+							ent_box.enable();
+							if (clt_box && clt_box.value) {
+								loadEventData(clt_box.value, cmd_box.value);
+							}
+						}
+					}
+				}
+			});
+			events = new Ext.data.ArrayStore({
+				fields : ['val'],
+				data : []
+			});
+			ent_box = new Ext.form.ComboBox({
+				fieldLabel : 'Support Events',
+				hiddenName : 'Events',
+				store : events,
+				valueField : 'val',
+				displayField : 'val',
+				typeAhead : true,
+				mode : 'local',
+				triggerAction : 'all',
+				emptyText : 'Select a events...',
+				selectOnFocus : true,
+				anchor : '98%'
+			});
+			var fs = new Ext.FormPanel({
+				baseCls : 'x-plain',
+				align : 'center',
+				labelAlign : 'right',
+				labelWidth : 100,
+				bodyStyle : 'margin:15px auto -15px auto',
+				items : [new Ext.form.FieldSet({
+					title : 'Clients Information',
+					autoHeight : true,
+					defaultType : 'textfield',
+					items : [clt_box, cmd_box, ent_box]
+				})],
+				buttonAlign : "center",
+				buttons : [{
+					text : 'Start',
+					formBind : false,
+					handler : function(btn, evt) {
+						if (!cmd_box.value) {
+							return;
+						}
+						if (cmd_box.value == "N_SYNC") {
+							if (!clt_box.value) {
+								return;
+							}
+							Ext.Ajax.request({
+								url : 'EServer/' + clt_box.value + '/' + cmd_box.value,
+								method : 'GET',
+								success : function(response, options) {
+									MyDesktop.log.add("sending N_SYNC to client:" + clt_box.value);
+								},
+								failure : function(response, options) {
+									Ext.MessageBox.alert('Failed', 'Server error code:' + response.status);
+								}
+							});
+						} else {
+							if (!clt_box.value || !ent_box.value) {
+								return;
+							}
+
+						}
+					}
+				}]
+			});
 			win = desktop.createWindow({
-				id : 'cmgr-win',
-				title : 'Client Manager Window',
-				width : 740,
-				height : 480,
-				iconCls : 'icon-grid',
+				id : id,
+				title : 'Client Manager Window - ' + this.idx,
+				width : 355,
+				height : 200,
+				border : false,
+				iconCls : 'cmgr',
 				shim : false,
 				animCollapse : false,
 				constrainHeader : true,
-
-				layout : 'fit',
-				items : new Ext.grid.GridPanel({
-					border : false,
-					ds : new Ext.data.Store({
-						reader : new Ext.data.ArrayReader({}, [{
-							name : 'company'
-						}, {
-							name : 'price',
-							type : 'float'
-						}, {
-							name : 'change',
-							type : 'float'
-						}, {
-							name : 'pctChange',
-							type : 'float'
-						}]),
-						data : Ext.grid.dummyData
-					}),
-					cm : new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
-						header : "Company",
-						width : 120,
-						sortable : true,
-						dataIndex : 'company'
-					}, {
-						header : "Price",
-						width : 70,
-						sortable : true,
-						renderer : Ext.util.Format.usMoney,
-						dataIndex : 'price'
-					}, {
-						header : "Change",
-						width : 70,
-						sortable : true,
-						dataIndex : 'change'
-					}, {
-						header : "% Change",
-						width : 70,
-						sortable : true,
-						dataIndex : 'pctChange'
-					}]),
-
-					viewConfig : {
-						forceFit : true
-					},
-					//autoExpandColumn:'company',
-
-					tbar : [{
-						text : 'Add Something',
-						tooltip : 'Add a new row',
-						iconCls : 'add'
-					}, '-', {
-						text : 'Options',
-						tooltip : 'Blah blah blah blaht',
-						iconCls : 'option'
-					}, '-', {
-						text : 'Remove Something',
-						tooltip : 'Remove the selected item',
-						iconCls : 'remove'
-					}]
-				})
+				plain : true,
+				layout : "fit",
+				items : fs
+			});
+			this.idx++;
+			var cmgr = Ext.get("cmgr-container");
+			Ext.Ajax.request({
+				url : 'Cmd/List',
+				method : 'GET',
+				success : function(response, options) {
+					var vals = response.responseText.split('\n');
+					var rvals = new Array();
+					for (var i = 0; i < vals.length; i++) {
+						var val = vals[i].trim();
+						if (!val) {
+							continue;
+						}
+						rvals[rvals.length] = val;
+					}
+					var cvals = new Array();
+					for (var i = 0; i < rvals.length; i++) {
+						cvals.push(new Array(rvals[i]));
+					}
+					if (cvals.length > 0) {
+						clients.loadData(cvals);
+					}
+				},
+				failure : function(response, options) {
+					Ext.MessageBox.alert('Failed', 'Server error code:' + response.status);
+				}
 			});
 		}
 		win.show();
 	}
 });
+/**
+ * read.
+ */
+Ext.onReady(function() {
+	Ext.Ajax.request({
+		url : 'CheckLogin',
+		method : 'GET',
+		success : function(response, options) {
+		},
+		failure : function(response, options) {
+			MyDesktop.Login();
+		}
+	});
+
+});
+
 /*
  * Example windows
  */
