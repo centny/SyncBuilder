@@ -45,6 +45,7 @@ void printMainHelp() {
 			"\t-l path  the log configure file path\n"
 			"\t-c path  the demo configure  file path\n"
 			"\t-h show this message\n");
+
 #else
 	printf("Usage:cmd <option>\n"
 			"\t-l path  the log configure file path\n"
