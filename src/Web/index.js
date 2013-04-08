@@ -38,7 +38,7 @@ MyDesktop = new Ext.app.App({
 	},
 
 	getModules : function() {
-		return [this.LWindow, new MyDesktop.UserLogWindow(), new MyDesktop.LogMonitorWindow(), new MyDesktop.ClientManagerWindow(), new MyDesktop.AccordionWindow(), new MyDesktop.BogusMenuModule(), new MyDesktop.BogusMenuModule()];
+		return [this.LWindow, new MyDesktop.UserLogWindow(), this.LMonWindow, new MyDesktop.ClientManagerWindow(), new MyDesktop.AccordionWindow(), new MyDesktop.BogusMenuModule(), new MyDesktop.BogusMenuModule()];
 	},
 
 	// config for the start menu
@@ -257,18 +257,25 @@ MyDesktop.LogMonitorWindow = Ext.extend(Ext.app.Module, {
 		this.launcher = {
 			text : 'Log Monitor',
 			iconCls : 'icon-grid',
-			handler : this.createWindow,
+			handler : this.loadWindow,
 			scope : this
 		}
 	},
+	loadWindow : function() {
 
-	createWindow : function() {
+	},
+	createWindow : function(args) {
+		if (!args) {
+			return;
+		}
+		var name = args.client + "-" + args.ename;
+		console.log(args);
 		var desktop = this.app.getDesktop();
-		var win = desktop.getWindow('lmon-win');
+		var win = desktop.getWindow(name);
 		if (!win) {
 			win = desktop.createWindow({
-				id : 'lmon-win',
-				title : 'ULog Window',
+				id : name,
+				title : 'ULog Window(' + name + ')',
 				width : 740,
 				height : 480,
 				iconCls : 'icon-grid',
@@ -276,12 +283,58 @@ MyDesktop.LogMonitorWindow = Ext.extend(Ext.app.Module, {
 				animCollapse : false,
 				constrainHeader : true,
 				layout : 'fit',
-				html : "<div id=\"lmon-container\"></div>"
+				html : "<div id=\"lmon-container-" + name + "\"></div>",
+				listeners : {
+					close : function() {
+						win.stopLoad();
+					}
+				}
 			});
+			win.container = Ext.get("lmon-container-" + name);
+			win.wname = name;
+			win.args = args;
+			win.logLength = 0;
+			win.loadLog = function() {
+				Ext.Ajax.request({
+					url : 'EServer/' + win.args.client + '/T_LOG/' + win.args.ename + '/' + win.logLength,
+					method : 'GET',
+					success : function(response, options) {
+						var res = response.responseText;
+						var cidx = res.indexOf('\n');
+						var cmd = res.substring(cidx);
+						if (cmd.trim() !== "200") {
+							MyDesktop.log.add("[" + win.wname + "] get log failed, msg:" + res.substring(cidx + 1));
+						}
+						res = res.substring(cidx + 1);
+						cidx = res.indexOf('\n');
+						cmd = res.substring(cidx);
+						res = res.substring(cidx + 1);
+						var cmds=cmd.splite(' ');
+						win.container.createChild({
+							html:res
+						});
+					},
+					failure : function(response, options) {
+
+					}
+				});
+				win.startLoad();
+			}
+			win.startLoad = function() {
+				this.timeout = setTimeout(win.loadLog, 3000);
+			}
+			win.stopLoad = function() {
+				clearTimeout(this.timeout);
+			}
 		}
 		win.show();
+		win.startLoad();
 	}
 });
+/**
+ * log monitor window creater.
+ */
+MyDesktop.LMonWindow = new MyDesktop.LogMonitorWindow();
 /**
  *client manager window.
  */
@@ -352,7 +405,7 @@ MyDesktop.ClientManagerWindow = Ext.extend(Ext.app.Module, {
 					select : function(tar, nval) {
 						events.loadData([]);
 						if (cmd_box && cmd_box.value) {
-						    loadEventData(nval.data.val, cmd_box.value);
+							loadEventData(nval.data.val, cmd_box.value);
 						}
 					}
 				}
@@ -374,15 +427,15 @@ MyDesktop.ClientManagerWindow = Ext.extend(Ext.app.Module, {
 				selectOnFocus : true,
 				anchor : '98%',
 				listeners : {
-				    select: function (tar, nval) {
-				        ent_box.clearValue();
-					    events.loadData([]);
+					select : function(tar, nval) {
+						ent_box.clearValue();
+						events.loadData([]);
 						if (nval.data.val == "N_SYNC") {
 							ent_box.disable();
 						} else {
 							ent_box.enable();
 							if (clt_box && clt_box.value) {
-							    loadEventData(clt_box.value, nval.data.val);
+								loadEventData(clt_box.value, nval.data.val);
 							}
 						}
 					}
@@ -425,25 +478,31 @@ MyDesktop.ClientManagerWindow = Ext.extend(Ext.app.Module, {
 						if (!cmd_box.value) {
 							return;
 						}
-						if (cmd_box.value == "N_SYNC") {
-							if (!clt_box.value) {
-								return;
-							}
-							Ext.Ajax.request({
-								url : 'EServer/' + clt_box.value + '/' + cmd_box.value,
-								method : 'GET',
-								success : function(response, options) {
-									MyDesktop.log.add("sending N_SYNC to client:" + clt_box.value);
-								},
-								failure : function(response, options) {
-									Ext.MessageBox.alert('Failed', 'Server error code:' + response.status);
+						switch(cmd_box.value) {
+							case "N_SYNC":
+								if (!clt_box.value) {
+									return;
 								}
-							});
-						} else {
-							if (!clt_box.value || !ent_box.value) {
-								return;
-							}
-
+								Ext.Ajax.request({
+									url : 'EServer/' + clt_box.value + '/' + cmd_box.value,
+									method : 'GET',
+									success : function(response, options) {
+										MyDesktop.log.add("sending N_SYNC to client:" + clt_box.value);
+									},
+									failure : function(response, options) {
+										Ext.MessageBox.alert('Failed', 'Server error code:' + response.status);
+									}
+								});
+								break;
+							case "T_LOG":
+								if (!clt_box.value || !ent_box.value) {
+									return;
+								}
+								MyDesktop.LMonWindow.createWindow({
+									client : clt_box.value,
+									ename : ent_box.value
+								});
+								break;
 						}
 					}
 				}]

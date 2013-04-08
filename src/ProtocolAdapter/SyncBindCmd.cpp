@@ -279,13 +279,14 @@ void SyncBindCmd::transfLog(vector<string>& cmds) {
 		this->writeErrMsg(500, "open log file error, listener:" + name);
 		return;
 	}
-	char buf[R_BUF_SIZE];
-	size_t blen = 0;
+	char buf[R_BUF_SIZE], buf2[1024];
+	size_t blen = 0, blen2 = 0;
 	fs.seekg(beg);
 	size_t remain = end - beg;
-	blen = sprintf(buf, "T_LOG_BACK %ld", remain);
+	blen2 = sprintf(buf2, "200\nLOG %ld\n", remain);
+	blen = sprintf(buf, "T_LOG_BACK %ld"DEFAULT_EOC, remain + blen2);
 	this->socket->write_some(buffer(buf, blen), ec);
-	this->socket->write_some(buffer(DEFAULT_EOC, strlen(DEFAULT_EOC)), ec);
+	this->socket->write_some(buffer(buf2, blen2), ec);
 	while (!fs.eof()) {
 		fs.read(buf, R_BUF_SIZE);
 		size_t rlen = fs.gcount();
