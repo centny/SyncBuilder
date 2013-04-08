@@ -63,9 +63,17 @@ string NetCfg::username() {
 	CFG_SLOCK;
 	return this->kvs["USERNAME"];
 }
+string NetCfg::busername() {
+	CFG_SLOCK;
+	return this->kvs["B_USERNAME"];
+}
 string NetCfg::password() {
 	CFG_SLOCK;
 	return this->kvs["PASSWORD"];
+}
+string NetCfg::bpassword() {
+	CFG_SLOCK;
+	return this->kvs["B_PASSWORD"];
 }
 string NetCfg::usrpwd() {
 	CFG_SLOCK;
@@ -79,6 +87,10 @@ string NetCfg::usrpwd() {
 string NetCfg::cname() {
 	CFG_SLOCK;
 	return this->kvs["CNAME"];
+}
+string NetCfg::bcname() {
+	CFG_SLOCK;
+	return this->kvs["B_CNAME"];
 }
 bool NetCfg::isUpload() {
 	CFG_SLOCK;

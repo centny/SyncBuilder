@@ -187,12 +187,12 @@ void devTest(int argc, char** argv) {
 	//	testDataPool();
 	//	testEventMgr();
 //	testCurl();
-	testSyncServer();
+//	testSyncServer();
 	//testSocketServer();
 	//testShellCmdServer();
 //	testAdapter();
 	//	testSyncMgr();
-	//testSyncDemo();
+	testSyncDemo();
 	//	testSyncBuilder();
 //	testCmdBase();
 }

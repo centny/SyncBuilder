@@ -22,7 +22,7 @@ SyncBindCmd::SyncBindCmd(EventCfg* ecfg, NetCfg* ncfg, NetAdapterBase* neta,
 			this->netstate=0;
 			this->neta=neta;
 			this->mid=mid;
-			this->reinit();
+			assert(this->reinit());
 		}
 
 SyncBindCmd::~SyncBindCmd() {
@@ -80,8 +80,37 @@ bool SyncBindCmd::reinit() {
 		this->netstate = 500;
 		return 0;
 	} else {
-		log.info("initial bind client success");
-		this->netstate = 200;
+		log.debug("connect binding server success");
+		char buf[1024];
+		size_t blen = 0;
+		blen = sprintf(buf, "LOGIN %s %s %s" DEFAULT_EOC,
+				this->ncfg->busername().c_str(),
+				this->ncfg->bpassword().c_str(), this->ncfg->bcname().c_str());
+		this->socket->write_some(buffer(buf, blen), ec);
+		if (ec.value()) {
+			this->netstate = 500;
+			log.error("login faild:%s", ec.message().c_str());
+			return false;
+		}
+		blen = this->socket->read_some(buffer(buf, 1024), ec);
+		if (ec.value()) {
+			this->netstate = 500;
+			log.error("login faild,msg:%s", ec.message().c_str());
+			return false;
+		}
+		buf[blen] = 0;
+		stringstream data(buf);
+		int code;
+		data >> code;
+		if (code != 200) {
+			log.error("login faild,msg:%s", buf);
+			this->netstate = 500;
+			return false;
+		} else {
+			log.info("initial bind client success");
+			this->netstate = 200;
+			return true;
+		}
 		return 1;
 	}
 }
@@ -116,6 +145,11 @@ void SyncBindCmd::readHandle(const boost::system::error_code& ec,
 		this->startRead();
 		return;
 	}
+//	cout << "Cmd:";
+//	for (vector<string>::iterator it = cmds.begin(); it != cmds.end(); it++) {
+//		cout << (*it) << " ";
+//	}
+//	cout << endl;
 	vector<string> tcmds;
 	tcmds.assign(++cmds.begin(), cmds.end());
 	/*
@@ -279,12 +313,14 @@ void SyncBindCmd::list(vector<string>& cmds) {
 	}
 	string cmd = cmds[0];
 	boost::to_lower(cmd);
-	if (cmds[0] == "n_event") {
+	if (cmd == "n_event") {
 		this->writeBackMsg(this->ecfg->nlistenerNames());
-	} else if (cmds[0] == "t_log") {
+	} else if (cmd == "t_log") {
 		this->writeBackMsg(this->ecfg->listenerNames());
 	} else {
-		this->writeErrMsg(500, "invalid command name only support <T_LOG|N_EVETNT>");
+		this->writeErrMsg(500,
+				"invalid command name:" + cmds[0]
+						+ "only support <T_LOG|N_EVETNT>");
 		return;
 	}
 }

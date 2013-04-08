@@ -26,9 +26,12 @@ public:
 	string path();
 	bool ssl();
 	string username();
+	string busername();
 	string password();
+	string bpassword();
 	string usrpwd();
 	string cname();
+	string bcname();
 	bool isUpload();
 	bool isDownload();
 	time_t syncChkTime();
