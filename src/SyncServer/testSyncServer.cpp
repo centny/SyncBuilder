@@ -38,7 +38,7 @@ void testSyncServer() {
 	 bss.accept();*/
 	//
 #ifdef WIN32
-	boost::shared_ptr<ShellCmdMgr> scm(new ShellCmdMgr("SyncServer/users.cfg","SyncServer/Web.cfg"));
+	boost::shared_ptr<ShellCmdMgr> scm(new ShellCmdMgr("SyncServer/users.cfg","SyncServer/WinWeb.cfg"));
 #else
 	boost::shared_ptr<ShellCmdMgr> scm(
 			new ShellCmdMgr("src/SyncServer/users.cfg",
