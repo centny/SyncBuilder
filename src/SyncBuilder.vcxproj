@@ -308,7 +308,10 @@
     <None Include="ProtocolAdapter\WinNet.cfg" />
     <None Include="SyncServer\users.cfg" />
     <None Include="SyncServer\Web.cfg" />
+    <None Include="SyncServer\WinWeb.cfg" />
+    <None Include="Web\css\desktop.css" />
     <None Include="Web\index.html" />
+    <None Include="Web\index.js" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -364,30 +364,6 @@ void ShellCmdMgr::get(ConClient* c, std::istream* isbuf) {
 			c->shutdown();
 			return;
 		}
-		stringstream sdata;
-		size_t rlen = 0;
-		while (!isbuf->eof()) {
-			isbuf->read(buf, BUF_SIZE);
-			rlen = isbuf->gcount();
-			sdata.write(buf, rlen);
-		}
-		string star = sdata.str();
-		if (star.size() < 3 || star.substr(star.size() - 3) != "\n\r\n") {
-			boost::system::error_code ec;
-			while (true) {
-				rlen = c->syncRead(abuf, ec);
-				if (ec) {
-					this->writeMsg(c, 500, "server error");
-					c->shutdown();
-					return;
-				}
-				star = sdata.str();
-				if (star.size() > 2
-						&& star.substr(star.size() - 3) == "\n\r\n") {
-					break;
-				}
-			}
-		}
 		if (this->binding.find(args[1]) == this->binding.end()) {
 			this->response(c, "EventServer", 500,
 					"can't find the client by name:" + args[1]);
@@ -608,6 +584,7 @@ void ShellCmdMgr::execBindedCmd(ConClient* c, ConClient* tar,
 
 }
 void ShellCmdMgr::shutdown(ConClient* c) {
+	LoginCmdBase::shutdown(c);
 	map<string, ConClient*>::iterator scit;
 	for (scit = this->binding.begin(); scit != this->binding.end(); scit++) {
 		if (scit->second == c) {

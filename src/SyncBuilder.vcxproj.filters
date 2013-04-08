@@ -46,6 +46,9 @@
     <Filter Include="Web">
       <UniqueIdentifier>{e1e7a65a-94e7-48b8-a72e-b9767fb1aeb5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Web\css">
+      <UniqueIdentifier>{8caf26f2-a0c0-4462-9653-4b602e9dd72a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CfgParser\CfgParser.cpp">
@@ -303,6 +306,15 @@
     </None>
     <None Include="..\lib\sqlite3.def">
       <Filter>源文件</Filter>
+    </None>
+    <None Include="SyncServer\WinWeb.cfg">
+      <Filter>SyncServer</Filter>
+    </None>
+    <None Include="Web\index.js">
+      <Filter>Web</Filter>
+    </None>
+    <None Include="Web\css\desktop.css">
+      <Filter>Web\css</Filter>
     </None>
   </ItemGroup>
 </Project>

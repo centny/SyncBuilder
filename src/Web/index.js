@@ -352,7 +352,7 @@ MyDesktop.ClientManagerWindow = Ext.extend(Ext.app.Module, {
 					select : function(tar, nval) {
 						events.loadData([]);
 						if (cmd_box && cmd_box.value) {
-							loadEventData(clt_box.value, cmd_box.value);
+						    loadEventData(nval.data.val, cmd_box.value);
 						}
 					}
 				}
@@ -374,14 +374,15 @@ MyDesktop.ClientManagerWindow = Ext.extend(Ext.app.Module, {
 				selectOnFocus : true,
 				anchor : '98%',
 				listeners : {
-					select : function(tar, nval) {
-						events.loadData([]);
+				    select: function (tar, nval) {
+				        ent_box.clearValue();
+					    events.loadData([]);
 						if (nval.data.val == "N_SYNC") {
 							ent_box.disable();
 						} else {
 							ent_box.enable();
 							if (clt_box && clt_box.value) {
-								loadEventData(clt_box.value, cmd_box.value);
+							    loadEventData(clt_box.value, nval.data.val);
 							}
 						}
 					}

@@ -24,8 +24,13 @@ void testSyncMgr() {
 //			<< "--------------------------------" << endl;
 }
 void testSyncDemo() {
+#ifdef WIN32
+	string ecfp = "EventMgr/e.cfg";
+	string ncfp = "ProtocolAdapter/WinNet.cfg";
+#else
 	string ecfp = "src/EventMgr/e.cfg";
 	string ncfp = "src/ProtocolAdapter/Net.cfg";
+#endif
 //	string ncfp = "src/ProtocolAdapter/Ftp.cfg";
 	io_service ios;
 	NoticeCenter::defaultCenter().initTimer(ios);

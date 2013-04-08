@@ -17,3 +17,7 @@
 
 /src/Release
 /libsqlite/Release
+
+/Test
+
+/src/*.user
