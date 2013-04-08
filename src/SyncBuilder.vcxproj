@@ -308,6 +308,7 @@
     <None Include="ProtocolAdapter\WinNet.cfg" />
     <None Include="SyncServer\users.cfg" />
     <None Include="SyncServer\Web.cfg" />
+    <None Include="SyncServer\WinUsers.cfg" />
     <None Include="SyncServer\WinWeb.cfg" />
     <None Include="Web\css\desktop.css" />
     <None Include="Web\index.html" />

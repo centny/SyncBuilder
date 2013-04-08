@@ -316,5 +316,8 @@
     <None Include="Web\css\desktop.css">
       <Filter>Web\css</Filter>
     </None>
+    <None Include="SyncServer\WinUsers.cfg">
+      <Filter>SyncServer</Filter>
+    </None>
   </ItemGroup>
 </Project>
