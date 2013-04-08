@@ -69,7 +69,7 @@ void SyncServer::accept() {
 //	}
 //}
 void SyncServer::acceptHandler(boost::shared_ptr<ConClient> client,
-							   const boost::system::error_code& ec) {
+		const boost::system::error_code& ec) {
 	this->clients.push_back(client);
 	if (ec.value()) {
 		log.error("accepting error:%s", ec.message().c_str());
@@ -78,6 +78,7 @@ void SyncServer::acceptHandler(boost::shared_ptr<ConClient> client,
 	} else {
 		log.debug("accepting one connect:%s", client->address().c_str());
 		client->setSp(client);
+		client->initAdr();
 		client->startRead();
 		this->accept();
 	}
@@ -92,8 +93,10 @@ void SyncServer::cfgSocketTimeouts(tcp::socket& socket, long timeout) {
 	struct timeval tv;
 	tv.tv_sec = timeout / 1000;
 	tv.tv_usec = 0;
-	setsockopt(socket.native(), SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof(tv));
-	setsockopt(socket.native(), SOL_SOCKET, SO_SNDTIMEO, (const char*)&tv, sizeof(tv));
+	setsockopt(socket.native(), SOL_SOCKET, SO_RCVTIMEO, (const char*) &tv,
+			sizeof(tv));
+	setsockopt(socket.native(), SOL_SOCKET, SO_SNDTIMEO, (const char*) &tv,
+			sizeof(tv));
 #endif
 }
 void SyncServer::ctimerHandler(const boost::system::error_code& ec) {
@@ -109,15 +112,15 @@ void SyncServer::ctimerHandler(const boost::system::error_code& ec) {
 		return;
 	}
 	it = this->clients.begin();
-	for (;it!=this->clients.end();it++) {
+	for (; it != this->clients.end(); it++) {
 		if (it->use_count() < 2) {
-			it=this->clients.erase(it);
-			if(it==this->clients.end()){
+			it = this->clients.erase(it);
+			if (it == this->clients.end()) {
 				break;
 			}
 		}
 	}
-	log.debug("current %d clients,erase %d client",this->clients.size(),
+	log.debug("current %d clients,erase %d client", this->clients.size(),
 			size - this->clients.size());
 }
 }

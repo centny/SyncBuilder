@@ -66,6 +66,8 @@ private:
 	string cname;
 	string csession;
 	boost::shared_ptr<ConClient> csp;
+	boost::asio::ip::address radr;
+	boost::asio::ip::address ladr;
 	//
 	//
 	bool inited;
@@ -89,6 +91,8 @@ public:
 	SyncServer& tServer();
 	//it will free this object.
 //	void fre();
+	//
+	void initAdr();
 	//
 	bool isInited();
 	//

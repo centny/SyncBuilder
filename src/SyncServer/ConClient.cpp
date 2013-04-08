@@ -10,7 +10,7 @@
 #include <cstdlib>
 #include <stdio.h>
 namespace centny {
-
+#define SHOW_REL_LOG 1
 ConClient::ConClient(SyncServer& server, CmdBase* cmd) :
 		log(C_LOG("ConClient")),server(server) {
 			this->cmdb=cmd;
@@ -52,6 +52,10 @@ SyncServer& ConClient::tServer() {
 //	this->shutdown();
 //	this->server.remove(this);
 //}
+void ConClient::initAdr() {
+	this->radr = psocket->remote_endpoint().address();
+	this->ladr = psocket->local_endpoint().address();
+}
 bool ConClient::isInited() {
 	return this->inited;
 }
@@ -117,7 +121,7 @@ size_t ConClient::syncRead(boost::array<char, R_BUF_SIZE>& buf,
 	return this->psocket->read_some(buffer(buf), ec);
 }
 string ConClient::address() {
-	return psocket->remote_endpoint().address().to_string();
+	return this->radr.to_string();
 }
 void ConClient::writeHandler(const boost::system::error_code& ec,
 		size_t bytes_transferred) {

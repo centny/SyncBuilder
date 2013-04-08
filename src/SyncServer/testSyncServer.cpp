@@ -21,7 +21,7 @@ void testSyncServer() {
 			new FileCmdMgr("src/SyncServer/users.cfg"));
 #endif
 	io_service ios;
-	SyncServer fss(ios, 10000, fcm.get(), "FCM");
+	SyncServer fss(ios, 10002, fcm.get(), "FCM");
 	fcm->setServer(&fss);
 	fss.accept();
 	//
