@@ -321,7 +321,7 @@ MyDesktop.LogMonitorWindow = Ext.extend(Ext.app.Module, {
 				win.startLoad();
 			}
 			win.startLoad = function() {
-				this.timeout = setTimeout(win.loadLog, 3000);
+				this.timeout = setTimeout(win.loadLog, 10000);
 			}
 			win.stopLoad = function() {
 				clearTimeout(this.timeout);
@@ -488,6 +488,21 @@ MyDesktop.ClientManagerWindow = Ext.extend(Ext.app.Module, {
 									method : 'GET',
 									success : function(response, options) {
 										MyDesktop.log.add("sending N_SYNC to client:" + clt_box.value);
+									},
+									failure : function(response, options) {
+										Ext.MessageBox.alert('Failed', 'Server error code:' + response.status);
+									}
+								});
+								break;
+							case "N_EVENT":
+								if (!clt_box.value || !ent_box.value) {
+									return;
+								}
+								Ext.Ajax.request({
+									url : 'EServer/' + clt_box.value + '/' + cmd_box.value+'/'+ent_box.value,
+									method : 'GET',
+									success : function(response, options) {
+										MyDesktop.log.add("sending N_EVENT/"+ent_box.value+" to client:" + clt_box.value);
 									},
 									failure : function(response, options) {
 										Ext.MessageBox.alert('Failed', 'Server error code:' + response.status);
