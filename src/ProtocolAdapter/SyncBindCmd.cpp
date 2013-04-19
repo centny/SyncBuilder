@@ -274,7 +274,7 @@ void SyncBindCmd::transfLog(vector<string>& cmds) {
 		this->writeErrMsg(202, "invalid data seek, listener:" + name);
 		return;
 	}
-	fstream fs(lc->logFile.c_str(), ios::in);
+	fstream fs(lc->logFile.c_str(), ios::in|ios::binary);
 	if (!fs.is_open()) {
 		this->writeErrMsg(500, "open log file error, listener:" + name);
 		return;
@@ -284,9 +284,11 @@ void SyncBindCmd::transfLog(vector<string>& cmds) {
 	fs.seekg(beg);
 	size_t remain = end - beg;
 	blen2 = sprintf(buf2, "200\nLOG %ld\n", remain);
+	buf2[blen2]=0;
 	blen = sprintf(buf, "T_LOG_BACK %ld"DEFAULT_EOC, remain + blen2);
+	blen+=sprintf(buf+blen, "%s", buf2);
+	buf[blen]=0;
 	this->socket->write_some(buffer(buf, blen), ec);
-	this->socket->write_some(buffer(buf2, blen2), ec);
 	while (!fs.eof()) {
 		fs.read(buf, R_BUF_SIZE);
 		size_t rlen = fs.gcount();
