@@ -283,7 +283,7 @@ void SyncBindCmd::transfLog(vector<string>& cmds) {
 	size_t blen = 0, blen2 = 0;
 	fs.seekg(beg);
 	size_t remain = end - beg;
-	blen2 = sprintf(buf2, "200\nLOG %ld\n", remain);
+	blen2 = sprintf(buf2, "200\nLOG %ld %ld\n",beg, remain);
 	buf2[blen2]=0;
 	blen = sprintf(buf, "T_LOG_BACK %ld"DEFAULT_EOC, remain + blen2);
 	blen+=sprintf(buf+blen, "%s", buf2);

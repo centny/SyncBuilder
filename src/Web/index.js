@@ -290,7 +290,7 @@ MyDesktop.LogMonitorWindow = Ext.extend(Ext.app.Module, {
 					}
 				}
 			});
-			win.container = Ext.get("lmon-container-" + name);
+			win.wcontainer = Ext.get("lmon-container-" + name);
 			win.wname = name;
 			win.args = args;
 			win.logLength = 0;
@@ -311,10 +311,17 @@ MyDesktop.LogMonitorWindow = Ext.extend(Ext.app.Module, {
 						cmd = res.substring(0,cidx);
 						res = res.substring(cidx + 1);
 						var cmds = cmd.split(' ');
-						var llen = parseInt(cmds[1]);
+						var lbeg = parseInt(cmds[1]);
+						var llen = parseInt(cmds[2]);
+						if (lbeg < win.logLength) {
+						    Ext.each(win.wcontainer.query("div"), function (item, index, len) {
+						        item.remove();
+						    });
+						    win.logLength = lbeg;
+						}
 						if (llen > 0) {
 						    win.logLength += llen;
-						    win.container.createChild({
+						    win.wcontainer.createChild({
 						        html: res
 						    });
 						}
@@ -479,7 +486,7 @@ MyDesktop.ClientManagerWindow = Ext.extend(Ext.app.Module, {
 				buttons : [{
 					text : 'Start',
 					formBind : false,
-					handler : function(btn, evt) {
+					handler: function (btn, evt) {
 						if (!cmd_box.value) {
 							return;
 						}
