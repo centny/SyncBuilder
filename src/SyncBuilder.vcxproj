@@ -298,7 +298,6 @@
     <ClInclude Include="xgetopt.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\lib\sqlite3.def" />
     <None Include="CfgParser\e.cfg" />
     <None Include="EventMgr\e.cfg" />
     <None Include="EventMgr\Wine.cfg" />

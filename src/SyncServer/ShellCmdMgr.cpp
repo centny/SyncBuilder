@@ -568,7 +568,7 @@ void ShellCmdMgr::execBindedCmd(ConClient* c, ConClient* tar,
 				this->writeMsg(tar, 500, "server error");
 				break;
 			}
-			tar->syncWrite(buf, rlen);
+			tar->syncWrite(abuf.c_array(), rlen);
 			bsize -= rlen;
 		}
 		c->startRead();

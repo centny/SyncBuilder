@@ -301,18 +301,23 @@ MyDesktop.LogMonitorWindow = Ext.extend(Ext.app.Module, {
 					success : function(response, options) {
 						var res = response.responseText;
 						var cidx = res.indexOf('\n');
-						var cmd = res.substring(cidx);
+						var cmd = res.substring(0,cidx);
 						if (cmd.trim() !== "200") {
-							MyDesktop.log.add("[" + win.wname + "] get log failed, msg:" + res.substring(cidx + 1));
+						    MyDesktop.log.add("[" + win.wname + "] get log failed, msg:" + res.substring(cidx + 1));
+						    return;
 						}
 						res = res.substring(cidx + 1);
 						cidx = res.indexOf('\n');
-						cmd = res.substring(cidx);
+						cmd = res.substring(0,cidx);
 						res = res.substring(cidx + 1);
-						var cmds=cmd.splite(' ');
-						win.container.createChild({
-							html:res
-						});
+						var cmds = cmd.split(' ');
+						var llen = parseInt(cmds[1]);
+						if (llen > 0) {
+						    win.logLength += llen;
+						    win.container.createChild({
+						        html: res
+						    });
+						}
 					},
 					failure : function(response, options) {
 
@@ -328,7 +333,7 @@ MyDesktop.LogMonitorWindow = Ext.extend(Ext.app.Module, {
 			}
 		}
 		win.show();
-		win.startLoad();
+		win.loadLog();
 	}
 });
 /**

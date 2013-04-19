@@ -304,9 +304,6 @@
     <None Include="Web\index.html">
       <Filter>Web</Filter>
     </None>
-    <None Include="..\lib\sqlite3.def">
-      <Filter>源文件</Filter>
-    </None>
     <None Include="SyncServer\WinWeb.cfg">
       <Filter>SyncServer</Filter>
     </None>
