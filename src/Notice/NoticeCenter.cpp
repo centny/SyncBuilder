@@ -30,6 +30,7 @@ void NoticeCenter::fre() {
 NoticeCenter::NoticeCenter() :
 		log(C_LOG("NoticeCenter")) {
 			this->log.debug("initial one NoticeCenter");
+			NoticeTimer::defaultNoticeTimer().reg(this);
 		}
 
 NoticeCenter::~NoticeCenter() {
@@ -86,25 +87,10 @@ void NoticeCenter::postObj(string name, DataPool::DObj* dobj) {
 	this->notices.push_back(pair<string,DataPool::DId>(name,did));
 	this->log.debug("receive post notice:%s",name.c_str());
 }
-void NoticeCenter::initTimer(boost::asio::io_service& ios) {
-	this->dtimer = boost::shared_ptr<boost::asio::deadline_timer>(
-			new boost::asio::deadline_timer(ios));
-	this->dtimer->expires_from_now(
-			boost::posix_time::milliseconds(HEVENT_TIMEOUT));
-	this->dtimer->async_wait(
-			boost::bind(&NoticeCenter::timerHandler, this, _1));
-
-}
-void NoticeCenter::timerHandler(const boost::system::error_code& ec) {
-	if (ec.value() == ECANCELED) {
-		return;
-	}
-//	this->log.debug("handling event");
-	this->handle();
-	this->dtimer->expires_from_now(
-			boost::posix_time::milliseconds(HEVENT_TIMEOUT));
-	this->dtimer->async_wait(
-			boost::bind(&NoticeCenter::timerHandler, this, _1));
+bool NoticeCenter::timeout() {
+	while (this->handle())
+		;
+	return false;
 }
 //
 } /* namespace centny */

@@ -15,15 +15,16 @@
 #include <string>
 #include "../DataPool/DataPool.h"
 #include "../log/LogFactory.h"
+#include "NoticeTimer.h"
 namespace centny {
 using namespace std;
-#define HEVENT_TIMEOUT 1500
+#define HEVENT_TIMEOUT 1000
 class Noticeable {
 public:
 	virtual void receive(string name, DataPool::DId did)=0;
 	virtual ~Noticeable();
 };
-class NoticeCenter {
+class NoticeCenter: public TimeNoticeable {
 public:
 	static NoticeCenter& defaultCenter();
 	static void fre();
@@ -44,9 +45,8 @@ public:
 	void rmv(string name);
 	void postDid(string name, DataPool::DId did = "");
 	void postObj(string name, DataPool::DObj* dobj);
-	void initTimer(boost::asio::io_service& ios);
-private:
-	void timerHandler(const boost::system::error_code& ec);
+//	void initTimer(boost::asio::io_service& ios);
+	virtual bool timeout();
 };
 
 } /* namespace centny */

@@ -39,7 +39,7 @@ SyncDemo::SyncDemo(string ncf, string ecf) :
 			if ("SYNC" == ntype) {
 				SyncAdapter *sa = new SyncAdapter(this->db, this->ncfg);
 				this->net = sa;
-				assert(sa->isLogined());
+//				assert(sa->isLogined());
 			}
 			assert(this->net);
 			this->loc = new LocAdapter(this->db, this->ncfg->locSyncDir());

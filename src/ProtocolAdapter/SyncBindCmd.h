@@ -21,6 +21,7 @@
 #include "AdapterBase.h"
 #include "../Common/Cmd.h"
 #include "../EventMgr/EventMgr.h"
+#include "../Notice/NoticeTimer.h"
 namespace centny {
 using namespace boost;
 using namespace boost::asio;
@@ -31,7 +32,7 @@ using ip::tcp;
 class EventCfg;
 class NetCfg;
 
-class SyncBindCmd: public Cmd {
+class SyncBindCmd: public Cmd,public TimeNoticeable {
 private:
 	NetAdapterBase* neta;
 	EventMgr::EventMgrId mid;
@@ -56,6 +57,7 @@ public:
 	//
 	bool reinit();
 	void shutdown();
+	virtual bool timeout();
 private:
 	void readHandle(const boost::system::error_code& ec,
 			std::size_t bytes_transferred);

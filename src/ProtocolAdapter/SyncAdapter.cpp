@@ -39,12 +39,13 @@ SyncAdapter::~SyncAdapter() {
 	this->quit();
 }
 bool SyncAdapter::isLogined() {
-	return this->logined !=0;
+	return this->logined != 0;
 }
 bool SyncAdapter::reinit() {
 	if (this->socket.get()) {
 		this->socket->close(ec);
 	}
+	this->logined = 0;
 	this->socket = boost::shared_ptr<ip::tcp::socket>(
 			new ip::tcp::socket(this->iosev));
 	ip::tcp::endpoint ep(ip::address_v4::from_string(this->ncfg->host()),
@@ -132,11 +133,13 @@ vector<FInfo*> SyncAdapter::listSubs(FInfo* parent) {
 	this->socket->write_some(buffer(buf, blen), ec);
 	if (ec) {
 		log.error("list subs error:%s", ec.message().c_str());
+		this->netstate = 500;
 		throw "list subs error";
 	}
 	blen = this->socket->read_some(buffer(buf, R_BUF_SIZE), ec);
 	if (ec) {
 		log.error("list subs error:%s", ec.message().c_str());
+		this->netstate = 500;
 		throw "list subs error";
 	}
 	std::stringstream header(buf);
@@ -172,6 +175,7 @@ vector<FInfo*> SyncAdapter::listSubs(FInfo* parent) {
 		blen = this->socket->read_some(buffer(buf, R_BUF_SIZE), ec);
 		if (ec) {
 			log.error("list subs error:%s", ec.message().c_str());
+			this->netstate = 500;
 			throw "list subs error";
 		}
 		data.write(buf, blen);

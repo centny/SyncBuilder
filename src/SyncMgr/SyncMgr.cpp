@@ -78,11 +78,15 @@ void SyncMgr::sync() {
 			}
 		}
 		if (this->net->netstate != 200) {
-			log.error("the NetAdapter state is:%d,it will be reconnect",
-					this->net->netstate);
-			if (!this->net->reinit()) {
-				remain = ctime;
-				continue;
+			try {
+				log.error("the NetAdapter state is:%d,it will be reconnect",
+						this->net->netstate);
+				if (!this->net->reinit()) {
+					remain = ctime;
+					continue;
+				}
+			} catch (...) {
+				log.error("reconnect faild,it will try again");
 			}
 		}
 		try {

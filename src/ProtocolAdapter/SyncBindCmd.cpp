@@ -22,7 +22,8 @@ SyncBindCmd::SyncBindCmd(EventCfg* ecfg, NetCfg* ncfg, NetAdapterBase* neta,
 			this->netstate=0;
 			this->neta=neta;
 			this->mid=mid;
-			assert(this->reinit());
+			this->reinit();
+			this->rtime=5000;
 		}
 
 SyncBindCmd::~SyncBindCmd() {
@@ -123,10 +124,14 @@ void SyncBindCmd::shutdown() {
 	this->socket->shutdown(boost::asio::ip::tcp::socket::shutdown_both,
 			ignored_ec);
 }
+bool SyncBindCmd::timeout() {
+	return this->reinit();
+}
 void SyncBindCmd::readHandle(const boost::system::error_code& ec,
 		std::size_t bytes_transferred) {
 	if (ec.value()) {
 		this->log.debug("bind connection error");
+		NoticeTimer::defaultNoticeTimer().reg(this);
 		this->shutdown();
 		return;
 	}
@@ -274,7 +279,7 @@ void SyncBindCmd::transfLog(vector<string>& cmds) {
 		this->writeErrMsg(202, "invalid data seek, listener:" + name);
 		return;
 	}
-	fstream fs(lc->logFile.c_str(), ios::in|ios::binary);
+	fstream fs(lc->logFile.c_str(), ios::in | ios::binary);
 	if (!fs.is_open()) {
 		this->writeErrMsg(500, "open log file error, listener:" + name);
 		return;
@@ -283,11 +288,11 @@ void SyncBindCmd::transfLog(vector<string>& cmds) {
 	size_t blen = 0, blen2 = 0;
 	fs.seekg(beg);
 	size_t remain = end - beg;
-	blen2 = sprintf(buf2, "200\nLOG %ld %ld\n",beg, remain);
-	buf2[blen2]=0;
+	blen2 = sprintf(buf2, "200\nLOG %ld %ld\n", beg, remain);
+	buf2[blen2] = 0;
 	blen = sprintf(buf, "T_LOG_BACK %ld"DEFAULT_EOC, remain + blen2);
-	blen+=sprintf(buf+blen, "%s", buf2);
-	buf[blen]=0;
+	blen += sprintf(buf + blen, "%s", buf2);
+	buf[blen] = 0;
 	this->socket->write_some(buffer(buf, blen), ec);
 	while (!fs.eof()) {
 		fs.read(buf, R_BUF_SIZE);
