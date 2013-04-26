@@ -24,6 +24,7 @@ void testSyncMgr() {
 //			<< "--------------------------------" << endl;
 }
 void testSyncDemo() {
+	namespace fs=boost::filesystem;
 #ifdef WIN32
 	string ecfp = "EventMgr/Wine.cfg";
 	string ncfp = "ProtocolAdapter/WinNet.cfg";
@@ -33,7 +34,6 @@ void testSyncDemo() {
 #else
 	string ecfp = "src/EventMgr/e.cfg";
 	string ncfp = "src/ProtocolAdapter/Net.cfg";
-	namespace fs=boost::filesystem;
 	if(!fs::exists(fs::path("/tmp/sync"))){
 		fs::create_directories(fs::path("/tmp/sync"));
 	}

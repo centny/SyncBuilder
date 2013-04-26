@@ -11,12 +11,17 @@
 #include "BindCmdMgr.h"
 #include "ShellCmdMgr.h"
 #include <boost/array.hpp>
+#include <boost/filesystem.hpp>
 using namespace centny;
 void testSyncServer() {
+	namespace fs=boost::filesystem;
 #ifdef WIN32
 	boost::shared_ptr<FileCmdMgr> fcm(
 			new FileCmdMgr("SyncServer/WinUsers.cfg"));
 #else
+	if(!fs::exists(fs::path("Test"))){
+		fs::create_directories(fs::path("Test"));
+	}
 	boost::shared_ptr<FileCmdMgr> fcm(
 			new FileCmdMgr("src/SyncServer/users.cfg"));
 #endif
