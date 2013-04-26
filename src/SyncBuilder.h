@@ -7,16 +7,61 @@
 
 #ifndef SYNCBUILDER_H_
 #define SYNCBUILDER_H_
-#include <string>
+#include "Notice/NoticeCenter.h"
+#include "xgetopt.h"
+#include "SyncServer/DemoCfg.h"
+#include "SyncMgr/DemoCfg.h"
+#include <boost/asio.hpp>
 using namespace std;
+using namespace centny;
+namespace centny {
+class SyncBuilder {
+public:
+	boost::asio::io_service ios;
+public:
+	SyncBuilder();
+	virtual ~SyncBuilder();
+	virtual void init(string cfg)=0;
+	virtual void run()=0;
+	virtual void stop()=0;
+	//
+public:
+	static void help();
+	static SyncBuilder* create(int argc, char** argv);
+	static SyncBuilder* demo();
+	static void fre();
+};
+class SMgrBuilder: public SyncBuilder {
+private:
+	centny::SMgr::DemoCfg* dcfg;
+	Log log;
+public:
+	SMgrBuilder();
+	virtual ~SMgrBuilder();
+	virtual void init(string cfg);
+	virtual void run();
+	virtual void stop();
+};
+class SServeBuilder: public SyncBuilder {
+private:
+	centny::SServer::DemoCfg* dcfg;
+	Log log;
+public:
+	SServeBuilder();
+	virtual ~SServeBuilder();
+	virtual void init(string cfg);
+	virtual void run();
+	virtual void stop();
+};
+}
 //
-void initSyncBuilder(string cfg);
-void runSyncBuilder();
-void stopSyncBuilder();
-//service interface.
-void printHelp();
-int initService(int argc,char** argv);
-int runService(int argc,char** argv);
-int stopService(int argc,char** argv);
+//void initSyncBuilder(string cfg);
+//void runSyncBuilder();
+//void stopSyncBuilder();
+////service interface.
+//void printHelp();
+//int initService(int argc, char** argv);
+//int runService(int argc, char** argv);
+//int stopService(int argc, char** argv);
 //
 #endif /* SYNCBUILDER_H_ */

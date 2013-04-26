@@ -5,8 +5,8 @@
  *      Author: Scorpion
  */
 
-#ifndef SYNCDEMO_H_
-#define SYNCDEMO_H_
+#ifndef SMGR_SYNCDEMO_H_
+#define SMGR_SYNCDEMO_H_
 #include "../ProtocolAdapter/FtpAdapter.h"
 #include "../ProtocolAdapter/SyncAdapter.h"
 #include "../ProtocolAdapter/LocAdapter.h"
@@ -16,6 +16,7 @@
 #include "SyncMgr.h"
 #include <sqlite3.h>
 namespace centny {
+namespace SMgr {
 //
 #define TNAME "FINFO"
 //location 0:local,1:remote.
@@ -61,6 +62,6 @@ public:
 	void run();
 	void initBCmd(io_service& ios);
 };
-
+}
 } /* namespace centny */
 #endif /* SYNCDEMO_H_ */

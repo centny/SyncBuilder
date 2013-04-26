@@ -47,15 +47,12 @@ void printMainHelp() {
 			"\t-h show this message\n");
 
 #else
-	printf("Usage:cmd <option>\n"
-			"\t-l path  the log configure file path\n"
-			"\t-c path  the demo configure  file path\n"
-			"\t-h show this message\n");
+	SyncBuilder::help();
 #endif
 }
 #ifndef WIN32
 void receiveKillSignal(int s) {
-	stopService(0, 0);
+	SyncBuilder::demo()->stop();
 	printf("receive kill signal:%d\n", s);
 }
 void registerKillSignal() {
@@ -153,8 +150,8 @@ int main(int argc, char** argv) {
 	assert(lfs.is_open());
 	lfs << getpid() << endl;
 	registerKillSignal();
-	initService(argc, argv);
-	runService(argc, argv);
+	SyncBuilder::create(argc, argv);
+	SyncBuilder::demo()->run();
 	lfs.close();
 	std::system("rm -f /tmp/SyncBuilderLock");
 #endif
@@ -164,7 +161,7 @@ int main(int argc, char** argv) {
 #if DEV_NO_SERVICE
 void killsig(int s) {
 	printf("receive kill signal:%d\n", s);
-	stopService(0, 0);
+	SyncBuilder::demo()->stop();
 }
 void registerSignal() {
 	signal(SIGTERM, killsig);
@@ -218,11 +215,11 @@ void t() {
 
 void testSyncBuilder() {
 #ifdef WIN32
-	initSyncBuilder("Demoes.cfg");
+//	initSyncBuilder("Demoes.cfg");
 #else
-	initSyncBuilder("src/Demoes.cfg");
+//	initSyncBuilder("src/Demoes.cfg");
 #endif
-	runSyncBuilder();
+//	runSyncBuilder();
 	bsleep(100000);
 	cout << "-----------run end-----------" << endl;
 }

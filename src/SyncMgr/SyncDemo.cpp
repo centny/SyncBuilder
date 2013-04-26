@@ -9,7 +9,7 @@
 #include <boost/thread.hpp>
 #include <boost/thread/mutex.hpp>
 namespace centny {
-
+namespace SMgr {
 SyncDemo::SyncDemo(string ncf, string ecf) :
 		log(C_LOG("SyncDemo")) {
 			this->db=0;
@@ -141,5 +141,6 @@ void SyncDemo::fre(SyncDemo* sd) {
 		_sync_demoes.clear();
 	}
 	_sd_mutex.unlock();
+}
 }
 } /* namespace centny */

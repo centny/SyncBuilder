@@ -5,8 +5,8 @@
  *      Author: Scorpion
  */
 
-#ifndef SYNCMGR_H_
-#define SYNCMGR_H_
+#ifndef SMGR_SYNCMGR_H_
+#define SMGR_SYNCMGR_H_
 #include "../ProtocolAdapter/AdapterBase.h"
 #include "../CfgParser/CfgParser.h"
 #include "../EventMgr/EventMgr.h"
@@ -17,6 +17,7 @@
 #include "../ProtocolAdapter/NetCfg.h"
 #include "../Notice/NoticeCenter.h"
 namespace centny {
+namespace SMgr {
 using namespace file;
 using namespace boost;
 //
@@ -57,6 +58,6 @@ private:
 //	void syncRemove(NetFInfo* netf, FInfo* locf);
 	int compare(FInfo* locf, NetFInfo* netf);
 };
-
+}
 } /* namespace centny */
 #endif /* SYNCMGR_H_ */

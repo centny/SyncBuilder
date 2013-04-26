@@ -6,6 +6,7 @@
  */
 #include "SyncDemo.h"
 using namespace centny;
+using namespace centny::SMgr;
 void handler() {
 	cout << "handle" << endl;
 }

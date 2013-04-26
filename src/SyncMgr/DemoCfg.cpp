@@ -8,7 +8,7 @@
 #include "DemoCfg.h"
 
 namespace centny {
-
+namespace SMgr {
 #define DEMO_SERVE_CFG "DEMO_SERVE_CFG_"
 #define DEMO_EVENT_CFG "DEMO_EVENT_CFG_"
 DemoCfg::DemoCfg(string& cfgPath) :
@@ -32,8 +32,8 @@ DemoCfg::DemoCfg(string& cfgPath) :
 				}
 				this->demo_cfgs[name] = pair<string, string>(it->second, fit->second);
 				names.push_back(name);
-		}
-		log.info("run %d demo for configure;%s",names.size(),cfgPath.c_str());
+			}
+			log.info("run %d demo for configure;%s",names.size(),cfgPath.c_str());
 }
 string DemoCfg::serveCfg(string name) {
 	pair<string, string> p = this->demo_cfgs[name];
@@ -42,5 +42,6 @@ string DemoCfg::serveCfg(string name) {
 string DemoCfg::eventCfg(string name) {
 	pair<string, string> p = this->demo_cfgs[name];
 	return p.second;
+}
 }
 } /* namespace centny */
