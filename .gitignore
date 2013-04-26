@@ -22,3 +22,5 @@
 
 /src/*.user
 CDebug
+SDebug
+sblog.log
