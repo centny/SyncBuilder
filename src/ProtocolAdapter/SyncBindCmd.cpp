@@ -35,7 +35,7 @@ bool SyncBindCmd::binding() {
 	if (this->netstate != 200) {
 		return false;
 	}
-#if DEV_IN_TEST
+#if DEV_NO_SERVICE
 	string session = "centny";
 #else
 	string session=this->neta->name;

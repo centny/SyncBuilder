@@ -20,7 +20,7 @@
 #endif
 using namespace std;
 //
-#ifdef DEV_IN_TEST
+#ifdef DEV_NO_SERVICE
 void testParser();
 void testDataPool();
 void testEventMgr();
@@ -67,7 +67,7 @@ void registerKillSignal() {
 }
 #endif
 int main(int argc, char** argv) {
-#ifdef DEV_IN_TEST
+#ifdef DEV_NO_SERVICE
 	devTest(argc, argv);
 #else
 #ifdef WIN32
@@ -160,7 +160,7 @@ int main(int argc, char** argv) {
 #endif
 	return 0;
 }
-#ifdef DEV_IN_TEST
+#ifdef DEV_NO_SERVICE
 void killsig(int s) {
 	printf("receive kill signal:%d\n", s);
 	stopService(0, 0);
@@ -178,23 +178,27 @@ void registerSignal() {
 #endif
 }
 void devTest(int argc, char** argv) {
-//	registerSignal();
-//	initService(argc,argv);
-//	runService(argc,argv);
 	LogFactory::init();
+	//	registerSignal();
+	//	initService(argc,argv);
+	//	runService(argc,argv);
+
 	//	cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
 	//	testParser();
 	//	testDataPool();
 	//	testEventMgr();
-//	testCurl();
-	testSyncServer();
-	//testSocketServer();
-	//testShellCmdServer();
-//	testAdapter();
+	//	testCurl();
+	//	testSocketServer();
+	//	testShellCmdServer();
+	//	testAdapter();
 	//	testSyncMgr();
-	//testSyncDemo();
 	//	testSyncBuilder();
-//	testCmdBase();
+	//	testCmdBase();
+#if RUN_SERVER
+	testSyncServer();
+#else
+	testSyncDemo();
+#endif
 }
 void t() {
 	testParser();

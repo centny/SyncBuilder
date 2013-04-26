@@ -25,11 +25,18 @@ void testSyncMgr() {
 }
 void testSyncDemo() {
 #ifdef WIN32
-	string ecfp = "EventMgr/e.cfg";
+	string ecfp = "EventMgr/Wine.cfg";
 	string ncfp = "ProtocolAdapter/WinNet.cfg";
+	if(!fs::exists(fs::path("F:\\Temp\\sbtemp"))){
+		fs::create_directories(fs::path("F:\\Temp\\sbtemp"));
+	}
 #else
 	string ecfp = "src/EventMgr/e.cfg";
 	string ncfp = "src/ProtocolAdapter/Net.cfg";
+	namespace fs=boost::filesystem;
+	if(!fs::exists(fs::path("/tmp/sync"))){
+		fs::create_directories(fs::path("/tmp/sync"));
+	}
 #endif
 //	string ncfp = "src/ProtocolAdapter/Ftp.cfg";
 	io_service ios;
