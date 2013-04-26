@@ -53,6 +53,7 @@ public:
 	};
 public:
 	boost::shared_ptr<tcp::socket> psocket;
+	int extend;
 private:
 	Log log;
 	boost::asio::streambuf buf;

@@ -15,7 +15,7 @@ using namespace centny;
 void testSyncServer() {
 #ifdef WIN32
 	boost::shared_ptr<FileCmdMgr> fcm(
-			new FileCmdMgr("SyncServer/users.cfg"));
+			new FileCmdMgr("SyncServer/WinUsers.cfg"));
 #else
 	boost::shared_ptr<FileCmdMgr> fcm(
 			new FileCmdMgr("src/SyncServer/users.cfg"));

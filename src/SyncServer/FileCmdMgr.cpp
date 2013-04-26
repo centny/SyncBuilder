@@ -189,7 +189,7 @@ size_t FileCmdMgr::help(ConClient* c) {
 	return blen;
 }
 size_t FileCmdMgr::list(ConClient* c, string path) {
-	log.debug("create new directory:%s", path.c_str());
+	//log.debug("create new directory:%s", path.c_str());
 	string rpath = this->rdir(c) + F_SEQ + path;
 	replaceAll(rpath, F_SEQ F_SEQ, F_SEQ, 0);
 	fs::path ppath(rpath);
@@ -197,7 +197,7 @@ size_t FileCmdMgr::list(ConClient* c, string path) {
 		blen = sprintf(cbuf, "%d\n%s"DEFAULT_EOC, 500, "invalid directory");
 		c->asyncWrite(cbuf, blen);
 		cbuf[blen] = 0;
-		log.debug("execute list command error:%s,send:%ld", cbuf, blen);
+		log.debug("execute list command error:%s not exists",rpath.c_str());
 		return blen;
 	}
 	fs::directory_iterator it(ppath);

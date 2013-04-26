@@ -68,25 +68,25 @@ void ShellCmdMgr::sendCmd(vector<string>& cmds, ConClient* tar) {
 	blen += clen;
 	tar->asyncWrite(buf, blen);
 }
-void ShellCmdMgr::httpBing(ConClient* c, ConClient* tar, vector<string> cmds) {
-	c->tServer().thrGrps().create_thread(
-			boost::bind(&ShellCmdMgr::thrHttpBing, this, c, tar, cmds));
-}
-void ShellCmdMgr::thrHttpBing(ConClient* c, ConClient* tar,
-		vector<string> cmds) {
-	boost::timed_mutex* tmutex = this->conMutex(tar);
-	bool locked = tmutex->timed_lock(
-			boost::get_system_time() + boost::posix_time::seconds(10));
-	if (locked) {
-		this->binded[c] = tar;
-		this->http.insert(c);
-		this->sendCmd(cmds, tar);
-	} else {
-		this->response(c, "EServer Error", 423,
-				"try lock target client timeout.");
-		c->shutdown();
-	}
-}
+//void ShellCmdMgr::httpBing(ConClient* c, ConClient* tar, vector<string> cmds) {
+//	c->tServer().thrGrps().create_thread(
+//			boost::bind(&ShellCmdMgr::thrHttpBing, this, c, tar, cmds));
+//}
+//void ShellCmdMgr::thrHttpBing(ConClient* c, ConClient* tar,
+//		vector<string> cmds) {
+//	boost::timed_mutex* tmutex = this->conMutex(tar);
+//	bool locked = tmutex->timed_lock(
+//			boost::get_system_time() + boost::posix_time::seconds(10));
+//	if (locked) {
+//		this->binded[c] = tar;
+//		this->http.insert(c);
+//		this->sendCmd(cmds, tar);
+//	} else {
+//		this->response(c, "EServer Error", 423,
+//				"try lock target client timeout.");
+//		c->shutdown();
+//	}
+//}
 void ShellCmdMgr::cmdBing(ConClient* c, ConClient* tar, vector<string> cmds) {
 	c->tServer().thrGrps().create_thread(
 			boost::bind(&ShellCmdMgr::thrCmdBing, this, c, tar, cmds));
@@ -98,12 +98,9 @@ void ShellCmdMgr::thrCmdBing(ConClient* c, ConClient* tar,
 			boost::get_system_time() + boost::posix_time::seconds(10));
 	if (locked) {
 		this->binded[c] = tar;
-		if (cmds.size()) {
-			this->sendCmd(cmds, c);
-		}
-		this->writeMsg(c, 200, "bind success");
+		this->sendCmd(cmds, tar);
 	} else {
-		this->writeMsg(c, 423, "bind timeout");
+		this->writeMsg(c, 423, "lock client timeout");
 	}
 }
 boost::timed_mutex* ShellCmdMgr::conMutex(ConClient* c) {
@@ -113,6 +110,18 @@ boost::timed_mutex* ShellCmdMgr::conMutex(ConClient* c) {
 	this->cmutex_lock.unlock();
 	assert(tmutex);
 	return tmutex;
+}
+void ShellCmdMgr::listBing(ConClient* c, std::istream* isbuf){
+	stringstream sdata;
+	map<string, ConClient*>::iterator it;
+	for (it = this->binding.begin(); it != this->binding.end(); it++) {
+		sdata << (it->first) << "\r\n";
+	}
+	if (sdata.str().empty()) {
+		this->writeMsg(c,204,"");
+	} else {
+		c->syncWrite(sdata.str().c_str(), sdata.str().size());
+	}
 }
 void ShellCmdMgr::bind(ConClient* c, std::istream* isbuf) {
 	if (cmds.size() < 2) {
@@ -137,8 +146,39 @@ void ShellCmdMgr::bind(ConClient* c, std::istream* isbuf) {
 					"aleady binding by name " + key
 							+ "waiting another connect bind");
 		} else {
-			this->cmdBing(c, tar, vector<string>());
+				boost::timed_mutex* tmutex = this->conMutex(tar);
+				bool locked = tmutex->timed_lock(
+						boost::get_system_time() + boost::posix_time::seconds(10));
+				if (locked) {
+					this->binded[c] = tar;
+					this->writeMsg(c, 200, "bind success");
+				} else {
+					this->writeMsg(c, 423, "bind timeout");
+				}
 		}
+	}
+	c->startRead();
+}
+bool ShellCmdMgr::removeBinded(ConClient* c){
+	map<ConClient*,ConClient*>::iterator it=this->binded.find(c);
+	if(it==this->binded.end()){
+		return false;
+	}else{
+		boost::timed_mutex* tmutex = this->conMutex(it->second);
+		tmutex->unlock();
+		this->binded.erase(it);
+		return true;
+	}
+}
+void ShellCmdMgr::unbind(ConClient* c, std::istream* isbuf) {
+	map<ConClient*,ConClient*>::iterator it=this->binded.find(c);
+	if(it==this->binded.end()){
+		this->writeMsg(c,500,"please bind first");
+	}else{
+		this->writeMsg(c, 200, "unbind success");
+		boost::timed_mutex* tmutex = this->conMutex(it->second);
+		tmutex->unlock();
+		this->binded.erase(it);
 	}
 	c->startRead();
 }
@@ -311,7 +351,11 @@ void ShellCmdMgr::get(ConClient* c, std::istream* isbuf) {
 		return;
 	}
 	if (this->sessions.find(session) == this->sessions.end()) {
-		this->webfile(c);
+		if(args[0] == "Cmd"||args[0] == "EServer"){
+			this->response(c, "CmdServer", 500, "Please login first.");
+		}else{
+			this->webfile(c);
+		}
 		return;
 	}
 	if (args.size() > 0 && args[0] == "Cmd") {
@@ -327,7 +371,7 @@ void ShellCmdMgr::get(ConClient* c, std::istream* isbuf) {
 		if (acmd == "list") {
 			vector<string> nargs;
 			nargs.assign((args.begin() + 2), args.end());
-			this->list(c, nargs, isbuf, true);
+			this->list(c, nargs, isbuf);
 			return;
 		} else if (acmd == "help") {
 			this->response(c, "CmdServer", 200, "Usage:</br>"
@@ -373,7 +417,7 @@ void ShellCmdMgr::get(ConClient* c, std::istream* isbuf) {
 		tar = this->binding[args[1]];
 		vector<string> rcmds;
 		rcmds.assign((args.begin() + 2), args.end());
-		this->httpBing(c, tar, rcmds);
+		this->cmdBing(c, tar, rcmds);
 	} else {
 		this->webfile(c);
 	}
@@ -440,22 +484,12 @@ void ShellCmdMgr::sendFile(ConClient* c, string tpath) {
 void ShellCmdMgr::help(ConClient* c) {
 	this->writeMsg(c, 200, "");
 }
-bool ShellCmdMgr::list(ConClient* c, vector<string>& args, std::istream* isbuf,
-		bool byHttp) {
+
+bool ShellCmdMgr::list(ConClient* c, vector<string>& args, std::istream* isbuf) {
 	stringstream sdata;
 	if (args.empty()) {
-		map<string, ConClient*>::iterator it;
-		for (it = this->binding.begin(); it != this->binding.end(); it++) {
-			sdata << (it->first) << "\r\n";
-		}
-		if (sdata.str().empty()) {
-			this->response(c,"EServer",204,"");
-		} else {
-			c->syncWrite(sdata.str().c_str(), sdata.str().size());
-		}
-		if (byHttp) {
-			c->shutdown();
-		}
+		this->listBing(c,isbuf);
+		c->shutdown();
 		return false;
 	}
 	if (args.size() == 1) {
@@ -463,29 +497,21 @@ bool ShellCmdMgr::list(ConClient* c, vector<string>& args, std::istream* isbuf,
 				"invalid command\r\nUsage:\r\n"
 						"LIST  list the binding clients.\r\n"
 						"LIST <Client Name> <T_LOG|N_EVENT> list the support event name.\r\n");
-		if (byHttp) {
-			c->shutdown();
-		}
+		c->shutdown();
 		return false;
 	}
 	string cname = args[0];
 	if (this->binding.find(cname) == this->binding.end()) {
 		this->writeMsg(c, 500,
 				"can't find the binding client by name " + cname);
-		if (byHttp) {
-			c->shutdown();
-		}
+		c->shutdown();
 		return false;
 	}
 	ConClient* tar = this->binding[cname];
 	vector<string> ncmds;
 	ncmds.push_back("LIST");
 	ncmds.push_back(args[1]);
-	if (byHttp) {
-		this->httpBing(c, tar, ncmds);
-	} else {
-		this->cmdBing(c, tar, ncmds);
-	}
+	this->cmdBing(c, tar, ncmds);
 	return true;
 }
 void ShellCmdMgr::execCmd(ConClient* c, std::istream* isbuf) {
@@ -493,6 +519,7 @@ void ShellCmdMgr::execCmd(ConClient* c, std::istream* isbuf) {
 	boost::to_lower(cmd);
 	ConClient *tar = 0;
 	map<ConClient*, ConClient*>::iterator it;
+	c->extend=NormalShell;
 	if (cmd == "quit" || cmd == "exit") {
 		c->shutdown();
 		return;
@@ -503,11 +530,30 @@ void ShellCmdMgr::execCmd(ConClient* c, std::istream* isbuf) {
 		return;
 	}
 	if (cmd == "get") {
+		c->extend=HttpCmd;
 		this->get(c, isbuf);
 		return;
 	}
 	if (cmd == "login") {
 		this->login(c, cmds);
+		return;
+	}
+	if (cmd == "unbind") {
+		this->unbind(c, isbuf);
+		return;
+	}
+	if (this->binded.find(c) != this->binded.end()) {
+		tar = this->binded[c];
+	} else {
+		for (it = this->binded.begin(); it != this->binded.end(); it++) {
+			if (it->second == c) {
+				tar = it->first;
+				break;
+			}
+		}
+	}
+	if (tar) {
+		this->execBindedCmd(c, tar, isbuf);
 		return;
 	}
 	if (!this->isLogin(c)) {
@@ -524,29 +570,12 @@ void ShellCmdMgr::execCmd(ConClient* c, std::istream* isbuf) {
 		return;
 	}
 	if (cmd == "list") {
-		vector<string> nargs;
-		nargs.assign((cmds.begin() + 1), cmds.end());
-		this->list(c, nargs, isbuf, false);
+		this->listBing(c,isbuf);
 		c->startRead();
 		return;
 	}
-	if (this->binded.find(c) != this->binded.end()) {
-		tar = this->binded[c];
-	} else {
-		for (it = this->binded.begin(); it != this->binded.end(); it++) {
-			if (it->second == c) {
-				tar = it->first;
-				break;
-			}
-		}
-	}
-	if (tar) {
-		this->execBindedCmd(c, tar, isbuf);
-	} else {
-		this->writeMsg(c, 500, "Usage:bind name\n\t"
-				" to bind another connect or wait be binded");
-		c->startRead();
-	}
+	this->writeMsg(c, 500, "invalid command");
+	c->startRead();
 }
 void ShellCmdMgr::execBindedCmd(ConClient* c, ConClient* tar,
 		std::istream* isbuf) {
@@ -576,12 +605,9 @@ void ShellCmdMgr::execBindedCmd(ConClient* c, ConClient* tar,
 		this->sendCmd(cmds, tar);
 		c->startRead();
 	}
-	set<ConClient*>::iterator it = this->http.find(tar);
-	if (it != this->http.end()) {
-		this->http.erase(it);
+	if(tar->extend==HttpCmd){
 		tar->shutdown();
 	}
-
 }
 void ShellCmdMgr::shutdown(ConClient* c) {
 	LoginCmdBase::shutdown(c);

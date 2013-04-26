@@ -23,6 +23,9 @@ public:
 	string rootPath();
 	string contentType(string fpath);
 };
+enum ShellType{
+	NormalShell=1,HttpCmd=2
+};
 //
 class ShellCmdMgr: public LoginCmdBase {
 private:
@@ -32,7 +35,6 @@ private:
 	map<string, ConClient*> binding;
 	map<ConClient*, boost::timed_mutex*> cmutex;
 	boost::mutex cmutex_lock;
-	set<ConClient*> http;
 	set<string> sessions;
 	//map<string, ConClient*> n2c;
 	char buf[R_BUF_SIZE];
@@ -56,11 +58,14 @@ public:
 	virtual void sendCookie(ConClient* c, int code, size_t len, string cookie,
 			string ctype = "text/plain");
 private:
-	void httpBing(ConClient* c, ConClient* tar, vector<string> cmds);
-	void thrHttpBing(ConClient* c, ConClient* tar, vector<string> cmds);
+	//void httpBing(ConClient* c, ConClient* tar, vector<string> cmds);
+	//void thrHttpBing(ConClient* c, ConClient* tar, vector<string> cmds);
 	void cmdBing(ConClient* c, ConClient* tar, vector<string> cmds);
 	void thrCmdBing(ConClient* c, ConClient* tar, vector<string> cmds);
 	boost::timed_mutex* conMutex(ConClient* c);
+	bool removeBinded(ConClient* c);
+	void unbind(ConClient* c, std::istream* isbuf);
+	void listBing(ConClient* c, std::istream* isbuf);
 	void bind(ConClient* c, std::istream* isbuf);
 	void bing(ConClient* c, std::istream* isbuf);
 	void get(ConClient* c, std::istream* isbuf);
@@ -68,8 +73,7 @@ private:
 	void sendFile(ConClient* c,string tpath);
 	void help(ConClient* c);
 	//request remote data if return true ,or false.
-	bool list(ConClient* c, vector<string>& args, std::istream* isbuf,
-			bool byHtpp);
+	bool list(ConClient* c, vector<string>& args, std::istream* isbuf);
 	void execBindedCmd(ConClient* c, ConClient* tar, std::istream* isbuf);
 //	void startTransfter(ConClient* c,ConClient* tar);
 //	void readHandle(ConClient* c,ConClient* tar,const boost::system::error_code& ec,std::size_t bytes_transferred);
