@@ -34,6 +34,7 @@ private:
 //	thread *thr;
 	bool stopped;
 	boost::shared_mutex stop_mutex;
+	boost::mutex end_mutex;
 	bool noticed;
 	boost::shared_mutex notice_mutex;
 	EventMgr::EventMgrId emi;

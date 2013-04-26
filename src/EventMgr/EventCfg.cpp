@@ -115,17 +115,23 @@ EventCfg::EventCfg(basic_istream<char>& cfgStream) :
 }
 EventCfg::~EventCfg() {
 	map<string, ListenerCfg*>::iterator it, end;
+	set<ListenerCfg*> ls;
 	for (it = this->listeners.begin(), end = this->listeners.end(); it != end;
 			it++) {
-		delete it->second;
+		ls.insert(it->second);
 	}
 	this->listeners.clear();
 	for (it = this->notices.begin(), end = this->notices.end(); it != end;
 			it++) {
 		NoticeCenter::defaultCenter().rmv("EN_" + it->first);
-		delete it->second;
+		ls.insert(it->second);
 	}
 	this->notices.clear();
+	set<ListenerCfg*>::iterator sit, send;
+	sit = ls.begin(), send = ls.end();
+	for (; sit != send; sit++) {
+		delete (*sit);
+	}
 }
 ListenerCfg* EventCfg::listener(string& name) {
 	CFG_SLOCK;

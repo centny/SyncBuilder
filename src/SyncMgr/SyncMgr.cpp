@@ -33,8 +33,10 @@ SyncMgr::~SyncMgr() {
 		this->stopped = 1;
 	}
 	this->stop_mutex.unlock();
+	boost::mutex::scoped_lock end(this->end_mutex);
 }
 void SyncMgr::sync() {
+	boost::mutex::scoped_lock end(this->end_mutex);
 	this->stopped = 0;
 	assert(ctime>=1000);
 	if (!this->cfg->isNoticeSync && this->cfg->isTimeSync) {

@@ -20,7 +20,7 @@
 #endif
 using namespace std;
 //
-#ifdef DEV_NO_SERVICE
+#if DEV_NO_SERVICE
 void testParser();
 void testDataPool();
 void testEventMgr();
@@ -56,6 +56,7 @@ void printMainHelp() {
 #ifndef WIN32
 void receiveKillSignal(int s) {
 	stopService(0, 0);
+	printf("receive kill signal:%d\n", s);
 }
 void registerKillSignal() {
 	signal(SIGTERM, receiveKillSignal);
@@ -67,7 +68,7 @@ void registerKillSignal() {
 }
 #endif
 int main(int argc, char** argv) {
-#ifdef DEV_NO_SERVICE
+#if DEV_NO_SERVICE
 	devTest(argc, argv);
 #else
 #ifdef WIN32
@@ -160,7 +161,7 @@ int main(int argc, char** argv) {
 #endif
 	return 0;
 }
-#ifdef DEV_NO_SERVICE
+#if DEV_NO_SERVICE
 void killsig(int s) {
 	printf("receive kill signal:%d\n", s);
 	stopService(0, 0);

@@ -98,8 +98,6 @@ void SyncDemo::run() {
 void SyncDemo::initBCmd(io_service& ios) {
 	this->bcmd = new SyncBindCmd(this->ecfg, this->ncfg, this->net, this->mid,
 			ios);
-	assert(this->bcmd->binding());
-	this->bcmd->startRead();
 }
 /*
  * static field.

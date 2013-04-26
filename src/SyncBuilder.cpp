@@ -10,52 +10,8 @@
 #include "SyncMgr/SyncDemo.h"
 #include "Notice/NoticeCenter.h"
 #include "xgetopt.h"
+#include "SyncMgr/DemoCfg.h"
 using namespace centny;
-#define DEMO_SERVE_CFG "DEMO_SERVE_CFG_"
-#define DEMO_EVENT_CFG "DEMO_EVENT_CFG_"
-class DemoCfg: public CfgParser {
-public:
-	vector<string> names;
-private:
-	map<string, pair<string, string> > demo_cfgs;
-	Log log;
-public:
-	DemoCfg(string& cfgPath);
-	string serveCfg(string name);
-	string eventCfg(string name);
-};
-DemoCfg::DemoCfg(string& cfgPath) :
-		CfgParser(cfgPath), log(C_LOG("DemoCfg")) {
-			map<string, string>::iterator it, fit, end;
-			end = this->kvs.end();
-			size_t clen = std::strlen(DEMO_SERVE_CFG);
-			for (it = this->kvs.begin(); it != end; it++) {
-				if (it->first.size() <= clen) {
-					continue;
-				}
-				string w, name;
-				w = it->first.substr(0, clen);
-				if (w != DEMO_SERVE_CFG) {
-					continue;
-				}
-				name = it->first.substr(clen);
-				fit = this->kvs.find(DEMO_EVENT_CFG + name);
-				if (fit == end) {
-					continue;
-				}
-				this->demo_cfgs[name] = pair<string, string>(it->second, fit->second);
-			names.push_back(name);
-		}
-		log.info("run %d demo for configure;%s",names.size(),cfgPath.c_str());
-}
-string DemoCfg::serveCfg(string name) {
-	pair<string, string> p = this->demo_cfgs[name];
-	return p.first;
-}
-string DemoCfg::eventCfg(string name) {
-	pair<string, string> p = this->demo_cfgs[name];
-	return p.second;
-}
 
 DemoCfg *_dcfg = 0;
 void initSyncBuilder(string cfg) {
@@ -75,11 +31,8 @@ void initSyncBuilder(string cfg) {
 	}
 	log.info("initial SyncBuilder success");
 }
-//void postTestNotice() {
-//	bsleep(5000);
-//	NoticeCenter::defaultCenter().post("ABC");
-//}
-int MAIN_THR_STOP = 1;
+
+io_service* ios__ = 0;
 void runSyncBuilder() {
 	if (_dcfg == NULL) {
 		assert( "the demo configure is not initialed,"
@@ -93,30 +46,28 @@ void runSyncBuilder() {
 	} else {
 		log.info("find %d demo configure", dsize);
 	}
+	ios__ = new io_service();
 	for (size_t i = 0; i < dsize; i++) {
 		string dname = _dcfg->names[i];
-		SyncDemo::createDemo(_dcfg->serveCfg(dname), _dcfg->eventCfg(dname));
+		SyncDemo::createDemo(_dcfg->serveCfg(dname), _dcfg->eventCfg(dname))->initBCmd(
+				*ios__);
 	}
-	//thread thr(postTestNotice);
-	MAIN_THR_STOP = 0;
-	while (SyncDemo::demoes()) {
-		if (MAIN_THR_STOP) {
-			break;
-		}
-		if (NoticeCenter::defaultCenter().handle()) {
-			continue;
-		} else {
-			bsleep(500);
-		}
-	}
-	MAIN_THR_STOP = 1;
+	NoticeTimer::defaultNoticeTimer().initTimer(*ios__);
+	NoticeCenter::defaultCenter();
+	ios__->run();
 	log.info("SyncBuilder service will stop");
+	NoticeTimer::fre();
+	NoticeCenter::fre();
 	SyncDemo::fre();
+	delete _dcfg;
+	_dcfg = 0;
 	log.info("SyncBuilder service stopped");
 }
 
 void stopSyncBuilder() {
-	MAIN_THR_STOP = 1;
+	if (ios__) {
+		ios__->stop();
+	}
 }
 
 void printHelp() {

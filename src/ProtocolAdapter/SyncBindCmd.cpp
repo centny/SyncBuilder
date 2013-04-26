@@ -39,7 +39,7 @@ bool SyncBindCmd::binding() {
 #if DEV_NO_SERVICE
 	string session = "centny";
 #else
-	string session=this->neta->name;
+	string session = this->neta->name;
 #endif
 	//
 	char buf[1024];
@@ -68,6 +68,7 @@ bool SyncBindCmd::binding() {
 		return false;
 	} else {
 		log.debug("bind success");
+		this->startRead();
 		return true;
 	}
 }
@@ -110,9 +111,8 @@ bool SyncBindCmd::reinit() {
 		} else {
 			log.info("initial bind client success");
 			this->netstate = 200;
-			return true;
+			return this->binding();
 		}
-		return 1;
 	}
 }
 void SyncBindCmd::shutdown() {
