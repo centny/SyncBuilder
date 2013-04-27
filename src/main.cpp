@@ -68,6 +68,7 @@ int main(int argc, char** argv) {
 #if DEV_NO_SERVICE
 	devTest(argc, argv);
 #else
+
 #ifdef WIN32
 	string lcfg,ncfg,sname;
 	int cmd_action=0;

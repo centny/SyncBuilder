@@ -53,7 +53,10 @@ CfgParser::CfgParser(string& cfgPath) :
 		log(C_LOG("CfgParser")) {
 			this->cfgPath = cfgPath;
 			this->valid = false;
-			assert(boost::filesystem::is_regular_file(boost::filesystem::path(cfgPath)));
+			if(!boost::filesystem::is_regular_file(boost::filesystem::path(cfgPath))){
+				this->log.error("the configure file %s is not a regular file.",cfgPath.c_str());
+				assert("invalid configure file"==0);
+			}
 			std::ifstream fs(this->cfgPath.c_str());
 			if (!fs.is_open()) {
 				this->valid = false;

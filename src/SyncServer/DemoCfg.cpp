@@ -60,6 +60,7 @@ DemoCfg::DemoCfg(string& cfgPath) :
 
 DemoCfg::~DemoCfg() {
 	map<string, Demo*>::iterator it;
+	it = this->demo_cfgs.begin();
 	for (; it != this->demo_cfgs.end(); it++) {
 		delete it->second;
 	}

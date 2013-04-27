@@ -182,7 +182,11 @@ void SServeBuilder::run() {
 		string dname = this->dcfg->names[i];
 		SServer::SyncDemo::createDemo(this->ios, this->dcfg->demo(dname));
 	}
-	this->ios.run();
+	try {
+		this->ios.run();
+	} catch (...) {
+
+	}
 	log.info("service will stop");
 	SServer::SyncDemo::fre();
 	delete this->dcfg;
