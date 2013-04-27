@@ -64,15 +64,11 @@ bool ConClient::isLocked() {
 }
 void ConClient::lock() {
 	this->lmutex.lock();
-	assert(!this->locked);
 	this->locked = true;
 }
 void ConClient::unlock() {
-	if (!this->locked) {
-		return;
-	}
+	this->lmutex.unlock();
 	this->locked = false;
-	this->unlock();
 }
 void ConClient::shutdown() {
 	if (!this->inited) {
