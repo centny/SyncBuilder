@@ -23,7 +23,7 @@ SyncBindCmd::SyncBindCmd(EventCfg* ecfg, NetCfg* ncfg, NetAdapterBase* neta,
 			this->neta=neta;
 			this->mid=mid;
 			this->reinit();
-			this->rtime=5000;
+			this->rtime=this->ncfg->bindReconnectTime();
 		}
 
 SyncBindCmd::~SyncBindCmd() {

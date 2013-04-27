@@ -35,6 +35,7 @@ public:
 	bool isUpload();
 	bool isDownload();
 	time_t syncChkTime();
+	time_t bindReconnectTime();
 	string syncChkNotice();
 	vector<string> syncChkType();
 	string type();

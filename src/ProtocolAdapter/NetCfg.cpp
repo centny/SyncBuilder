@@ -13,13 +13,14 @@ namespace centny {
 namespace fs = boost::filesystem;
 NetCfg::NetCfg(string& cfgPath) :
 		CfgParser(cfgPath) {
-	if(!this->valid){
+	if (!this->valid) {
 		return;
 	}
 	fs::path fp(this->locSyncDir());
 	this->valid = exists(fp) && fs::is_directory(fp);
 	if (!this->valid) {
-		this->msg ="local sync directory (" + this->locSyncDir() + ") is not exist or not a directory";
+		this->msg = "local sync directory (" + this->locSyncDir()
+				+ ") is not exist or not a directory";
 		return;
 	}
 	this->isNoticeSync = false;
@@ -106,7 +107,20 @@ bool NetCfg::isDownload() {
 time_t NetCfg::syncChkTime() {
 	CFG_SLOCK;
 	string tmp = this->kvs["SYNC_CHK_TIME"];
-	return atol(tmp.c_str());
+	if(tmp.empty()) {
+		return 50000;
+	} else {
+		return atol(tmp.c_str());
+	}
+}
+time_t NetCfg::bindReconnectTime() {
+	CFG_SLOCK;
+	string tmp = this->kvs["BIND_RECONNECT_TIME"];
+	if(tmp.empty()) {
+		return 20000;
+	} else {
+		return atol(tmp.c_str());
+	}
 }
 string NetCfg::syncChkNotice() {
 	CFG_SLOCK;
