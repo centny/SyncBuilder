@@ -205,15 +205,38 @@ FInfo* SyncAdapter::convertOne(FInfo* parent, string line) {
 		log.error("convert to instance error:%s", line.c_str());
 		return 0;
 	}
+	string cwd = parent->cwd + "/" + ifs[1];
+	replaceAll(cwd, "//", "/");
+	vector<string> exc = this->ncfg->dexc();
+	vector<string> inc = this->ncfg->dinc();
+	vector<string>::iterator it, end;
+	bool exced = false, inced = false;
+	for (it = exc.begin(), end = exc.end(); it != end; it++) {
+		if (boost::regex_match(cwd, boost::regex(*it))) {
+			exced = true;
+			break;
+		}
+	}
+	if (exced) {
+		return 0;
+	}
+	for (it = inc.begin(), end = inc.end(); it != end; it++) {
+		if (boost::regex_match(cwd, boost::regex(*it))) {
+			inced = true;
+			break;
+		}
+	}
+	if (!inced) {
+		return 0;
+	}
 	FInfo *fi = new NetFInfo(this, (NetFInfo*) parent);
 	fi->type = ifs[0].at(0);
 	fi->name = ifs[1] + "";
 	fi->size = atol(ifs[2].c_str());
 	fi->mtime = atol(ifs[3].c_str());
 	fi->parent = parent;
-	fi->cwd = parent->cwd + "/" + fi->name;
+	fi->cwd = cwd;
 //	cout << "list:" << fi->name << endl;
-	replaceAll(fi->cwd, "//", "/");
 	return fi;
 }
 void SyncAdapter::mkdir(FInfo* fi, string name) {

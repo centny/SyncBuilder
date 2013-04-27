@@ -145,5 +145,46 @@ string NetCfg::dbPath() {
 	CFG_SLOCK;
 	return this->kvs["LOC_DB_PATH"];
 }
+vector<string> NetCfg::uinc() {
+	CFG_SLOCK;
+	string tmp=this->kvs["U_INC_FILTER"];
+	vector<string> filters;
+	boost::split(filters,tmp,boost::is_any_of(";"));
+	return this->rempty(filters);
+}
+vector<string> NetCfg::uexc() {
+	CFG_SLOCK;
+	string tmp=this->kvs["U_EXC_FILTER"];
+	vector<string> filters;
+	boost::split(filters,tmp,boost::is_any_of(";"));
+	return this->rempty(filters);
+}
+vector<string> NetCfg::dinc() {
+	CFG_SLOCK;
+	string tmp=this->kvs["D_INC_FILTER"];
+	vector<string> filters;
+	boost::split(filters,tmp,boost::is_any_of(";"));
+	return this->rempty(filters);
+}
+vector<string> NetCfg::dexc() {
+	CFG_SLOCK;
+	string tmp=this->kvs["D_EXC_FILTER"];
+	vector<string> filters;
+	boost::split(filters,tmp,boost::is_any_of(";"));
+	return this->rempty(filters);
+}
+vector<string> NetCfg::rempty(vector<string>& tar) {
+	vector<string>::iterator it, end;
+	for (it = tar.begin(), end = tar.end(); it != end; it++) {
+		if (it->empty()) {
+			it = tar.erase(it);
+			end = tar.end();
+			if(it==end){
+				break;
+			}
+		}
+	}
+	return tar;
+}
 //
 } /* namespace centny */

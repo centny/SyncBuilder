@@ -9,6 +9,7 @@
 #define LOCADAPTER_H_
 #include "AdapterBase.h"
 #include <boost/filesystem.hpp>
+#include <boost/regex.hpp>
 #include "../log/LogFactory.h"
 #include <set>
 namespace centny {
@@ -30,15 +31,20 @@ public:
 class LocAdapter: public AdapterBase {
 private:
 	Log log;
+	vector<string> uinc;
+	vector<string> uexc;
 public:
 	LocAdapter(sqlite3 *db, string rurl);
+	LocAdapter(sqlite3 *db, string rurl, vector<string> uinc,
+			vector<string> uexc);
+	void checkRUrl(string rurl);
 	virtual ~LocAdapter();
 	virtual FInfo* createRootNode();
 	virtual vector<FInfo*> listSubs(FInfo* parent);
 	virtual void mkdir(FInfo* fi, string name);
 	FInfo* contain(FInfo*fi, string name);
 	virtual string absUrl(FInfo* tg);
-	virtual bool remove(FInfo* fi, string name="");
+	virtual bool remove(FInfo* fi, string name = "");
 };
 
 } /* namespace centny */
