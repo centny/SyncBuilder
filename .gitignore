@@ -31,3 +31,9 @@ DebugService
 
 ReleaseService/src
 ReleaseService/SyncBuilder
+/src/ReleaseService
+
+/src/SyncServer/*.bak
+
+/ReleaseService/SyncBuilder.exe
+/ReleaseService/SyncBuilder.pdb
