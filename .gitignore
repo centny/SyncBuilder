@@ -28,3 +28,6 @@ CDebugService
 DebugService
 /src/CmdDebug
 /CmdDebug
+
+ReleaseService/src
+ReleaseService/SyncBuilder
