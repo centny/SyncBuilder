@@ -93,7 +93,7 @@ vector<FInfo*> LocAdapter::listSubs(FInfo* parent) {
 	fs::directory_iterator end;
 	vector<string>::iterator fit, fend;
 	for (; it != end; it++) {
-		string cwd = string(it->path().c_str());
+		string cwd = it->path().string();
 		bool exced = false, inced = false;
 		if (this->sexc.size()) {
 			for (fit = this->sexc.begin(), fend = this->sexc.end(); fit != fend;
