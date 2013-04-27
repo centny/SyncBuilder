@@ -33,7 +33,9 @@ ReleaseService/src
 ReleaseService/SyncBuilder
 /src/ReleaseService
 
-/src/SyncServer/*.bak
+*.bak
 
 /ReleaseService/SyncBuilder.exe
 /ReleaseService/SyncBuilder.pdb
+
+/ReleaseService/*.cfg

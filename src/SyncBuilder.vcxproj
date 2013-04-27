@@ -469,6 +469,13 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>libcurl_imp.lib;libextc.lib;log4cxx.lib;libsqlite.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>copy ..\src\SyncServer\WinDemoes.cfg  $(OutDir)
+copy ..\src\SyncServer\WinUsers.cfg  $(OutDir)
+copy ..\src\SyncServer\WinWeb.cfg  $(OutDir)
+copy ..\src\ProtocolAdapter\WinNet.cfg  $(OutDir)
+copy ..\src\EventMgr\Wine.cfg $(OutDir)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
