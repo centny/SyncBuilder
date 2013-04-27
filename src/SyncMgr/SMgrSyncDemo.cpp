@@ -41,7 +41,7 @@ SMgrSyncDemo::SMgrSyncDemo(string ncf, string ecf) :
 //				assert(sa->isLogined());
 			}
 			assert(this->net);
-			this->loc = new LocAdapter(this->db, this->ncfg->locSyncDir());
+			this->loc = new LocAdapter(this->db, this->ncfg->locSyncDir(),this->ncfg->sinc(),this->ncfg->sexc());
 			this->mid = EventMgr::createDemo(this->ecfg);
 			this->mgr = new SyncMgr(this->loc, this->net, this->ncfg, this->mid);
 			this->thr=new boost::thread(boost::bind(&SMgrSyncDemo::run,this));
@@ -98,7 +98,7 @@ void SMgrSyncDemo::initBCmd(io_service& ios) {
 	this->bcmd = new SyncBindCmd(this->ecfg, this->ncfg, this->net, this->mid,
 			ios);
 }
-SyncBindCmd* SMgrSyncDemo::gbcm(){
+SyncBindCmd* SMgrSyncDemo::gbcm() {
 	return this->bcmd;
 }
 /*

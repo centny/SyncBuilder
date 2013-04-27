@@ -53,13 +53,13 @@ LocAdapter::LocAdapter(sqlite3 *db, string rurl) :
 			this->rurl = rurl;
 			this->checkRUrl(rurl);
 		}
-LocAdapter::LocAdapter(sqlite3 *db, string rurl, vector<string> uinc,
-		vector<string> uexc) :
+LocAdapter::LocAdapter(sqlite3 *db, string rurl, vector<string> sinc,
+		vector<string> sexc) :
 		AdapterBase(db), log(C_LOG("LocAdapter")) {
 			this->rurl = rurl;
 			this->checkRUrl(rurl);
-			this->uinc=uinc;
-			this->uexc=uexc;
+			this->sinc=sinc;
+			this->sexc=sexc;
 		}
 void LocAdapter::checkRUrl(string rurl) {
 	fs::path rpath(rurl);
@@ -95,25 +95,29 @@ vector<FInfo*> LocAdapter::listSubs(FInfo* parent) {
 	for (; it != end; it++) {
 		string cwd = string(it->path().c_str());
 		bool exced = false, inced = false;
-		for (fit = this->uexc.begin(), fend = this->uexc.end(); fit != fend;
-				fit++) {
-			if (boost::regex_match(cwd, boost::regex(*fit))) {
-				exced = true;
-				break;
+		if (this->sexc.size()) {
+			for (fit = this->sexc.begin(), fend = this->sexc.end(); fit != fend;
+					fit++) {
+				if (boost::regex_match(cwd, boost::regex(*fit))) {
+					exced = true;
+					break;
+				}
+			}
+			if (exced) {
+				continue;
 			}
 		}
-		if (exced) {
-			continue;
-		}
-		for (fit = this->uinc.begin(), fend = this->uinc.end(); fit != fend;
-				fit++) {
-			if (boost::regex_match(cwd, boost::regex(*fit))) {
-				inced = true;
-				break;
+		if (this->sinc.size()) {
+			for (fit = this->sinc.begin(), fend = this->sinc.end(); fit != fend;
+					fit++) {
+				if (boost::regex_match(cwd, boost::regex(*fit))) {
+					inced = true;
+					break;
+				}
 			}
-		}
-		if (!inced) {
-			continue;
+			if (!inced) {
+				continue;
+			}
 		}
 		LocFInfo *lf = new LocFInfo(this, (LocFInfo*) parent);
 		lf->initByPath(it->path());

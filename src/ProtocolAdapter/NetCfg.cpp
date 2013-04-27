@@ -145,30 +145,16 @@ string NetCfg::dbPath() {
 	CFG_SLOCK;
 	return this->kvs["LOC_DB_PATH"];
 }
-vector<string> NetCfg::uinc() {
+vector<string> NetCfg::sinc() {
 	CFG_SLOCK;
-	string tmp=this->kvs["U_INC_FILTER"];
+	string tmp=this->kvs["SYNC_INC_FILTER"];
 	vector<string> filters;
 	boost::split(filters,tmp,boost::is_any_of(";"));
 	return this->rempty(filters);
 }
-vector<string> NetCfg::uexc() {
+vector<string> NetCfg::sexc() {
 	CFG_SLOCK;
-	string tmp=this->kvs["U_EXC_FILTER"];
-	vector<string> filters;
-	boost::split(filters,tmp,boost::is_any_of(";"));
-	return this->rempty(filters);
-}
-vector<string> NetCfg::dinc() {
-	CFG_SLOCK;
-	string tmp=this->kvs["D_INC_FILTER"];
-	vector<string> filters;
-	boost::split(filters,tmp,boost::is_any_of(";"));
-	return this->rempty(filters);
-}
-vector<string> NetCfg::dexc() {
-	CFG_SLOCK;
-	string tmp=this->kvs["D_EXC_FILTER"];
+	string tmp=this->kvs["SYNC_EXC_FILTER"];
 	vector<string> filters;
 	boost::split(filters,tmp,boost::is_any_of(";"));
 	return this->rempty(filters);

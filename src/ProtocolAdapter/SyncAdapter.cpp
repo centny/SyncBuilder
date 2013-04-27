@@ -29,6 +29,8 @@ SyncAdapter::SyncAdapter(sqlite3 *db, NetCfg *ncfg) :
 			this->usr=this->ncfg->username();
 			this->pwd=this->ncfg->password();
 			this->name=this->ncfg->cname();
+			this->sexc=this->ncfg->sexc();
+			this->sinc=this->ncfg->sinc();
 			this->logined=false;
 			this->blen=0;
 			memset(buf,0,R_BUF_SIZE);
@@ -207,27 +209,29 @@ FInfo* SyncAdapter::convertOne(FInfo* parent, string line) {
 	}
 	string cwd = parent->cwd + "/" + ifs[1];
 	replaceAll(cwd, "//", "/");
-	vector<string> exc = this->ncfg->dexc();
-	vector<string> inc = this->ncfg->dinc();
 	vector<string>::iterator it, end;
 	bool exced = false, inced = false;
-	for (it = exc.begin(), end = exc.end(); it != end; it++) {
-		if (boost::regex_match(cwd, boost::regex(*it))) {
-			exced = true;
-			break;
+	if (this->sexc.size()) {
+		for (it = this->sexc.begin(), end = this->sexc.end(); it != end; it++) {
+			if (boost::regex_match(cwd, boost::regex(*it))) {
+				exced = true;
+				break;
+			}
+		}
+		if (exced) {
+			return 0;
 		}
 	}
-	if (exced) {
-		return 0;
-	}
-	for (it = inc.begin(), end = inc.end(); it != end; it++) {
-		if (boost::regex_match(cwd, boost::regex(*it))) {
-			inced = true;
-			break;
+	if (this->sinc.size()) {
+		for (it = this->sinc.begin(), end = this->sinc.end(); it != end; it++) {
+			if (boost::regex_match(cwd, boost::regex(*it))) {
+				inced = true;
+				break;
+			}
 		}
-	}
-	if (!inced) {
-		return 0;
+		if (!inced) {
+			return 0;
+		}
 	}
 	FInfo *fi = new NetFInfo(this, (NetFInfo*) parent);
 	fi->type = ifs[0].at(0);

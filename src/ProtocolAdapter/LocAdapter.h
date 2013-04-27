@@ -31,12 +31,12 @@ public:
 class LocAdapter: public AdapterBase {
 private:
 	Log log;
-	vector<string> uinc;
-	vector<string> uexc;
+	vector<string> sinc;
+	vector<string> sexc;
 public:
 	LocAdapter(sqlite3 *db, string rurl);
-	LocAdapter(sqlite3 *db, string rurl, vector<string> uinc,
-			vector<string> uexc);
+	LocAdapter(sqlite3 *db, string rurl, vector<string> sinc,
+			vector<string> sexc);
 	void checkRUrl(string rurl);
 	virtual ~LocAdapter();
 	virtual FInfo* createRootNode();
