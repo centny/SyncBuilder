@@ -51,18 +51,29 @@ void LocFInfo::refreshSubs() {
 LocAdapter::LocAdapter(sqlite3 *db, string rurl) :
 		AdapterBase(db), log(C_LOG("LocAdapter")) {
 			this->rurl = rurl;
-			fs::path rpath(rurl);
-			if(!fs::exists(rpath)) {
-				boost::system::error_code ec;
-				fs::create_directories(rurl,ec);
-				if(ec.value()) {
-					log.error("create root directory %s error",rurl.c_str());
-				} else {
-					log.debug("create root directory %s error",rurl.c_str());
-				}
-			}
-			assert(fs::exists(rpath));
+			this->checkRUrl(rurl);
 		}
+LocAdapter::LocAdapter(sqlite3 *db, string rurl, vector<string> sinc,
+		vector<string> sexc) :
+		AdapterBase(db), log(C_LOG("LocAdapter")) {
+			this->rurl = rurl;
+			this->checkRUrl(rurl);
+			this->sinc=sinc;
+			this->sexc=sexc;
+		}
+void LocAdapter::checkRUrl(string rurl) {
+	fs::path rpath(rurl);
+	if (!fs::exists(rpath)) {
+		boost::system::error_code ec;
+		fs::create_directories(rurl, ec);
+		if (ec.value()) {
+			log.error("create root directory %s error", rurl.c_str());
+		} else {
+			log.debug("create root directory %s error", rurl.c_str());
+		}
+	}
+	assert(fs::exists(rpath));
+}
 LocAdapter::~LocAdapter() {
 }
 FInfo* LocAdapter::createRootNode() {
@@ -80,7 +91,34 @@ vector<FInfo*> LocAdapter::listSubs(FInfo* parent) {
 	assert(fs::exists(ppath));
 	fs::directory_iterator it(ppath);
 	fs::directory_iterator end;
+	vector<string>::iterator fit, fend;
 	for (; it != end; it++) {
+		string cwd = string(it->path().c_str());
+		bool exced = false, inced = false;
+		if (this->sexc.size()) {
+			for (fit = this->sexc.begin(), fend = this->sexc.end(); fit != fend;
+					fit++) {
+				if (boost::regex_match(cwd, boost::regex(*fit))) {
+					exced = true;
+					break;
+				}
+			}
+			if (exced) {
+				continue;
+			}
+		}
+		if (this->sinc.size()) {
+			for (fit = this->sinc.begin(), fend = this->sinc.end(); fit != fend;
+					fit++) {
+				if (boost::regex_match(cwd, boost::regex(*fit))) {
+					inced = true;
+					break;
+				}
+			}
+			if (!inced) {
+				continue;
+			}
+		}
 		LocFInfo *lf = new LocFInfo(this, (LocFInfo*) parent);
 		lf->initByPath(it->path());
 		fsub.push_back(lf);

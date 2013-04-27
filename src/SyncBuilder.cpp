@@ -136,7 +136,7 @@ namespace centny {
 			sd=SMgrSyncDemo::createDemo(this->dcfg->serveCfg(dname),
 				this->dcfg->eventCfg(dname));
 			sd->initBCmd(this->ios);
-			NoticeTimer::defaultNoticeTimer().reg(sd->gbcm());
+//			NoticeTimer::defaultNoticeTimer().reg(sd->gbcm());
 		}
 		this->ios.run();
 		log.info("service will stop");

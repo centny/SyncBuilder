@@ -41,6 +41,11 @@ public:
 	string type();
 	string locSyncDir();
 	string dbPath();
+	//the sync include filter.
+	vector<string> sinc();
+	//the sync exclude filter.
+	vector<string> sexc();
+	vector<string> rempty(vector<string>& tar);
 };
 
 } /* namespace centny */

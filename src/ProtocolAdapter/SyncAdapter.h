@@ -39,6 +39,8 @@ private:
 //	boost::array<char, BUF_SIZE> rbuf;
 	size_t blen;
 	int logined;
+	vector<string> sinc;
+	vector<string> sexc;
 public:
 	SyncAdapter(sqlite3 *db, NetCfg *ncfg);
 	virtual ~SyncAdapter();

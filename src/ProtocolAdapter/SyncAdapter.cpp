@@ -29,6 +29,8 @@ SyncAdapter::SyncAdapter(sqlite3 *db, NetCfg *ncfg) :
 			this->usr=this->ncfg->username();
 			this->pwd=this->ncfg->password();
 			this->name=this->ncfg->cname();
+			this->sexc=this->ncfg->sexc();
+			this->sinc=this->ncfg->sinc();
 			this->logined=false;
 			this->blen=0;
 			memset(buf,0,R_BUF_SIZE);
@@ -205,15 +207,40 @@ FInfo* SyncAdapter::convertOne(FInfo* parent, string line) {
 		log.error("convert to instance error:%s", line.c_str());
 		return 0;
 	}
+	string cwd = parent->cwd + "/" + ifs[1];
+	replaceAll(cwd, "//", "/");
+	vector<string>::iterator it, end;
+	bool exced = false, inced = false;
+	if (this->sexc.size()) {
+		for (it = this->sexc.begin(), end = this->sexc.end(); it != end; it++) {
+			if (boost::regex_match(cwd, boost::regex(*it))) {
+				exced = true;
+				break;
+			}
+		}
+		if (exced) {
+			return 0;
+		}
+	}
+	if (this->sinc.size()) {
+		for (it = this->sinc.begin(), end = this->sinc.end(); it != end; it++) {
+			if (boost::regex_match(cwd, boost::regex(*it))) {
+				inced = true;
+				break;
+			}
+		}
+		if (!inced) {
+			return 0;
+		}
+	}
 	FInfo *fi = new NetFInfo(this, (NetFInfo*) parent);
 	fi->type = ifs[0].at(0);
 	fi->name = ifs[1] + "";
 	fi->size = atol(ifs[2].c_str());
 	fi->mtime = atol(ifs[3].c_str());
 	fi->parent = parent;
-	fi->cwd = parent->cwd + "/" + fi->name;
+	fi->cwd = cwd;
 //	cout << "list:" << fi->name << endl;
-	replaceAll(fi->cwd, "//", "/");
 	return fi;
 }
 void SyncAdapter::mkdir(FInfo* fi, string name) {
