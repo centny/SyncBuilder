@@ -5,28 +5,24 @@
  *      Author: Scorpion
  */
 
-#ifndef SMGR_DEMOCFG_H_
-#define SMGR_DEMOCFG_H_
+#ifndef SSERVER_DEMOCFG_H_
+#define SSERVER_DEMOCFG_H_
 #include <string>
 #include <vector>
 #include <map>
 #include "../CfgParser/CfgParser.h"
-#include "SyncDemo.h"
-
-using namespace std;
+#include "SServerSyncDemo.h"
 namespace centny {
-namespace SMgr {
-class DemoCfg: public CfgParser {
+class SServerDemoCfg: public CfgParser {
 public:
 	vector<string> names;
 private:
-	map<string, pair<string, string> > demo_cfgs;
+	map<string, SServerDemo*> demo_cfgs;
 	Log log;
 public:
-	DemoCfg(string& cfgPath);
-	string serveCfg(string name);
-	string eventCfg(string name);
+	SServerDemoCfg(string& cfgPath);
+	SServerDemo* demo(string& name);
+	~SServerDemoCfg();
 };
-}
 } /* namespace centny */
 #endif /* DEMOCFG_H_ */

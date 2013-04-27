@@ -105,9 +105,6 @@
     <ClCompile Include="ProtocolAdapter\testCurl.cpp">
       <Filter>ProtocolAdapter</Filter>
     </ClCompile>
-    <ClCompile Include="SyncMgr\SyncDemo.cpp">
-      <Filter>SyncMgr</Filter>
-    </ClCompile>
     <ClCompile Include="SyncMgr\SyncMgr.cpp">
       <Filter>SyncMgr</Filter>
     </ClCompile>
@@ -171,6 +168,24 @@
     <ClCompile Include="SyncServer\LoginCmdBase.cpp">
       <Filter>SyncServer</Filter>
     </ClCompile>
+    <ClCompile Include="Notice\NoticeTimer.cpp">
+      <Filter>Notice</Filter>
+    </ClCompile>
+    <ClCompile Include="Notice\testNotice.cpp">
+      <Filter>Notice</Filter>
+    </ClCompile>
+    <ClCompile Include="SyncMgr\SMgrDemoCfg.cpp">
+      <Filter>SyncMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="SyncMgr\SMgrSyncDemo.cpp">
+      <Filter>SyncMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="SyncServer\SServerDemoCfg.cpp">
+      <Filter>SyncServer</Filter>
+    </ClCompile>
+    <ClCompile Include="SyncServer\SServerSyncDemo.cpp">
+      <Filter>SyncServer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CfgParser\CfgParser.h">
@@ -211,9 +226,6 @@
     </ClInclude>
     <ClInclude Include="ProtocolAdapter\NetCfg.h">
       <Filter>ProtocolAdapter</Filter>
-    </ClInclude>
-    <ClInclude Include="SyncMgr\SyncDemo.h">
-      <Filter>SyncMgr</Filter>
     </ClInclude>
     <ClInclude Include="SyncMgr\SyncMgr.h">
       <Filter>SyncMgr</Filter>
@@ -272,6 +284,21 @@
     <ClInclude Include="SyncServer\LoginCmdBase.h">
       <Filter>SyncServer</Filter>
     </ClInclude>
+    <ClInclude Include="Notice\NoticeTimer.h">
+      <Filter>Notice</Filter>
+    </ClInclude>
+    <ClInclude Include="SyncMgr\SMgrDemoCfg.h">
+      <Filter>SyncMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="SyncMgr\SMgrSyncDemo.h">
+      <Filter>SyncMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="SyncServer\SServerDemoCfg.h">
+      <Filter>SyncServer</Filter>
+    </ClInclude>
+    <ClInclude Include="SyncServer\SServerSyncDemo.h">
+      <Filter>SyncServer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="CfgParser\e.cfg">
@@ -315,6 +342,15 @@
     </None>
     <None Include="SyncServer\WinUsers.cfg">
       <Filter>SyncServer</Filter>
+    </None>
+    <None Include="SyncServer\Demoes.cfg">
+      <Filter>SyncServer</Filter>
+    </None>
+    <None Include="SyncMgr\db.sql">
+      <Filter>SyncMgr</Filter>
+    </None>
+    <None Include="SyncMgr\Demoes.cfg">
+      <Filter>SyncMgr</Filter>
     </None>
   </ItemGroup>
 </Project>

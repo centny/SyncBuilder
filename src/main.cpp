@@ -1,9 +1,9 @@
 /*
- * main.cpp
- *
- *  Created on: Nov 4, 2012
- *      Author: Scorpion
- */
+* main.cpp
+*
+*  Created on: Nov 4, 2012
+*      Author: Scorpion
+*/
 
 #include <iostream>
 #include <fstream>
@@ -39,12 +39,12 @@ using namespace centny;
 void printMainHelp() {
 #ifdef WIN32
 	printf("Usage:cmd <option>\n"
-			"\t-i  install service\n"
-			"\t-u  uninstall service\n"
-			"\t-n name  service name\n"
-			"\t-l path  the log configure file path\n"
-			"\t-c path  the demo configure  file path\n"
-			"\t-h show this message\n");
+		"\t-i  install service\n"
+		"\t-u  uninstall service\n"
+		"\t-n name  service name\n"
+		"\t-l path  the log configure file path\n"
+		"\t-c path  the demo configure  file path\n"
+		"\t-h show this message\n");
 
 #else
 	SyncBuilder::help();
@@ -71,32 +71,36 @@ int main(int argc, char** argv) {
 
 #ifdef WIN32
 	string lcfg,ncfg,sname;
+	bool hc,hs;
+	hc=hs=false;
 	int cmd_action=0;
 	int ch;
-	while ((ch = xgetopt(argc, argv, "iuhn:l:c:")) != EOF) {
+	while ((ch = xgetopt(argc, argv, "iuhn:l:c:CS")) != EOF) {
 		switch (ch) {
-			case 'l':
+		case 'l':
 			lcfg = string(xoptarg);
 			break;
-			case 'c':
+		case 'c':
 			ncfg = string(xoptarg);
 			break;
-			case 'n':
+		case 'n':
 			sname=string(xoptarg);
 			break;
-			case 'i':
+		case 'i':
 			cmd_action=1;
 			break;
-			case 'u':
+		case 'u':
 			cmd_action=2;
 			break;
-			case 'h':
+		case 'C':
+			break;
+		case 'h':
 			printMainHelp();
 			return 0;
 		}
 	}
 	switch(cmd_action) {
-		case 1: //install
+	case 1: //install
 		{
 			if(lcfg.size()<1||ncfg.size()<1||sname.size()<1) {
 				printMainHelp();
@@ -104,6 +108,14 @@ int main(int argc, char** argv) {
 			}
 			vector<string> args;
 			string epath=ModuleFullPath();
+			if(hc){
+				args.push_back("-C");
+			}else if(hs){
+				args.push_back("-S");
+			}else{
+				printf("-C or -S must be setted\n");
+				exit(0);
+			}
 			args.push_back("-n");
 			args.push_back(sname);
 			args.push_back("-l");
@@ -113,7 +125,7 @@ int main(int argc, char** argv) {
 			InstallService(sname,epath,args);
 			break;
 		}
-		case 2: //uninstall
+	case 2: //uninstall
 		{
 			if(sname.size()<1) {
 				printMainHelp();
@@ -122,7 +134,7 @@ int main(int argc, char** argv) {
 			UnInstallService(sname);
 			break;
 		}
-		case 0:
+	case 0:
 		{
 			if(lcfg.size()<1||ncfg.size()<1||sname.size()<1) {
 				printMainHelp();
@@ -216,11 +228,11 @@ void t() {
 
 void testSyncBuilder() {
 #ifdef WIN32
-//	initSyncBuilder("Demoes.cfg");
+	//	initSyncBuilder("Demoes.cfg");
 #else
-//	initSyncBuilder("src/Demoes.cfg");
+	//	initSyncBuilder("src/Demoes.cfg");
 #endif
-//	runSyncBuilder();
+	//	runSyncBuilder();
 	bsleep(100000);
 	cout << "-----------run end-----------" << endl;
 }

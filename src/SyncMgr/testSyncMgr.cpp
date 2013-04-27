@@ -4,9 +4,8 @@
  *  Created on: Nov 14, 2012
  *      Author: Scorpion
  */
-#include "SyncDemo.h"
+#include "SMgrSyncDemo.h"
 using namespace centny;
-using namespace centny::SMgr;
 void handler() {
 	cout << "handle" << endl;
 }
@@ -43,11 +42,11 @@ void testSyncDemo() {
 	io_service ios;
 	NoticeTimer::defaultNoticeTimer().initTimer(ios);
 	NoticeCenter::defaultCenter();
-	SyncDemo::createDemo(ncfp, ecfp)->initBCmd(ios);
+	SMgrSyncDemo::createDemo(ncfp, ecfp)->initBCmd(ios);
 //	while (1)
 //		bsleep(50000);
 	ios.run();
-	SyncDemo::fre();
+	SMgrSyncDemo::fre();
 	NoticeTimer::fre();
 	NoticeCenter::fre();
 	cout << "--------------------------------" << "all end"

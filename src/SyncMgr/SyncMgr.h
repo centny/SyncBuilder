@@ -17,7 +17,6 @@
 #include "../ProtocolAdapter/NetCfg.h"
 #include "../Notice/NoticeCenter.h"
 namespace centny {
-namespace SMgr {
 using namespace file;
 using namespace boost;
 //
@@ -58,6 +57,5 @@ private:
 //	void syncRemove(NetFInfo* netf, FInfo* locf);
 	int compare(FInfo* locf, NetFInfo* netf);
 };
-}
 } /* namespace centny */
 #endif /* SYNCMGR_H_ */

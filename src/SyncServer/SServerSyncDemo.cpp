@@ -5,12 +5,11 @@
  *      Author: Scorpion
  */
 
-#include "SyncDemo.h"
+#include "SServerSyncDemo.h"
 
 namespace centny {
-namespace SServer {
 
-SyncDemo::SyncDemo(io_service& ios, Demo* d) {
+SServerSyncDemo::SServerSyncDemo(io_service& ios, SServerDemo* d) {
 	this->fcm = new FileCmdMgr(d->fucfg);
 	this->fss = new SyncServer(ios, d->fport, this->fcm, "FCM");
 	this->fcm->setServer(fss);
@@ -20,35 +19,35 @@ SyncDemo::SyncDemo(io_service& ios, Demo* d) {
 	this->sss->accept();
 }
 
-SyncDemo::~SyncDemo() {
+SServerSyncDemo::~SServerSyncDemo() {
 	delete this->fcm;
 	delete this->fss;
 	delete this->scm;
 	delete this->sss;
 }
-static vector<SyncDemo*> _sserve_demoes;
+static vector<SServerSyncDemo*> _sserve_demoes;
 static boost::shared_mutex _ss_mutex;
 //
-SyncDemo* SyncDemo::createDemo(io_service& ios, Demo* d) {
-	SyncDemo *sd = new SyncDemo(ios, d);
+SServerSyncDemo* SServerSyncDemo::createDemo(io_service& ios, SServerDemo* d) {
+	SServerSyncDemo *sd = new SServerSyncDemo(ios, d);
 	_sserve_demoes.push_back(sd);
 	return sd;
 }
-int SyncDemo::demoes() {
+int SServerSyncDemo::demoes() {
 	int size = 0;
 	_ss_mutex.lock_shared();
 	size = _sserve_demoes.size();
 	_ss_mutex.unlock_shared();
 	return size;
 }
-void SyncDemo::fre(SyncDemo* sd) {
+void SServerSyncDemo::fre(SServerSyncDemo* sd) {
 	_ss_mutex.lock();
-	vector<SyncDemo*>::iterator it, end;
+	vector<SServerSyncDemo*>::iterator it, end;
 	it = _sserve_demoes.begin();
 	end = _sserve_demoes.end();
 	if (sd) {
 		for (; it != end; it++) {
-			SyncDemo *sd2 = *it;
+			SServerSyncDemo *sd2 = *it;
 			if (sd2 == sd) {
 				break;
 			}
@@ -59,12 +58,11 @@ void SyncDemo::fre(SyncDemo* sd) {
 		}
 	} else {
 		for (; it != end; it++) {
-			SyncDemo *sd2 = *it;
+			SServerSyncDemo *sd2 = *it;
 			delete sd2;
 		}
 		_sserve_demoes.clear();
 	}
 	_ss_mutex.unlock();
 }
-} /* namespace SServer */
 } /* namespace centny */

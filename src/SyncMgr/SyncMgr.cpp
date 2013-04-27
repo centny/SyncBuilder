@@ -9,7 +9,6 @@
 #include <boost/filesystem.hpp>
 
 namespace centny {
-namespace SMgr {
 namespace fs = boost::filesystem;
 SyncMgr::SyncMgr(AdapterBase *loc, NetAdapterBase *net, NetCfg *cfg,
 		EventMgr::EventMgrId emi) :
@@ -429,5 +428,4 @@ void SyncMgr::syncDown(NetFInfo* netf, FInfo* locf) {
 //	}
 //	netf->refreshSubs();
 //}
-}
 } /* namespace centny */

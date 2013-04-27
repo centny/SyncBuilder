@@ -1,6 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="CDebug|Win32">
+      <Configuration>CDebug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="CDebug|x64">
+      <Configuration>CDebug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="DebugService|Win32">
       <Configuration>DebugService</Configuration>
       <Platform>Win32</Platform>
@@ -25,6 +33,14 @@
       <Configuration>Release</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="SDebug|Win32">
+      <Configuration>SDebug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="SDebug|x64">
+      <Configuration>SDebug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{98B4EECE-5C9A-4E2C-8571-19E006268FCD}</ProjectGuid>
@@ -38,7 +54,31 @@
     <PlatformToolset>v110</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='SDebug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CDebug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='SDebug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CDebug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v110</PlatformToolset>
@@ -76,7 +116,19 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='SDebug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='CDebug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='SDebug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='CDebug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DebugService|Win32'" Label="PropertySheets">
@@ -99,7 +151,35 @@
     <LibraryWPath>$(DEV_LIB_HOME)\bin;$(LibraryWPath)</LibraryWPath>
     <ExecutablePath>$(DEV_LIB_HOME)\bin;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='SDebug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(SolutionDir)\$(Configuration);$(SolutionDir)\Debug;$(DEV_LIB_HOME)\include;$(BOOST_HOME);$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\Debug;$(SolutionDir)\$(Configuration);$(BOOST_HOME)\stage\lib;$(DEV_LIB_HOME)\lib;$(LibraryPath)</LibraryPath>
+    <LibraryWPath>$(DEV_LIB_HOME)\bin;$(LibraryWPath)</LibraryWPath>
+    <ExecutablePath>$(DEV_LIB_HOME)\bin;$(ExecutablePath)</ExecutablePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CDebug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(SolutionDir)\Debug;$(SolutionDir)\$(Configuration);$(DEV_LIB_HOME)\include;$(BOOST_HOME);$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\Debug;$(SolutionDir)\$(Configuration);$(BOOST_HOME)\stage\lib;$(DEV_LIB_HOME)\lib;$(LibraryPath)</LibraryPath>
+    <LibraryWPath>$(DEV_LIB_HOME)\bin;$(LibraryWPath)</LibraryWPath>
+    <ExecutablePath>$(DEV_LIB_HOME)\bin;$(ExecutablePath)</ExecutablePath>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(DEV_LIB_HOME)\include;$(BOOST_HOME);$(IncludePath)</IncludePath>
+    <LibraryPath>$(BOOST_HOME)\stage\lib;$(DEV_LIB_HOME)\lib;$(LibraryPath)</LibraryPath>
+    <LibraryWPath>$(DEV_LIB_HOME)\bin;$(LibraryWPath)</LibraryWPath>
+    <ExecutablePath>$(DEV_LIB_HOME)\bin;$(ExecutablePath)</ExecutablePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='SDebug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(DEV_LIB_HOME)\include;$(BOOST_HOME);$(IncludePath)</IncludePath>
+    <LibraryPath>$(BOOST_HOME)\stage\lib;$(DEV_LIB_HOME)\lib;$(LibraryPath)</LibraryPath>
+    <LibraryWPath>$(DEV_LIB_HOME)\bin;$(LibraryWPath)</LibraryWPath>
+    <ExecutablePath>$(DEV_LIB_HOME)\bin;$(ExecutablePath)</ExecutablePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CDebug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(DEV_LIB_HOME)\include;$(BOOST_HOME);$(IncludePath)</IncludePath>
     <LibraryPath>$(BOOST_HOME)\stage\lib;$(DEV_LIB_HOME)\lib;$(LibraryPath)</LibraryPath>
@@ -108,8 +188,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugService|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(DEV_LIB_HOME)\include;$(BOOST_HOME);$(IncludePath)</IncludePath>
-    <LibraryPath>$(BOOST_HOME)\stage\lib;$(DEV_LIB_HOME)\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\Debug;$(SolutionDir)\$(Configuration);$(DEV_LIB_HOME)\include;$(BOOST_HOME);$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\Debug;$(SolutionDir)\$(Configuration);$(BOOST_HOME)\stage\lib;$(DEV_LIB_HOME)\lib;$(LibraryPath)</LibraryPath>
     <LibraryWPath>$(DEV_LIB_HOME)\bin;$(LibraryWPath)</LibraryWPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugService|x64'">
@@ -139,7 +219,67 @@
       <AdditionalDependencies>libcurl_imp.lib;libextc_d.lib;log4cxx.lib;libsqlite_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='SDebug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;DEV_NO_SERVICE=1;RUN_SERVER=1;USING_LOG4CXX=1;SHOW_REL_LOG=1;_WIN32_WINNT=0x0501;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4996;4250;4251;4244</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>libcurl_imp.lib;libextc_d.lib;log4cxx.lib;libsqlite_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='CDebug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;DEV_NO_SERVICE=1;RUN_SERVER=0;USING_LOG4CXX=1;SHOW_REL_LOG=1;_WIN32_WINNT=0x0501;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4996;4250;4251;4244</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>libcurl_imp.lib;libextc_d.lib;log4cxx.lib;libsqlite_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;DEV_IN_TEST=1;USING_LOG4CXX=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4996;4250;4251</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>libcurl_imp.lib;libextc_d.lib;log4cxx.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='SDebug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;DEV_IN_TEST=1;USING_LOG4CXX=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4996;4250;4251</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>libcurl_imp.lib;libextc_d.lib;log4cxx.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='CDebug|x64'">
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
@@ -159,14 +299,16 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;USING_LOG4CXX=1;_WIN32_WINNT=0x0501;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;USING_LOG4CXX=1;_WIN32_WINNT=0x0501;DEV_NO_SERVICE=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4996;4250;4251</DisableSpecificWarnings>
       <PrecompiledHeaderFile>PreHeader.h</PrecompiledHeaderFile>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>libcurl_imp.lib;libextc_d.lib;log4cxx.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libcurl_imp.lib;libextc_d.lib;log4cxx.lib;libsqlite_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugService|x64'">
@@ -235,6 +377,8 @@
     <ClCompile Include="log\LogFactory.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Notice\NoticeCenter.cpp" />
+    <ClCompile Include="Notice\NoticeTimer.cpp" />
+    <ClCompile Include="Notice\testNotice.cpp" />
     <ClCompile Include="ProtocolAdapter\AdapterBase.cpp" />
     <ClCompile Include="ProtocolAdapter\CurlBuilder.cpp" />
     <ClCompile Include="ProtocolAdapter\FtpAdapter.cpp" />
@@ -245,15 +389,18 @@
     <ClCompile Include="ProtocolAdapter\testAdapter.cpp" />
     <ClCompile Include="ProtocolAdapter\testCurl.cpp" />
     <ClCompile Include="SyncBuilder.cpp" />
-    <ClCompile Include="SyncMgr\SyncDemo.cpp" />
+    <ClCompile Include="SyncMgr\SMgrDemoCfg.cpp" />
+    <ClCompile Include="SyncMgr\SMgrSyncDemo.cpp" />
     <ClCompile Include="SyncMgr\SyncMgr.cpp" />
     <ClCompile Include="SyncMgr\testSyncMgr.cpp" />
     <ClCompile Include="SyncServer\BindCmdMgr.cpp" />
     <ClCompile Include="SyncServer\ConClient.cpp" />
+    <ClCompile Include="SyncServer\SServerDemoCfg.cpp" />
     <ClCompile Include="SyncServer\FileCmdMgr.cpp" />
     <ClCompile Include="SyncServer\HttpCmdMgr.cpp" />
     <ClCompile Include="SyncServer\LoginCmdBase.cpp" />
     <ClCompile Include="SyncServer\ShellCmdMgr.cpp" />
+    <ClCompile Include="SyncServer\SServerSyncDemo.cpp" />
     <ClCompile Include="SyncServer\SyncServer.cpp" />
     <ClCompile Include="SyncServer\testCmdBase.cpp" />
     <ClCompile Include="SyncServer\testSyncServer.cpp" />
@@ -275,6 +422,7 @@
     <ClInclude Include="EventMgr\EventRunner.h" />
     <ClInclude Include="log\LogFactory.h" />
     <ClInclude Include="Notice\NoticeCenter.h" />
+    <ClInclude Include="Notice\NoticeTimer.h" />
     <ClInclude Include="ProtocolAdapter\AdapterBase.h" />
     <ClInclude Include="ProtocolAdapter\CurlBuilder.h" />
     <ClInclude Include="ProtocolAdapter\FtpAdapter.h" />
@@ -283,14 +431,17 @@
     <ClInclude Include="ProtocolAdapter\SyncAdapter.h" />
     <ClInclude Include="ProtocolAdapter\SyncBindCmd.h" />
     <ClInclude Include="SyncBuilder.h" />
-    <ClInclude Include="SyncMgr\SyncDemo.h" />
+    <ClInclude Include="SyncMgr\SMgrDemoCfg.h" />
+    <ClInclude Include="SyncMgr\SMgrSyncDemo.h" />
     <ClInclude Include="SyncMgr\SyncMgr.h" />
     <ClInclude Include="SyncServer\BindCmdMgr.h" />
     <ClInclude Include="SyncServer\ConClient.h" />
+    <ClInclude Include="SyncServer\SServerDemoCfg.h" />
     <ClInclude Include="SyncServer\FileCmdMgr.h" />
     <ClInclude Include="SyncServer\HttpCmdMgr.h" />
     <ClInclude Include="SyncServer\LoginCmdBase.h" />
     <ClInclude Include="SyncServer\ShellCmdMgr.h" />
+    <ClInclude Include="SyncServer\SServerSyncDemo.h" />
     <ClInclude Include="SyncServer\SyncServer.h" />
     <ClInclude Include="SyncServer\UserCfg.h" />
     <ClInclude Include="WinServcie\WinService.h" />
@@ -305,6 +456,9 @@
     <None Include="ProtocolAdapter\Ftp.cfg" />
     <None Include="ProtocolAdapter\Net.cfg" />
     <None Include="ProtocolAdapter\WinNet.cfg" />
+    <None Include="SyncMgr\db.sql" />
+    <None Include="SyncMgr\Demoes.cfg" />
+    <None Include="SyncServer\Demoes.cfg" />
     <None Include="SyncServer\users.cfg" />
     <None Include="SyncServer\Web.cfg" />
     <None Include="SyncServer\WinUsers.cfg" />

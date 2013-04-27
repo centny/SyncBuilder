@@ -16,7 +16,6 @@
 #include "SyncMgr.h"
 #include <sqlite3.h>
 namespace centny {
-namespace SMgr {
 //
 #define TNAME "FINFO"
 //location 0:local,1:remote.
@@ -35,7 +34,7 @@ CREATE TABLE IF NOT EXISTS FINFO(\
  PRIMARY KEY (CWD,LOCATION)\
 )"
 
-class SyncDemo {
+class SMgrSyncDemo {
 private:
 	NetCfg *ncfg;
 	EventCfg *ecfg;
@@ -50,18 +49,17 @@ private:
 	string ncf;
 	string ecf;
 public:
-	SyncDemo(string ncf, string ecf);
-	virtual ~SyncDemo();
+	SMgrSyncDemo(string ncf, string ecf);
+	virtual ~SMgrSyncDemo();
 public:
-	static SyncDemo* createDemo(string ncf, string ecf);
+	static SMgrSyncDemo* createDemo(string ncf, string ecf);
 	static int demoes();
-	static void fre(SyncDemo* sd = 0);
+	static void fre(SMgrSyncDemo* sd = 0);
 private:
 	void checkDbTable();
 public:
 	void run();
 	void initBCmd(io_service& ios);
 };
-}
 } /* namespace centny */
 #endif /* SYNCDEMO_H_ */

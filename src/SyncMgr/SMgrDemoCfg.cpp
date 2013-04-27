@@ -5,13 +5,12 @@
  *      Author: Scorpion
  */
 
-#include "DemoCfg.h"
+#include "SMgrDemoCfg.h"
 
 namespace centny {
-namespace SMgr {
 #define DEMO_SERVE_CFG "DEMO_SERVE_CFG_"
 #define DEMO_EVENT_CFG "DEMO_EVENT_CFG_"
-DemoCfg::DemoCfg(string& cfgPath) :
+SMgrDemoCfg::SMgrDemoCfg(string& cfgPath) :
 		CfgParser(cfgPath), log(C_LOG("DemoCfg")) {
 			map<string, string>::iterator it, fit, end;
 			end = this->kvs.end();
@@ -35,13 +34,12 @@ DemoCfg::DemoCfg(string& cfgPath) :
 			}
 			log.info("run %d demo for configure;%s",names.size(),cfgPath.c_str());
 }
-string DemoCfg::serveCfg(string name) {
+string SMgrDemoCfg::serveCfg(string name) {
 	pair<string, string> p = this->demo_cfgs[name];
 	return p.first;
 }
-string DemoCfg::eventCfg(string name) {
+string SMgrDemoCfg::eventCfg(string name) {
 	pair<string, string> p = this->demo_cfgs[name];
 	return p.second;
-}
 }
 } /* namespace centny */

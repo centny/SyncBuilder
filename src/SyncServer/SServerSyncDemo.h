@@ -15,8 +15,7 @@
 #include <boost/array.hpp>
 #include <boost/filesystem.hpp>
 namespace centny {
-namespace SServer {
-struct Demo {
+struct SServerDemo {
 	string name;
 	unsigned int fport;
 	unsigned int sport;
@@ -24,21 +23,19 @@ struct Demo {
 	string sucfg;
 	string swcfg;
 };
-class SyncDemo {
+class SServerSyncDemo {
 private:
 	FileCmdMgr* fcm;
 	SyncServer* fss;
 	ShellCmdMgr* scm;
 	SyncServer* sss;
 public:
-	static SyncDemo* createDemo(io_service& ios, Demo* d);
+	static SServerSyncDemo* createDemo(io_service& ios, SServerDemo* d);
 	static int demoes();
-	static void fre(SyncDemo* sd = 0);
+	static void fre(SServerSyncDemo* sd = 0);
 public:
-	SyncDemo(io_service& ios, Demo* d);
-	virtual ~SyncDemo();
+	SServerSyncDemo(io_service& ios, SServerDemo* d);
+	virtual ~SServerSyncDemo();
 };
-
-} /* namespace SServer */
 } /* namespace centny */
 #endif /* SYNCDEMO_H_ */

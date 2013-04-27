@@ -5,12 +5,11 @@
  *      Author: Scorpion
  */
 
-#include "SyncDemo.h"
+#include "SMgrSyncDemo.h"
 #include <boost/thread.hpp>
 #include <boost/thread/mutex.hpp>
 namespace centny {
-namespace SMgr {
-SyncDemo::SyncDemo(string ncf, string ecf) :
+SMgrSyncDemo::SMgrSyncDemo(string ncf, string ecf) :
 		log(C_LOG("SyncDemo")) {
 			this->db=0;
 			this->net=0;
@@ -45,10 +44,10 @@ SyncDemo::SyncDemo(string ncf, string ecf) :
 			this->loc = new LocAdapter(this->db, this->ncfg->locSyncDir());
 			this->mid = EventMgr::createDemo(this->ecfg);
 			this->mgr = new SyncMgr(this->loc, this->net, this->ncfg, this->mid);
-			this->thr=new boost::thread(boost::bind(&SyncDemo::run,this));
+			this->thr=new boost::thread(boost::bind(&SMgrSyncDemo::run,this));
 			}
 
-SyncDemo::~SyncDemo() {
+SMgrSyncDemo::~SMgrSyncDemo() {
 	if (this->mid) {
 		log.debug("free demos");
 		EventMgr::freDemo(this->mid);
@@ -89,42 +88,42 @@ SyncDemo::~SyncDemo() {
 		this->db = NULL;
 	}
 }
-void SyncDemo::checkDbTable() {
+void SMgrSyncDemo::checkDbTable() {
 	assert(sqlite3_exec(this->db, CREATE_TABLE, 0, 0, 0)==SQLITE_OK);
 }
-void SyncDemo::run() {
+void SMgrSyncDemo::run() {
 	this->mgr->sync();
 }
-void SyncDemo::initBCmd(io_service& ios) {
+void SMgrSyncDemo::initBCmd(io_service& ios) {
 	this->bcmd = new SyncBindCmd(this->ecfg, this->ncfg, this->net, this->mid,
 			ios);
 }
 /*
  * static field.
  */
-static vector<SyncDemo*> _sync_demoes;
+static vector<SMgrSyncDemo*> _sync_demoes;
 static boost::shared_mutex _sd_mutex;
 //
-SyncDemo* SyncDemo::createDemo(string ncf, string ecf) {
-	SyncDemo *sd = new SyncDemo(ncf, ecf);
+SMgrSyncDemo* SMgrSyncDemo::createDemo(string ncf, string ecf) {
+	SMgrSyncDemo *sd = new SMgrSyncDemo(ncf, ecf);
 	_sync_demoes.push_back(sd);
 	return sd;
 }
-int SyncDemo::demoes() {
+int SMgrSyncDemo::demoes() {
 	int size = 0;
 	_sd_mutex.lock_shared();
 	size = _sync_demoes.size();
 	_sd_mutex.unlock_shared();
 	return size;
 }
-void SyncDemo::fre(SyncDemo* sd) {
+void SMgrSyncDemo::fre(SMgrSyncDemo* sd) {
 	_sd_mutex.lock();
-	vector<SyncDemo*>::iterator it, end;
+	vector<SMgrSyncDemo*>::iterator it, end;
 	it = _sync_demoes.begin();
 	end = _sync_demoes.end();
 	if (sd) {
 		for (; it != end; it++) {
-			SyncDemo *sd2 = *it;
+			SMgrSyncDemo *sd2 = *it;
 			if (sd2 == sd) {
 				break;
 			}
@@ -135,12 +134,11 @@ void SyncDemo::fre(SyncDemo* sd) {
 		}
 	} else {
 		for (; it != end; it++) {
-			SyncDemo *sd2 = *it;
+			SMgrSyncDemo *sd2 = *it;
 			delete sd2;
 		}
 		_sync_demoes.clear();
 	}
 	_sd_mutex.unlock();
-}
 }
 } /* namespace centny */

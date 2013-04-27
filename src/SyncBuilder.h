@@ -9,8 +9,8 @@
 #define SYNCBUILDER_H_
 #include "Notice/NoticeCenter.h"
 #include "xgetopt.h"
-#include "SyncServer/DemoCfg.h"
-#include "SyncMgr/DemoCfg.h"
+#include "SyncServer/SServerDemoCfg.h"
+#include "SyncMgr/SMgrDemoCfg.h"
 #include <boost/asio.hpp>
 using namespace std;
 using namespace centny;
@@ -33,7 +33,7 @@ public:
 };
 class SMgrBuilder: public SyncBuilder {
 private:
-	centny::SMgr::DemoCfg* dcfg;
+	SMgrDemoCfg* dcfg;
 	Log log;
 public:
 	SMgrBuilder();
@@ -44,7 +44,7 @@ public:
 };
 class SServeBuilder: public SyncBuilder {
 private:
-	centny::SServer::DemoCfg* dcfg;
+	SServerDemoCfg* dcfg;
 	Log log;
 public:
 	SServeBuilder();
@@ -60,8 +60,10 @@ public:
 //void stopSyncBuilder();
 ////service interface.
 //void printHelp();
-//int initService(int argc, char** argv);
-//int runService(int argc, char** argv);
-//int stopService(int argc, char** argv);
+#ifdef WIN32
+int initService(int argc, char** argv);
+int runService(int argc, char** argv);
+int stopService(int argc, char** argv);
+#endif
 //
 #endif /* SYNCBUILDER_H_ */
