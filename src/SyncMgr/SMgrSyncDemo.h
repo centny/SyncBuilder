@@ -60,6 +60,7 @@ private:
 public:
 	void run();
 	void initBCmd(io_service& ios);
+	SyncBindCmd* gbcm();
 };
 } /* namespace centny */
 #endif /* SYNCDEMO_H_ */

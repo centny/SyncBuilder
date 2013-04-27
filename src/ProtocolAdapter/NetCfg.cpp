@@ -13,10 +13,13 @@ namespace centny {
 namespace fs = boost::filesystem;
 NetCfg::NetCfg(string& cfgPath) :
 		CfgParser(cfgPath) {
+	if(!this->valid){
+		return;
+	}
 	fs::path fp(this->locSyncDir());
 	this->valid = exists(fp) && fs::is_directory(fp);
 	if (!this->valid) {
-		this->msg = this->locSyncDir() + " is not exist or not a directory";
+		this->msg ="local sync directory (" + this->locSyncDir() + ") is not exist or not a directory";
 		return;
 	}
 	this->isNoticeSync = false;

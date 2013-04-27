@@ -98,6 +98,9 @@ void SMgrSyncDemo::initBCmd(io_service& ios) {
 	this->bcmd = new SyncBindCmd(this->ecfg, this->ncfg, this->net, this->mid,
 			ios);
 }
+SyncBindCmd* SMgrSyncDemo::gbcm(){
+	return this->bcmd;
+}
 /*
  * static field.
  */

@@ -41,6 +41,8 @@ void printMainHelp() {
 	printf("Usage:cmd <option>\n"
 		"\t-i  install service\n"
 		"\t-u  uninstall service\n"
+		"\t-C  run as client.\n"
+		"\t-S  run as server.\n"
 		"\t-n name  service name\n"
 		"\t-l path  the log configure file path\n"
 		"\t-c path  the demo configure  file path\n"
@@ -93,6 +95,10 @@ int main(int argc, char** argv) {
 			cmd_action=2;
 			break;
 		case 'C':
+			hc=true;
+			break;
+		case 'S':
+			hs=true;
 			break;
 		case 'h':
 			printMainHelp();
@@ -189,6 +195,11 @@ void registerSignal() {
 #endif
 }
 void devTest(int argc, char** argv) {
+#if CMD_DEBUG
+	SyncBuilder::create(argc,argv);
+	SyncBuilder::demo()->run();
+	SyncBuilder::fre();
+#else
 	LogFactory::init();
 	//	registerSignal();
 	//	initService(argc,argv);
@@ -209,6 +220,7 @@ void devTest(int argc, char** argv) {
 	testSyncServer();
 #else
 	testSyncDemo();
+#endif
 #endif
 }
 void t() {

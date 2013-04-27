@@ -24,6 +24,12 @@ namespace centny {
 			"\t-h \t\t show this useage\n");
 	}
 	SyncBuilder* SyncBuilder::create(int argc, char** argv) {
+		//fstream fs;
+		//fs.open("D:\\t.log",ios::out);
+		//for(int i=0;i<argc;i++){
+		//	fs<<string(argv[i])<<endl;
+		//}
+		//fs.close();
 		fre();
 		string lcfg;
 		string ncfg;
@@ -122,13 +128,16 @@ namespace centny {
 		} else {
 			log.info("find %d demo configure", dsize);
 		}
-		for (size_t i = 0; i < dsize; i++) {
-			string dname = this->dcfg->names[i];
-			SMgrSyncDemo::createDemo(this->dcfg->serveCfg(dname),
-				this->dcfg->eventCfg(dname))->initBCmd(this->ios);
-		}
 		NoticeTimer::defaultNoticeTimer().initTimer(this->ios);
 		NoticeCenter::defaultCenter();
+		for (size_t i = 0; i < dsize; i++) {
+			string dname = this->dcfg->names[i];
+			SMgrSyncDemo* sd;
+			sd=SMgrSyncDemo::createDemo(this->dcfg->serveCfg(dname),
+				this->dcfg->eventCfg(dname));
+			sd->initBCmd(this->ios);
+			NoticeTimer::defaultNoticeTimer().reg(sd->gbcm());
+		}
 		this->ios.run();
 		log.info("service will stop");
 		NoticeTimer::fre();

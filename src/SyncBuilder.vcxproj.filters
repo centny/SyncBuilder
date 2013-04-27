@@ -352,5 +352,11 @@
     <None Include="SyncMgr\Demoes.cfg">
       <Filter>SyncMgr</Filter>
     </None>
+    <None Include="SyncMgr\WinDemoes.cfg">
+      <Filter>SyncMgr</Filter>
+    </None>
+    <None Include="SyncServer\WinDemoes.cfg">
+      <Filter>SyncServer</Filter>
+    </None>
   </ItemGroup>
 </Project>

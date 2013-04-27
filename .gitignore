@@ -26,3 +26,5 @@ SDebug
 sblog.log
 CDebugService
 DebugService
+/src/CmdDebug
+/CmdDebug
