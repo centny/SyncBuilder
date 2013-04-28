@@ -41,6 +41,7 @@ void printMainHelp() {
 	printf("Usage:cmd <option>\n"
 		"\t-i  install service\n"
 		"\t-u  uninstall service\n"
+		"\t-r  run in command line.\n"
 		"\t-C  run as client.\n"
 		"\t-S  run as server.\n"
 		"\t-n name  service name\n"
@@ -52,7 +53,8 @@ void printMainHelp() {
 	SyncBuilder::help();
 #endif
 }
-#ifndef WIN32
+
+
 void receiveKillSignal(int s) {
 	SyncBuilder::demo()->stop();
 	printf("receive kill signal:%d\n", s);
@@ -60,12 +62,16 @@ void receiveKillSignal(int s) {
 void registerKillSignal() {
 	signal(SIGTERM, receiveKillSignal);
 	signal(SIGINT, receiveKillSignal);
+#ifdef WIN32
+	signal(SIGBREAK,receiveKillSignal);
+#else
 	signal(SIGKILL, receiveKillSignal);
 	signal(SIGSTOP, receiveKillSignal);
 	signal(SIGHUP, receiveKillSignal);
 	signal(SIGQUIT, receiveKillSignal);
-}
 #endif
+}
+//
 int main(int argc, char** argv) {
 #if DEV_NO_SERVICE
 	devTest(argc, argv);
@@ -77,7 +83,7 @@ int main(int argc, char** argv) {
 	hc=hs=false;
 	int cmd_action=0;
 	int ch;
-	while ((ch = xgetopt(argc, argv, "iuhn:l:c:CS")) != EOF) {
+	while ((ch = xgetopt(argc, argv, "iurhn:l:c:CS")) != EOF) {
 		switch (ch) {
 		case 'l':
 			lcfg = string(xoptarg);
@@ -93,6 +99,9 @@ int main(int argc, char** argv) {
 			break;
 		case 'u':
 			cmd_action=2;
+			break;
+		case 'r':
+			cmd_action=3;
 			break;
 		case 'C':
 			hc=true;
@@ -139,6 +148,13 @@ int main(int argc, char** argv) {
 			}
 			UnInstallService(sname);
 			break;
+		}
+	case 3: //run
+		{
+			registerKillSignal();
+			SyncBuilder::create(argc,argv);
+			SyncBuilder::demo()->run();
+			SyncBuilder::fre();
 		}
 	case 0:
 		{
