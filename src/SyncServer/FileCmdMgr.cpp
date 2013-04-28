@@ -191,6 +191,11 @@ size_t FileCmdMgr::help(ConClient* c) {
 size_t FileCmdMgr::list(ConClient* c, string path) {
 	//log.debug("create new directory:%s", path.c_str());
 	string rpath = this->rdir(c) + F_SEQ + path;
+//#ifdef WIN32
+//	replaceAll(rpath,UNIX_F_SEQ, F_SEQ, 0);
+//#else
+//	replaceAll(rpath,WIN_F_SEQ, F_SEQ, 0);
+//#endif
 	replaceAll(rpath, F_SEQ F_SEQ, F_SEQ, 0);
 	fs::path ppath(rpath);
 	if (!fs::exists(ppath)) {
