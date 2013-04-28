@@ -78,7 +78,11 @@ LocAdapter::~LocAdapter() {
 }
 FInfo* LocAdapter::createRootNode() {
 	last = new LocFInfo(this, 0);
-	last->cwd = F_SEQ;
+	if (this->rurl.empty()) {
+		last->cwd = "";
+	} else {
+		last->cwd = this->rurl;
+	}
 	last->type = 'd';
 	return last;
 }

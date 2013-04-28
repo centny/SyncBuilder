@@ -122,7 +122,11 @@ bool SyncAdapter::quit() {
 }
 FInfo* SyncAdapter::createRootNode() {
 	FInfo *fi = new NetFInfo(this, 0);
-	fi->cwd = "/";
+	if (this->rurl.empty()) {
+		fi->cwd = "";
+	} else {
+		fi->cwd = this->rurl;
+	}
 	fi->type = 'd';
 	return fi;
 }
@@ -208,7 +212,7 @@ FInfo* SyncAdapter::convertOne(FInfo* parent, string line) {
 		return 0;
 	}
 	string cwd = parent->cwd + "/" + ifs[1];
-	replaceAll(cwd, "//", "/");
+//	replaceAll(cwd, "//", "/");
 	vector<string>::iterator it, end;
 	bool exced = false, inced = false;
 	if (this->sexc.size()) {
@@ -324,8 +328,8 @@ const char* SyncAdapter::upload(FInfo* fi, string lf, string name) {
 }
 const char* SyncAdapter::upload(FInfo* fi, istream& is, size_t len,
 		time_t mtime, string name) {
-	blen = sprintf(buf, "STOR %s %ld %ld" DEFAULT_EOC, (fi->cwd + name).c_str(),
-			len, mtime);
+	blen = sprintf(buf, "STOR %s %ld %ld" DEFAULT_EOC,
+			(fi->cwd + "/" + name).c_str(), len, mtime);
 	this->socket->write_some(buffer(buf, blen), ec);
 	if (ec) {
 		log.error("upload error:%s", ec.message().c_str());
