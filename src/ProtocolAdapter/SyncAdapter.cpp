@@ -122,11 +122,7 @@ bool SyncAdapter::quit() {
 }
 FInfo* SyncAdapter::createRootNode() {
 	FInfo *fi = new NetFInfo(this, 0);
-	if (this->rurl.empty()) {
-		fi->cwd = "";
-	} else {
-		fi->cwd = this->rurl;
-	}
+	fi->cwd = this->rurl;
 	fi->type = 'd';
 	return fi;
 }
@@ -137,6 +133,10 @@ vector<FInfo*> SyncAdapter::listSubs(FInfo* parent) {
 	memset(buf, 0, R_BUF_SIZE);
 	blen = sprintf(buf, "LIST %s" DEFAULT_EOC, parent->cwd.c_str());
 	this->socket->write_some(buffer(buf, blen), ec);
+	if(blen>2){
+		buf[blen-2]=0;
+		this->log.debug("sending command:%s",buf);
+	}
 	if (ec) {
 		log.error("list subs error:%s", ec.message().c_str());
 		this->netstate = 500;
@@ -211,7 +211,12 @@ FInfo* SyncAdapter::convertOne(FInfo* parent, string line) {
 		log.error("convert to instance error:%s", line.c_str());
 		return 0;
 	}
-	string cwd = parent->cwd + "/" + ifs[1];
+	string cwd;
+	if(parent->cwd.empty()){
+		cwd= ifs[1];
+	}else{
+		cwd= parent->cwd + "/" + ifs[1];
+	}
 //	replaceAll(cwd, "//", "/");
 	vector<string>::iterator it, end;
 	bool exced = false, inced = false;

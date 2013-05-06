@@ -22,7 +22,11 @@ void LocFInfo::initByPath(const fs::path& p) {
 	assert(fs::exists(p));
 	if (parent) {
 		this->name = p.filename().string();
-		this->cwd = parent->cwd + F_SEQ + this->name;
+		if (parent->cwd.empty()) {
+			this->cwd = this->name;
+		} else {
+			this->cwd = parent->cwd + F_SEQ + this->name;
+		}
 		replaceAll(this->cwd, F_SEQ F_SEQ, F_SEQ);
 	} else {
 		this->name = "";
@@ -78,19 +82,16 @@ LocAdapter::~LocAdapter() {
 }
 FInfo* LocAdapter::createRootNode() {
 	last = new LocFInfo(this, 0);
-	if (this->rurl.empty()) {
-		last->cwd = "";
-	} else {
-		last->cwd = this->rurl;
-	}
+	last->cwd = "";
 	last->type = 'd';
 	return last;
 }
 vector<FInfo*> LocAdapter::listSubs(FInfo* parent) {
 	assert(parent);
 	vector<FInfo*> fsub;
-	string rpath = this->rurl + parent->cwd;
-	replaceAll(rpath, F_SEQ F_SEQ, F_SEQ, 0);
+	string rpath = this->absUrl(parent);
+//	cout << rpath << endl;
+
 	fs::path ppath(rpath);
 	assert(fs::exists(ppath));
 	fs::directory_iterator it(ppath);
@@ -131,6 +132,7 @@ vector<FInfo*> LocAdapter::listSubs(FInfo* parent) {
 }
 void LocAdapter::mkdir(FInfo* fi, string name) {
 	string dpath = fi->absUrl() + F_SEQ + name;
+//	cout<<"dpath:"<<dpath<<endl;
 	fs::path tp(dpath);
 	bool ced = fs::create_directories(tp);
 	if (!ced) {
@@ -143,7 +145,12 @@ FInfo* LocAdapter::contain(FInfo*fi, string name) {
 		return 0;
 	}
 	vector<FInfo*>::iterator it, end = fis.end();
-	string cwd = fi->cwd + F_SEQ + name;
+	string cwd;
+	if(fi->cwd.empty()){
+		cwd= name;
+	}else{
+		cwd= fi->cwd + F_SEQ + name;
+	}
 	replaceAll(cwd, F_SEQ F_SEQ, F_SEQ);
 	for (it = fis.begin(); it != end; it++) {
 		if ((*it)->cwd == cwd) {

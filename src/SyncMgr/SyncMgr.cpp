@@ -275,7 +275,7 @@ void SyncMgr::syncDown(NetFInfo* netf, FInfo* locf) {
 		NetFInfo *nit = (NetFInfo *) *it;
 		if (nit->isDir()) {
 			if (nit->isNewOrUpdated()) {
-				this->log.debug("create remote directory:%s",
+				this->log.debug("create local directory:%s",
 						nit->name.c_str());
 				locf->mkdir(nit->name);
 				locf->refreshSubs();

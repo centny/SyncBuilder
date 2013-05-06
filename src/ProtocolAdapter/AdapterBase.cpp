@@ -240,7 +240,13 @@ FInfo* AdapterBase::contain(FInfo*fi, string name) {
 		return 0;
 	}
 	vector<FInfo*>::iterator it, end = fis.end();
-	string cwd = fi->cwd + name;
+	string cwd;
+	if(fi->cwd.empty()){
+		cwd= name;
+	}else{
+		cwd= fi->cwd +"/"+ name;
+	}
+	cout<<"tcwd:"<<cwd<<endl;
 	for (it = fis.begin(); it != end; it++) {
 		if ((*it)->cwd == cwd) {
 			return *it;
