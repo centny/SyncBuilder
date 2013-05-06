@@ -239,7 +239,7 @@ void EventMgr::run() {
 		this->events_mutex.unlock();
 		ListenerCfg *lcfg = this->listener(e);
 		if (lcfg) {
-			this->log.debug("start run listener:%s", lcfg->name.c_str());
+			this->log.info("start run listener:%s", lcfg->name.c_str());
 			{
 				boost::mutex::scoped_lock _lock(this->running_mutex);
 				this->running = new EventRunner(lcfg, e);
@@ -251,7 +251,7 @@ void EventMgr::run() {
 				delete this->running;
 				this->running = 0;
 			}
-			this->log.debug("completed listener:%s", lcfg->name.c_str());
+			this->log.info("completed listener:%s", lcfg->name.c_str());
 		} else {
 			this->log.debug("can't find listener:%s", e->toString().c_str());
 		}
