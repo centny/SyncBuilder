@@ -246,7 +246,7 @@ FInfo* AdapterBase::contain(FInfo*fi, string name) {
 	}else{
 		cwd= fi->cwd +"/"+ name;
 	}
-	cout<<"tcwd:"<<cwd<<endl;
+//	cout<<"tcwd:"<<cwd<<endl;
 	for (it = fis.begin(); it != end; it++) {
 		if ((*it)->cwd == cwd) {
 			return *it;
