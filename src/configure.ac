@@ -25,7 +25,7 @@ AX_BOOST_SYSTEM
 AX_BOOST_THREAD
 AX_LIB_SQLITE3
 # Checks for header files.
-AC_CHECK_HEADER([stdlib.h string.h curl.h log4cxx/logger.h])
+#AC_CHECK_HEADER([stdlib.h string.h curl.h log4cxx/logger.h])
 #LDFLAGS=-lboost_system-mt
 # Checks for typedefs, structures, and compiler characteristics.
 AC_CHECK_HEADER_STDBOOL
