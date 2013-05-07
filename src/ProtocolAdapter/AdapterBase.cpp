@@ -7,6 +7,8 @@
 
 #include "AdapterBase.h"
 #include "../Common/ReplaceAll.h"
+#include <stdio.h>
+#include <stdlib.h>
 namespace centny {
 namespace file {
 const char * MONTHES[MONTHES_SIZE] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -241,10 +243,10 @@ FInfo* AdapterBase::contain(FInfo*fi, string name) {
 	}
 	vector<FInfo*>::iterator it, end = fis.end();
 	string cwd;
-	if(fi->cwd.empty()){
-		cwd= name;
-	}else{
-		cwd= fi->cwd +"/"+ name;
+	if (fi->cwd.empty()) {
+		cwd = name;
+	} else {
+		cwd = fi->cwd + "/" + name;
 	}
 //	cout<<"tcwd:"<<cwd<<endl;
 	for (it = fis.begin(); it != end; it++) {
