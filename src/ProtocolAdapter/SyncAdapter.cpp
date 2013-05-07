@@ -122,7 +122,7 @@ bool SyncAdapter::quit() {
 }
 FInfo* SyncAdapter::createRootNode() {
 	FInfo *fi = new NetFInfo(this, 0);
-	fi->cwd = this->rurl;
+	fi->cwd = "";
 	fi->type = 'd';
 	return fi;
 }
@@ -133,9 +133,9 @@ vector<FInfo*> SyncAdapter::listSubs(FInfo* parent) {
 	memset(buf, 0, R_BUF_SIZE);
 	blen = sprintf(buf, "LIST %s" DEFAULT_EOC, parent->cwd.c_str());
 	this->socket->write_some(buffer(buf, blen), ec);
-	if(blen>2){
-		buf[blen-2]=0;
-		this->log.debug("sending command:%s",buf);
+	if (blen > 2) {
+		buf[blen - 2] = 0;
+		this->log.debug("sending command:%s", buf);
 	}
 	if (ec) {
 		log.error("list subs error:%s", ec.message().c_str());
@@ -212,10 +212,10 @@ FInfo* SyncAdapter::convertOne(FInfo* parent, string line) {
 		return 0;
 	}
 	string cwd;
-	if(parent->cwd.empty()){
-		cwd= ifs[1];
-	}else{
-		cwd= parent->cwd + "/" + ifs[1];
+	if (parent->cwd.empty()) {
+		cwd = ifs[1];
+	} else {
+		cwd = parent->cwd + "/" + ifs[1];
 	}
 //	replaceAll(cwd, "//", "/");
 	vector<string>::iterator it, end;
@@ -244,7 +244,7 @@ FInfo* SyncAdapter::convertOne(FInfo* parent, string line) {
 	}
 	FInfo *fi = new NetFInfo(this, (NetFInfo*) parent);
 	fi->type = ifs[0].at(0);
-	fi->name = ifs[1] + "";
+	fi->name = ifs[1];
 	fi->size = atol(ifs[2].c_str());
 	fi->mtime = atol(ifs[3].c_str());
 	fi->parent = parent;
@@ -475,7 +475,13 @@ const char* SyncAdapter::download(FInfo* fi, ostream& os) {
 	return 0;
 }
 string SyncAdapter::absUrl(FInfo* tg) {
-	string aurl = this->rurl + "/" + tg->cwd;
+	string aurl;
+//	cout << "rurl:" << rurl << endl;
+	if (this->rurl.empty()) {
+		aurl = tg->cwd;
+	} else {
+		aurl = this->rurl + "/" + tg->cwd;
+	}
 	replaceAll(aurl, "//", "/");
 	return aurl;
 }

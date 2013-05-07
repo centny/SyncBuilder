@@ -25,9 +25,9 @@ void LocFInfo::initByPath(const fs::path& p) {
 		if (parent->cwd.empty()) {
 			this->cwd = this->name;
 		} else {
-			this->cwd = parent->cwd + F_SEQ + this->name;
+			this->cwd = parent->cwd + "/" + this->name;
 		}
-		replaceAll(this->cwd, F_SEQ F_SEQ, F_SEQ);
+//		replaceAll(this->cwd, F_SEQ F_SEQ, F_SEQ);
 	} else {
 		this->name = "";
 		this->cwd = "";
@@ -73,7 +73,7 @@ void LocAdapter::checkRUrl(string rurl) {
 		if (ec.value()) {
 			log.error("create root directory %s error", rurl.c_str());
 		} else {
-			log.debug("create root directory %s error", rurl.c_str());
+			log.debug("create root directory %s", rurl.c_str());
 		}
 	}
 	assert(fs::exists(rpath));
@@ -90,8 +90,6 @@ vector<FInfo*> LocAdapter::listSubs(FInfo* parent) {
 	assert(parent);
 	vector<FInfo*> fsub;
 	string rpath = this->absUrl(parent);
-//	cout << rpath << endl;
-
 	fs::path ppath(rpath);
 	assert(fs::exists(ppath));
 	fs::directory_iterator it(ppath);
@@ -146,12 +144,11 @@ FInfo* LocAdapter::contain(FInfo*fi, string name) {
 	}
 	vector<FInfo*>::iterator it, end = fis.end();
 	string cwd;
-	if(fi->cwd.empty()){
-		cwd= name;
-	}else{
-		cwd= fi->cwd + F_SEQ + name;
+	if (fi->cwd.empty()) {
+		cwd = name;
+	} else {
+		cwd = fi->cwd + "/" + name;
 	}
-	replaceAll(cwd, F_SEQ F_SEQ, F_SEQ);
 	for (it = fis.begin(); it != end; it++) {
 		if ((*it)->cwd == cwd) {
 			return *it;
@@ -160,8 +157,16 @@ FInfo* LocAdapter::contain(FInfo*fi, string name) {
 	return 0;
 }
 string LocAdapter::absUrl(FInfo* tg) {
-	string aurl = this->rurl + F_SEQ + tg->cwd;
+	string aurl;
+	if (tg->cwd.empty()) {
+		aurl = this->rurl;
+	} else {
+		aurl = this->rurl + "/" + tg->cwd;
+	}
 	replaceAll(aurl, "//", "/");
+#ifdef WIN32
+	replaceAll(aurl,"/",WIN_F_SEQ);
+#endif
 	return aurl;
 }
 bool LocAdapter::remove(FInfo* fi, string name) {
