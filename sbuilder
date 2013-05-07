@@ -1,22 +1,16 @@
 #!/bin/bash
-lf=/tmp/SyncBuilderLock
+lf=/tmp/SBuilderClientLock
 dpath=`dirname ${0}`
+echo $dpath
 ##
-case $0 in
+case $1 in
 start)
- if [ -f $lf ]; then
-   echo "the process aleady started."
-   exit
- fi
- $dpath/SyncBuilder -C -c $dpath/Demoes.cfg -l $dpath/log.conf
+ echo running SyncBuilder.
+ $dpath/SyncBuilder $lf -C -c $dpath/Demoes.cfg -l $dpath/log.conf
 ;;
 stop)
- if [ ! -f $lf ]; then
-  echo "process not started."
-  exit
- fi
- pid=`cat /tmp/SyncBuilderLock`
- echo "killing process by pid $pid"
- kill $pid
+ echo "stopping SyncBuilder."
+ $dpath/SyncBuilder $lf stop
 ;;
 esac
+
