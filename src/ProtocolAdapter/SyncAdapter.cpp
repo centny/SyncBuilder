@@ -133,10 +133,10 @@ vector<FInfo*> SyncAdapter::listSubs(FInfo* parent) {
 	memset(buf, 0, R_BUF_SIZE);
 	blen = sprintf(buf, "LIST %s" DEFAULT_EOC, parent->cwd.c_str());
 	this->socket->write_some(buffer(buf, blen), ec);
-	if (blen > 2) {
-		buf[blen - 2] = 0;
-		this->log.debug("sending command:%s", buf);
-	}
+//	if (blen > 2) {
+//		buf[blen - 2] = 0;
+//		this->log.debug("sending command:%s", buf);
+//	}
 	if (ec) {
 		log.error("list subs error:%s", ec.message().c_str());
 		this->netstate = 500;
