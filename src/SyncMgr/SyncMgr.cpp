@@ -121,13 +121,13 @@ void SyncMgr::receive(string name, DataPool::DId did) {
 void SyncMgr::sync(FInfo* locf, NetFInfo* netf) {
 	this->syncRemoved(locf, netf);
 	if (this->isUpload) {
-		log.debug("sync upload (%s,%s)", locf->absUrl().c_str(),
-				netf->absUrl().c_str());
+//		log.debug("sync upload (%s,%s)", locf->absUrl().c_str(),
+//				netf->absUrl().c_str());
 		this->syncUp(locf, netf);
 	}
 	if (this->isDownload) {
-		log.debug("sync download (%s,%s)", netf->absUrl().c_str(),
-				locf->absUrl().c_str());
+//		log.debug("sync download (%s,%s)", netf->absUrl().c_str(),
+//				locf->absUrl().c_str());
 		this->syncDown(netf, locf);
 	}
 }
