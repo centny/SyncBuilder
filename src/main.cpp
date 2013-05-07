@@ -1,9 +1,9 @@
 /*
-* main.cpp
-*
-*  Created on: Nov 4, 2012
-*      Author: Scorpion
-*/
+ * main.cpp
+ *
+ *  Created on: Nov 4, 2012
+ *      Author: Scorpion
+ */
 
 #include <iostream>
 #include <fstream>
@@ -39,21 +39,20 @@ using namespace centny;
 void printMainHelp() {
 #ifdef WIN32
 	printf("Usage:cmd <option>\n"
-		"\t-i  install service\n"
-		"\t-u  uninstall service\n"
-		"\t-r  run in command line.\n"
-		"\t-C  run as client.\n"
-		"\t-S  run as server.\n"
-		"\t-n name  service name\n"
-		"\t-l path  the log configure file path\n"
-		"\t-c path  the demo configure  file path\n"
-		"\t-h show this message\n");
+			"\t-i  install service\n"
+			"\t-u  uninstall service\n"
+			"\t-r  run in command line.\n"
+			"\t-C  run as client.\n"
+			"\t-S  run as server.\n"
+			"\t-n name  service name\n"
+			"\t-l path  the log configure file path\n"
+			"\t-c path  the demo configure  file path\n"
+			"\t-h show this message\n");
 
 #else
 	SyncBuilder::help();
 #endif
 }
-
 
 void receiveKillSignal(int s) {
 	SyncBuilder::demo()->stop();
@@ -85,37 +84,37 @@ int main(int argc, char** argv) {
 	int ch;
 	while ((ch = xgetopt(argc, argv, "iurhn:l:c:CS")) != EOF) {
 		switch (ch) {
-		case 'l':
+			case 'l':
 			lcfg = string(xoptarg);
 			break;
-		case 'c':
+			case 'c':
 			ncfg = string(xoptarg);
 			break;
-		case 'n':
+			case 'n':
 			sname=string(xoptarg);
 			break;
-		case 'i':
+			case 'i':
 			cmd_action=1;
 			break;
-		case 'u':
+			case 'u':
 			cmd_action=2;
 			break;
-		case 'r':
+			case 'r':
 			cmd_action=3;
 			break;
-		case 'C':
+			case 'C':
 			hc=true;
 			break;
-		case 'S':
+			case 'S':
 			hs=true;
 			break;
-		case 'h':
+			case 'h':
 			printMainHelp();
 			return 0;
 		}
 	}
 	switch(cmd_action) {
-	case 1: //install
+		case 1: //install
 		{
 			if(lcfg.size()<1||ncfg.size()<1||sname.size()<1) {
 				printMainHelp();
@@ -123,11 +122,11 @@ int main(int argc, char** argv) {
 			}
 			vector<string> args;
 			string epath=ModuleFullPath();
-			if(hc){
+			if(hc) {
 				args.push_back("-C");
-			}else if(hs){
+			} else if(hs) {
 				args.push_back("-S");
-			}else{
+			} else {
 				printf("-C or -S must be setted\n");
 				exit(0);
 			}
@@ -140,7 +139,7 @@ int main(int argc, char** argv) {
 			InstallService(sname,epath,args);
 			break;
 		}
-	case 2: //uninstall
+		case 2: //uninstall
 		{
 			if(sname.size()<1) {
 				printMainHelp();
@@ -149,14 +148,14 @@ int main(int argc, char** argv) {
 			UnInstallService(sname);
 			break;
 		}
-	case 3: //run
+		case 3: //run
 		{
 			registerKillSignal();
 			SyncBuilder::create(argc,argv);
 			SyncBuilder::demo()->run();
 			SyncBuilder::fre();
 		}
-	case 0:
+		case 0:
 		{
 			if(lcfg.size()<1||ncfg.size()<1||sname.size()<1) {
 				printMainHelp();
@@ -170,8 +169,46 @@ int main(int argc, char** argv) {
 		break;
 	}
 #else
-	if (argc < 4) {
+	if (argc < 3) {
 		printMainHelp();
+		exit(0);
+	} else if ("stop" == string(argv[2])) {
+		const char* _lockf = argv[1];
+		fstream lfs(_lockf, ios::in);
+		if (!lfs.is_open()) {
+			printf("process not started\n");
+			exit(0);
+		}
+		string line;
+		lfs >> line;
+		lfs.close();
+		long maxWait = 60;
+		line = "kill " + line;
+		std::cout << "sending " + line + "\n";
+		std::system(line.c_str());
+		while (maxWait > 0) {
+			lfs.open(_lockf, ios::in);
+			if (lfs.is_open()) {
+				lfs.close();
+				sleep(1);
+				maxWait--;
+			} else {
+				printf("stop process success\n");
+				exit(0);
+			}
+		}
+		printf("wait process exit timeout\n");
+		exit(0);
+	}
+	if (argc < 5) {
+		printMainHelp();
+		exit(0);
+	}
+	const char* _lockf = argv[1];
+	fstream ifs(_lockf, ios::in);
+	if (ifs.is_open()) {
+		printf("process aleady started\n");
+		ifs.close();
 		exit(0);
 	}
 #ifndef DEV_IN_ECLIPSE
@@ -181,14 +218,17 @@ int main(int argc, char** argv) {
 		exit(0);
 	}
 #endif
-	fstream lfs("/tmp/SyncBuilderLock", ios::out);
-	assert(lfs.is_open());
+	fstream lfs(_lockf, ios::out);
+	if (!lfs.is_open()) {
+		printf("open lock file %s error\n", _lockf);
+		exit(0);
+	}
 	lfs << getpid() << endl;
 	registerKillSignal();
-	SyncBuilder::create(argc, argv);
+	SyncBuilder::create(argc - 1, argv + 1);
 	SyncBuilder::demo()->run();
 	lfs.close();
-	std::system("rm -f /tmp/SyncBuilderLock");
+	std::system(("rm -f " + string(_lockf)).c_str());
 #endif
 #endif
 	return 0;
