@@ -275,8 +275,7 @@ void SyncMgr::syncDown(NetFInfo* netf, FInfo* locf) {
 		NetFInfo *nit = (NetFInfo *) *it;
 		if (nit->isDir()) {
 			if (nit->isNewOrUpdated()) {
-				this->log.debug("create local directory:%s",
-						nit->name.c_str());
+				this->log.debug("create local directory:%s", nit->name.c_str());
 				locf->mkdir(nit->name);
 				locf->refreshSubs();
 				n = locf->contain(nit->name);
@@ -305,7 +304,7 @@ void SyncMgr::syncDown(NetFInfo* netf, FInfo* locf) {
 				if (locf->parent) {
 					lf += F_SEQ;
 				}
-				lf += nit->name;
+				lf += "/" + nit->name;
 				log.debug("donwload %s to %s", nit->absUrl().c_str(),
 						lf.c_str());
 				emgr->postEvent(nit->absUrl(), nit->name, lf, nit->name,

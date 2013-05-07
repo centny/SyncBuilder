@@ -253,7 +253,7 @@ void EventMgr::run() {
 			}
 			this->log.info("completed listener:%s", lcfg->name.c_str());
 		} else {
-			this->log.debug("can't find listener:%s", e->toString().c_str());
+//			this->log.debug("can't find listener:%s", e->toString().c_str());
 		}
 		delete e;
 	}
@@ -294,7 +294,7 @@ void EventMgr::postEvent(string locf, string locfn, string netf, string netfn,
 	en->type = type;
 	en->period = period;
 	en->kvs = kvs;
-	this->log.debug("receive one event:%s", en->toString().c_str());
+//	this->log.debug("receive one event:%s", en->toString().c_str());
 	EVENTS_LOCK;
 	this->events.push_back(en);
 }
@@ -303,7 +303,7 @@ void EventMgr::postEvent(string name, FEventPeriod period,
 	NEventNode *en = new NEventNode(name);
 	en->period = period;
 	en->kvs = kvs;
-	this->log.debug("receive one event:%s", en->toString().c_str());
+//	this->log.debug("receive one event:%s", en->toString().c_str());
 	EVENTS_LOCK;
 	this->events.push_back(en);
 }
