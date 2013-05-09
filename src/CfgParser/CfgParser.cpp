@@ -7,9 +7,6 @@
 
 #include "CfgParser.h"
 #include <fstream>
-#include <boost/regex.hpp>
-#include <boost/algorithm/string.hpp>
-#include <boost/filesystem.hpp>
 using namespace boost;
 
 namespace centny {
@@ -38,8 +35,12 @@ void CfgParser::init(basic_istream<char>& s) {
 					name.c_str(), row);
 			continue;
 		}
-		this->kvs[name] = val;
-		//		cout<<subs[0]<<":"<<subs[1]<<endl;
+		if (name.size() > 4 && name.substr(0, 4) == "ENV_") {
+			string vname = name.substr(4);
+			setenv(vname.c_str(), envVal(val).c_str(), true);
+		} else {
+			this->kvs[name] = envVal(val);
+		}
 	}
 	this->valid = true;
 }
@@ -74,6 +75,23 @@ CfgParser::~CfgParser() {
 string CfgParser::value(string key) {
 	if (this->kvs.find(key) != this->kvs.end()) {
 		return this->kvs[key];
+	} else {
+		return "";
+	}
+}
+string CfgParser::envVal(string val) {
+	return boost::regex_replace(val, boost::regex("\\$\\([^\\)]*\\)"),
+			CfgParser::envBack);
+}
+string CfgParser::envBack(
+		boost::match_results<std::string::const_iterator> match) {
+	string ms = match[0].str();
+	ms = boost::regex_replace(ms, boost::regex("[\\$\\(\\)]"), "");
+//	cout << "name:" << ms << endl;
+	const char* val = getenv(ms.c_str());
+//	printf("%s\n", val);
+	if (val) {
+		return string(val) + "";
 	} else {
 		return "";
 	}

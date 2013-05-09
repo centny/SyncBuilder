@@ -7,15 +7,19 @@
 #include "CfgParser.h"
 using namespace centny;
 //
-void testParser(){
+void testParser() {
 #ifdef WIN32
 	string str="CfgParser\\e.cfg";
 #else
-	string str="src/CfgParser/e.cfg";
+	string str = "src/CfgParser/e.cfg";
 #endif
 	CfgParser cp(str);
-	if(!cp.valid){
-		cout<<cp.msg;
+	if (!cp.valid) {
+		cout << cp.msg;
 	}
-	printf("------------------------------testParser------------------------------\n");
+//	const char* val = getenv("WWS");
+//	printf("%s\n", val);
+	cout << cp.value("ccff") << endl;
+	printf(
+			"------------------------------testParser------------------------------\n");
 }

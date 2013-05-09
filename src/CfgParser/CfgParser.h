@@ -10,6 +10,9 @@
 #include <iostream>
 #include <map>
 #include <vector>
+#include <boost/regex.hpp>
+#include <boost/algorithm/string.hpp>
+#include <boost/filesystem.hpp>
 #include <boost/thread.hpp>
 #include <boost/thread/mutex.hpp>
 #include "../common.h"
@@ -38,6 +41,9 @@ public:
 	CfgParser(basic_istream<char>& cfgStream);
 	virtual ~CfgParser();
 	string value(string key);
+	static string envVal(string val);
+private:
+	static string envBack(boost::match_results<std::string::const_iterator> match);
 };
 
 } /* namespace centny */

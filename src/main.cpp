@@ -251,6 +251,10 @@ void registerSignal() {
 #endif
 }
 void devTest(int argc, char** argv) {
+#if DEV_CELL
+	LogFactory::init();
+	testParser();
+#else
 #if CMD_DEBUG
 	SyncBuilder::create(argc,argv);
 	SyncBuilder::demo()->run();
@@ -276,6 +280,7 @@ void devTest(int argc, char** argv) {
 	testSyncServer();
 #else
 	testSyncDemo();
+#endif
 #endif
 #endif
 }
