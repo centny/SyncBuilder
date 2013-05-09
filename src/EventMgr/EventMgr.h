@@ -32,13 +32,17 @@ string toFEventLocation(FEventLocation el);
 class EventNode {
 public:
 	FEventPeriod period;
-public:
 	map<string, string> kvs;
+public:
+	EventNode();
 	virtual ~EventNode();
 	virtual string toString();
 	virtual void add2Caller(ExtCaller* caller);
 	virtual bool match(ListenerCfg* lc)=0;
 };
+/*
+ * the notice event node.
+ */
 class NEventNode: public EventNode {
 public:
 	string name;
@@ -47,6 +51,9 @@ public:
 	virtual string toString();
 	virtual bool match(ListenerCfg* lc);
 };
+/*
+ * the file event node(syncing).
+ */
 class FEventNode: public EventNode {
 public:
 	string locf;
@@ -59,6 +66,21 @@ public:
 	virtual string toString();
 	virtual void add2Caller(ExtCaller* caller);
 	virtual bool match(ListenerCfg* lc);
+};
+/*
+ * the sync event node(synced).
+ */
+class SEventNode: public EventNode {
+public:
+	vector<string> locu;
+	vector<string> locd;
+	vector<string> netu;
+	vector<string> netd;
+public:
+	virtual string toString();
+	virtual void add2Caller(ExtCaller* caller);
+	virtual bool match(ListenerCfg* lc);
+	string toString(vector<string> vals);
 };
 //
 //
@@ -86,8 +108,9 @@ public:
 private:
 	EventMgr(EventCfg *cfg);
 	void run();
-	ListenerCfg* listener(EventNode* en);bool match(EventNode* en,
-			ListenerCfg* lc);
+	ListenerCfg* listener(EventNode* en);
+	//
+	bool match(EventNode* en, ListenerCfg* lc);
 public:
 //	void postEvent(string name, string type, DataPool::DId did);
 	void postEvent(string locf, string locfn, string netf, string netfn,
@@ -95,6 +118,9 @@ public:
 			map<string, string>& kvs = EMPTY_KVS);
 	void postEvent(string name, FEventPeriod period, map<string, string>& kvs =
 			EMPTY_KVS);
+	//it will auto call delete en after event runned.
+	void postEvent(EventNode* en);
+	//
 	int popEvent(string locf, string netf, FEventLocation uloc = FEL_NONE,
 			FEventType type = FET_NONE, FEventPeriod period = FEP_NONE);
 	int popEvent(string name, FEventPeriod period);

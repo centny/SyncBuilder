@@ -56,26 +56,26 @@ ListenerCfg::ListenerCfg(map<string, string>& kvs, string& name) :
 			this->logFile = kvs[(name + "_LOG")];
 			this->isClearLog = ("YES" == kvs[(name + "_LOG_CLEAR")]);
 			this->valid=true;
+			this->isDelete=this->isNew=this->isNormal=this->isNotice=this->isSynced=this->isUpdate=0;
+			vector<string>::iterator it, end;
+			for (it = this->types.begin(), end = this->types.end(); it != end; it++) {
+				if ("NOTICE" == *it) {
+					this->isNotice=1;
+				} else if("SYNCED"==*it) {
+					this->isSynced=1;
+				} else if("NEW"==*it) {
+					this->isNew=1;
+					this->isNormal=1;
+				} else if("UPDATE"==*it) {
+					this->isUpdate=1;
+					this->isNormal=1;
+				} else if("DELETE"==*it) {
+					this->isDelete=1;
+					this->isNormal=1;
+				}
+			}
 		}
 ListenerCfg::~ListenerCfg() {
-}
-bool ListenerCfg::isNotice() {
-	vector<string>::iterator it, end;
-	for (it = this->types.begin(), end = this->types.end(); it != end; it++) {
-		if ("NOTICE" == *it) {
-			return 1;
-		}
-	}
-	return 0;
-}
-bool ListenerCfg::isNormal() {
-	vector<string>::iterator it, end;
-	for (it = this->types.begin(), end = this->types.end(); it != end; it++) {
-		if ("NOTICE" != *it) {
-			return 1;
-		}
-	}
-	return 0;
 }
 void EventCfg::initAllEvent() {
 	//check the all event configure.
@@ -89,10 +89,10 @@ void EventCfg::initAllEvent() {
 			string name = en.substr(3);
 			ListenerCfg *lc = new ListenerCfg(this->kvs, name);
 			if (lc->valid) {
-				if (lc->isNormal()) {
+				if (lc->isNormal) {
 					this->listeners[name] = lc;
 				}
-				if (lc->isNotice()) {
+				if (lc->isNotice) {
 					this->notices[name] = lc;
 				}
 			} else {
@@ -143,7 +143,7 @@ string EventCfg::nlistenerNames() {
 	it=this->listeners.begin(),end=this->listeners.end();
 	stringstream sdata;
 	for(;it!=end;it++) {
-		if(it->second->isNotice()) {
+		if(it->second->isNotice) {
 			sdata<<(it->first)<<"\r\n";
 		}
 	}

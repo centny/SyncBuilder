@@ -46,6 +46,9 @@ string toFEventLocation(FEventLocation el) {
 	}
 }
 //
+EventNode::EventNode() {
+	this->period = FEP_CMD;
+}
 EventNode::~EventNode() {
 
 }
@@ -108,8 +111,6 @@ void FEventNode::add2Caller(ExtCaller* caller) {
 	caller->addEnv("FEventLocation", toFEventLocation(this->uloc));
 }
 bool FEventNode::match(ListenerCfg* lc) {
-	vector<string>::iterator fit, fend;
-	fit = lc->files.begin(), fend = lc->files.end();
 	string tf = "", tn = "";
 	switch (this->uloc) {
 	case FEL_LOC: {
@@ -126,15 +127,15 @@ bool FEventNode::match(ListenerCfg* lc) {
 		return false;
 	}
 	string ttype;
-	switch(this->type){
+	switch (this->type) {
 	case FET_DELETE:
-		ttype="DELETE";
+		ttype = "DELETE";
 		break;
 	case FET_NEW:
-		ttype="NEW";
+		ttype = "NEW";
 		break;
 	case FET_UPDATE:
-		ttype="UPDATE";
+		ttype = "UPDATE";
 		break;
 	default:
 		return false;
@@ -150,6 +151,8 @@ bool FEventNode::match(ListenerCfg* lc) {
 		return false;
 	}
 	try {
+		vector<string>::iterator fit, fend;
+		fit = lc->files.begin(), fend = lc->files.end();
 		for (; fit != fend; fit++) {
 			regex expr(*fit);
 			if (boost::regex_match(tn, expr)) {
@@ -163,6 +166,91 @@ bool FEventNode::match(ListenerCfg* lc) {
 		printf("match file error in listener:%s\n", lc->name.c_str());
 	}
 	return false;
+}
+string SEventNode::toString() {
+	return "SEventNode";
+}
+void SEventNode::add2Caller(ExtCaller* caller) {
+	string val;
+	val = this->toString(this->locu);
+	if (val.size()) {
+		caller->addEnv("LOCU", val);
+	}
+	val = this->toString(this->locd);
+	if (val.size()) {
+		caller->addEnv("LOCD", val);
+	}
+	val = this->toString(this->netu);
+	if (val.size()) {
+		caller->addEnv("NETU", val);
+	}
+	val = this->toString(this->netd);
+	if (val.size()) {
+		caller->addEnv("NETD", val);
+	}
+}
+bool SEventNode::match(ListenerCfg* lc) {
+	if (!lc->isSynced) {
+		return false;
+	}
+	try {
+		vector<string>::iterator fit, fend, fit2, fend2;
+		fit = lc->files.begin(), fend = lc->files.end();
+		string tn;
+		for (; fit != fend; fit++) {
+			regex expr(*fit);
+			if (lc->isNew || lc->isUpdate) {
+				fit2 = this->locu.begin();
+				fend2 = this->locu.end();
+				for (; fit2 != fend2; fit2++) {
+					tn = *fit2;
+					if (boost::regex_match(tn, expr)) {
+						return true;
+					}
+				}
+				fit2 = this->netu.begin();
+				fend2 = this->netu.end();
+				for (; fit2 != fend2; fit2++) {
+					tn = *fit2;
+					if (boost::regex_match(tn, expr)) {
+						return true;
+					}
+				}
+			}
+			if (lc->isDelete) {
+				fit2 = this->locd.begin();
+				fend2 = this->locd.end();
+				for (; fit2 != fend2; fit2++) {
+					tn = *fit2;
+					if (boost::regex_match(tn, expr)) {
+						return true;
+					}
+				}
+				fit2 = this->netd.begin();
+				fend2 = this->netd.end();
+				for (; fit2 != fend2; fit2++) {
+					tn = *fit2;
+					if (boost::regex_match(tn, expr)) {
+						return true;
+					}
+				}
+			}
+		}
+	} catch (...) {
+		printf("match file error in listener:%s\n", lc->name.c_str());
+	}
+	return false;
+}
+string SEventNode::toString(vector<string> vals) {
+	if (vals.empty()) {
+		return "";
+	}
+	stringstream sdata;
+	sdata << vals[0];
+	for (size_t i = 1; i < vals.size(); i++) {
+		sdata << "," << vals[1];
+	}
+	return sdata.str();
 }
 /*
  * static fields.
@@ -304,6 +392,10 @@ void EventMgr::postEvent(string name, FEventPeriod period,
 	en->period = period;
 	en->kvs = kvs;
 //	this->log.debug("receive one event:%s", en->toString().c_str());
+	EVENTS_LOCK;
+	this->events.push_back(en);
+}
+void EventMgr::postEvent(EventNode* en) {
 	EVENTS_LOCK;
 	this->events.push_back(en);
 }

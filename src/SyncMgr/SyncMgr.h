@@ -23,9 +23,7 @@ using namespace boost;
 
 class SyncMgr: public Noticeable {
 private:
-	time_t ctime;
-	bool isUpload;
-	bool isDownload;
+	time_t ctime;bool isUpload;bool isDownload;
 	Log log;
 private:
 	AdapterBase *loc;
@@ -34,11 +32,12 @@ private:
 //	thread *thr;
 	bool stopped;
 	boost::shared_mutex stop_mutex;
-	boost::mutex end_mutex;
-	bool noticed;
+	boost::mutex end_mutex;bool noticed;
 	boost::shared_mutex notice_mutex;
 	EventMgr::EventMgrId emi;
 	EventMgr *emgr;
+	//
+	SEventNode *snode;
 public:
 	SyncMgr(AdapterBase *loc, NetAdapterBase *net, NetCfg *cfg,
 			EventMgr::EventMgrId emi);

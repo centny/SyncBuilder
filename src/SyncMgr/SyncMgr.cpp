@@ -25,6 +25,7 @@ SyncMgr::SyncMgr(AdapterBase *loc, NetAdapterBase *net, NetCfg *cfg,
 			this->isDownload = this->cfg->isDownload();
 			this->isUpload = this->cfg->isUpload();
 			this->noticed = false;
+			this->snode=0;
 		}
 SyncMgr::~SyncMgr() {
 	log.info("sending stop sync mutex");
@@ -93,9 +94,12 @@ void SyncMgr::sync() {
 		}
 		try {
 			EventMgr::demo(this->emi)->postEvent("SYNC", FEP_PRE);
+			this->snode = new SEventNode();
 			locf = this->loc->root();
 			netf = (NetFInfo*) this->net->root();
 			this->sync(locf, netf);
+			EventMgr::demo(this->emi)->postEvent(this->snode); //it will auto delete.
+			this->snode = 0;
 			EventMgr::demo(this->emi)->postEvent("SYNC", FEP_POST);
 		} catch (const char* e) {
 			log.error("sync error:%s", e);
@@ -144,6 +148,7 @@ void SyncMgr::syncRemoved(FInfo* locf, NetFInfo* netf) {
 		rit = rsubs.begin(), rend = rsubs.end();
 		for (; rit != rend; rit++) {
 			if (this->isDownload) {
+				this->snode->locd.push_back(rit->second);
 				locf->remove(rit->first);
 			}
 			loc->delDbParent(rit->second);
@@ -158,6 +163,7 @@ void SyncMgr::syncRemoved(FInfo* locf, NetFInfo* netf) {
 		rit = rsubs.begin(), rend = rsubs.end();
 		for (; rit != rend; rit++) {
 			if (this->isUpload) {
+				this->snode->netd.push_back(rit->second);
 				netf->remove(rit->first);
 			}
 			net->delDbParent(rit->second);
@@ -182,6 +188,7 @@ void SyncMgr::syncUp(FInfo* locf, NetFInfo* netf) {
 				netf->refreshSubs();
 				n = (NetFInfo*) netf->contain(lit->name);
 				if (n) {
+					this->snode->netu.push_back(n->cwd);
 					lit->update2Normal();
 					n->update2Normal();
 					//update next directory.
@@ -211,12 +218,13 @@ void SyncMgr::syncUp(FInfo* locf, NetFInfo* netf) {
 				n = (NetFInfo*) netf->contain(lit->name);
 				if (n) {
 					n->update2Normal();
+					this->snode->netu.push_back(n->cwd);
+					emgr->postEvent(lit->absUrl(), lit->name,
+							netf->absUrl() + "/" + lit->name, lit->name,
+							FEL_NET, FET_NEW, FEP_POST);
 				} else {
 					this->log.error("upload:%s error", lit->absUrl().c_str());
 				}
-				emgr->postEvent(lit->absUrl(), lit->name,
-						netf->absUrl() + "/" + lit->name, lit->name, FEL_NET,
-						FET_NEW, FEP_POST);
 			} else if (lit->isUpdated()) {
 				this->log.debug("start upload:%s", lit->absUrl().c_str());
 				emgr->postEvent(lit->absUrl(), lit->name,
@@ -227,12 +235,13 @@ void SyncMgr::syncUp(FInfo* locf, NetFInfo* netf) {
 				n = (NetFInfo*) netf->contain(lit->name);
 				if (n) {
 					n->update2Normal();
+					this->snode->netu.push_back(n->cwd);
+					emgr->postEvent(lit->absUrl(), lit->name,
+							netf->absUrl() + "/" + lit->name, lit->name,
+							FEL_NET, FET_UPDATE, FEP_POST);
 				} else {
 					this->log.error("upload:%s error", lit->absUrl().c_str());
 				}
-				emgr->postEvent(lit->absUrl(), lit->name,
-						netf->absUrl() + "/" + lit->name, lit->name, FEL_NET,
-						FET_UPDATE, FEP_POST);
 			}
 		}
 	}
@@ -282,6 +291,7 @@ void SyncMgr::syncDown(NetFInfo* netf, FInfo* locf) {
 				locf->refreshSubs();
 				n = locf->contain(nit->name);
 				if (n) {
+					this->snode->locu.push_back(n->cwd);
 					nit->update2Normal();
 					n->update2Normal();
 					//update next directory.
@@ -317,12 +327,13 @@ void SyncMgr::syncDown(NetFInfo* netf, FInfo* locf) {
 				n = locf->contain(nit->name);
 				if (n) {
 					n->update2Normal();
+					this->snode->locu.push_back(n->cwd);
+					emgr->postEvent(nit->absUrl(), nit->name, lf, nit->name,
+							FEL_LOC, FET_NEW, FEP_POST);
 				} else {
 					log.error("donwload %s to %s error", nit->absUrl().c_str(),
 							lf.c_str());
 				}
-				emgr->postEvent(nit->absUrl(), nit->name, lf, nit->name,
-						FEL_LOC, FET_NEW, FEP_POST);
 			} else if (nit->isUpdated()) {
 				string lf = locf->absUrl();
 				if (locf->parent) {
@@ -339,12 +350,13 @@ void SyncMgr::syncDown(NetFInfo* netf, FInfo* locf) {
 				n = locf->contain(nit->name);
 				if (n) {
 					n->update2Normal();
+					this->snode->locu.push_back(n->cwd);
+					emgr->postEvent(nit->absUrl(), nit->name, lf, nit->name,
+							FEL_LOC, FET_UPDATE, FEP_POST);
 				} else {
 					log.error("donwload %s to %s error", nit->absUrl().c_str(),
 							lf.c_str());
 				}
-				emgr->postEvent(nit->absUrl(), nit->name, lf, nit->name,
-						FEL_LOC, FET_UPDATE, FEP_POST);
 			}
 		}
 	}

@@ -28,16 +28,26 @@ public:
 	//
 	bool valid;
 	string msg;
-	string logFile;bool isClearLog;
+	string logFile;
+	//
+	bool isClearLog;
+	//
+	bool isNotice, isNormal, isSynced, isNew, isUpdate, isDelete;
 public:
 //	void clearLog();
 //	void info(string& log);
 	ListenerCfg(map<string, string>& kvs, string& name);
 	virtual ~ListenerCfg();
 	//
-	bool isNotice();
-	//
-	bool isNormal();
+//	bool isNotice();
+//	//
+//	bool isNormal();
+//	//
+//	bool isSynced();
+//	//
+//	bool isNewOrUpdate();
+//	//
+//	bool isDelete();
 };
 class EventCfg: public CfgParser {
 public:
