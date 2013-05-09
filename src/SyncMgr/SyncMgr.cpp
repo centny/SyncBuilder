@@ -92,9 +92,11 @@ void SyncMgr::sync() {
 			}
 		}
 		try {
+			EventMgr::demo(this->emi)->postEvent("SYNC", FEP_PRE);
 			locf = this->loc->root();
 			netf = (NetFInfo*) this->net->root();
 			this->sync(locf, netf);
+			EventMgr::demo(this->emi)->postEvent("SYNC", FEP_POST);
 		} catch (const char* e) {
 			log.error("sync error:%s", e);
 		}
