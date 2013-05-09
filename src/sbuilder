@@ -1,32 +1,16 @@
 #!/bin/bash
-CMD=$1
-LOCKF=/tmp/SyncBuilderLock
-case $CMD in
+lf=/tmp/SBuilderClientLock
+dpath=`dirname ${0}`
+cfg=/etc/sbuilder
+##
+case $1 in
 start)
- if [ -f $LOCKF ];then
-  echo SyncBuilder already running.
-  exit
- fi
- /usr/local/bin/SyncBuilder -l /etc/SyncBuilder/log.conf -c /etc/SyncBuilder/Demoes.cfg
- ;;
+ echo running SyncBuilder.
+ $dpath/SyncBuilder $lf -C -c $cfg/Demoes.cfg -l $cfg/log.conf
+;;
 stop)
- if [ ! -f $LOCKF ];then
-  echo SyncBuilder is not running.
-  exit
- fi
- SPID=`cat $LOCKF`
- echo Sending kill signal...
- kill $SPID
- for((i=0;i<15;i++));
- do
-  if [ ! -e $LOCKF ];then
-   echo SyncBuilder stopped.
-   exit
-  fi
-  echo Waiting stop.
-  sleep 1
- done
- echo Stop SyncBuilder timeout.
- ;;
+ echo "stopping SyncBuilder."
+ $dpath/SyncBuilder $lf stop
+;;
 esac
 
