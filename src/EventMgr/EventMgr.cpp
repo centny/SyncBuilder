@@ -74,12 +74,7 @@ string NEventNode::toString() {
 }
 bool NEventNode::match(ListenerCfg* lc) {
 	if (this->name == lc->name) {
-		for (size_t i = 0; i < lc->types.size(); i++) {
-			if (lc->types[i] == "NOTICE") {
-				return true;
-			}
-		}
-		return false;
+		return lc->isNotice;
 	} else {
 		return false;
 	}
@@ -111,6 +106,9 @@ void FEventNode::add2Caller(ExtCaller* caller) {
 	caller->addEnv("FEventLocation", toFEventLocation(this->uloc));
 }
 bool FEventNode::match(ListenerCfg* lc) {
+	if (!lc->isNormal || lc->isSynced) {
+		return false;
+	}
 	string tf = "", tn = "";
 	switch (this->uloc) {
 	case FEL_LOC: {

@@ -29,6 +29,10 @@ enum FEventLocation {
 	FEL_LOC = 1, FEL_NET, FEL_NONE
 };
 string toFEventLocation(FEventLocation el);
+
+/*
+ * the evetn node base.
+ */
 class EventNode {
 public:
 	FEventPeriod period;
