@@ -21,7 +21,7 @@ cp EventMgr/e.cfg $(CFG_DIR)/e.cfg_s;\
 cp log/log.conf $(CFG_DIR)/log.conf_s;\
 cp SyncServer/Demoes.cfg $(CFG_DIR)/Demoes.cfg_s;\
 cp SyncServer/users.cfg $(CFG_DIR)/users.cfg_s;\
-cp SyncServer/web.cfg $(CFG_DIR)/web.cfg_s;\
+cp SyncServer/Web.cfg $(CFG_DIR)/Web.cfg_s;\
 cp sbuilder $(prefix)/bin;\
 chmod +x $(prefix)/bin/sbuilder;\
 )'>>Makefile.am
