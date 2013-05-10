@@ -301,29 +301,30 @@ MyDesktop.LogMonitorWindow = Ext.extend(Ext.app.Module, {
 					success : function(response, options) {
 						var res = response.responseText;
 						var cidx = res.indexOf('\n');
-						var cmd = res.substring(0,cidx);
+						var cmd = res.substring(0, cidx);
 						if (cmd.trim() !== "200") {
-						    MyDesktop.log.add("[" + win.wname + "] get log failed, msg:" + res.substring(cidx + 1));
-						    return;
+							MyDesktop.log.add("[" + win.wname + "] get log failed, msg:" + res.substring(cidx + 1));
+							return;
 						}
 						res = res.substring(cidx + 1);
 						cidx = res.indexOf('\n');
-						cmd = res.substring(0,cidx);
+						cmd = res.substring(0, cidx);
 						res = res.substring(cidx + 1);
 						var cmds = cmd.split(' ');
 						var lbeg = parseInt(cmds[1]);
 						var llen = parseInt(cmds[2]);
 						if (lbeg < win.logLength) {
-						    Ext.each(win.wcontainer.query("div"), function (item, index, len) {
-						        item.remove();
-						    });
-						    win.logLength = lbeg;
+							Ext.each(win.wcontainer.query("div"), function(item, index, len) {
+								item.remove();
+							});
+							win.logLength = lbeg;
 						}
 						if (llen > 0) {
-						    win.logLength += llen;
-						    win.wcontainer.createChild({
-						        html: res
-						    });
+							res.replace(/\\n/g, "<br/>")
+							win.logLength += llen;
+							win.wcontainer.createChild({
+								html : "<div>" + res + "</div>"
+							});
 						}
 					},
 					failure : function(response, options) {
@@ -486,7 +487,7 @@ MyDesktop.ClientManagerWindow = Ext.extend(Ext.app.Module, {
 				buttons : [{
 					text : 'Start',
 					formBind : false,
-					handler: function (btn, evt) {
+					handler : function(btn, evt) {
 						if (!cmd_box.value) {
 							return;
 						}
@@ -511,10 +512,10 @@ MyDesktop.ClientManagerWindow = Ext.extend(Ext.app.Module, {
 									return;
 								}
 								Ext.Ajax.request({
-									url : 'EServer/' + clt_box.value + '/' + cmd_box.value+'/'+ent_box.value,
+									url : 'EServer/' + clt_box.value + '/' + cmd_box.value + '/' + ent_box.value,
 									method : 'GET',
 									success : function(response, options) {
-										MyDesktop.log.add("sending N_EVENT/"+ent_box.value+" to client:" + clt_box.value);
+										MyDesktop.log.add("sending N_EVENT/" + ent_box.value + " to client:" + clt_box.value);
 									},
 									failure : function(response, options) {
 										Ext.MessageBox.alert('Failed', 'Server error code:' + response.status);
