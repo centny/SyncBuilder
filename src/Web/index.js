@@ -248,6 +248,7 @@ MyDesktop.UserLogWindow = Ext.extend(Ext.app.Module, {
 	}
 });
 
+var tobj;
 /**
  *log monitor window.
  */
@@ -283,7 +284,7 @@ MyDesktop.LogMonitorWindow = Ext.extend(Ext.app.Module, {
 				animCollapse : false,
 				constrainHeader : true,
 				layout : 'fit',
-				html : "<div id=\"lmon-container-" + name + "\"></div>",
+				html : "<div style=\"overflow-y:auto;height:100%;margin-left:5\" id=\"lmon-container-" + name + "\"></div>",
 				listeners : {
 					close : function() {
 						win.stopLoad();
@@ -320,10 +321,11 @@ MyDesktop.LogMonitorWindow = Ext.extend(Ext.app.Module, {
 							win.logLength = lbeg;
 						}
 						if (llen > 0) {
-							res.replace(/\\n/g, "<br/>")
+							tobj=res;
+							res=res.replace(/(\r\n|\n|\r)/gm, "<br/>")
 							win.logLength += llen;
 							win.wcontainer.createChild({
-								html : "<div>" + res + "</div>"
+								html : res
 							});
 						}
 					},
